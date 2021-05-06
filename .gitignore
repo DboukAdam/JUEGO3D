@@ -357,3 +357,4 @@ Makefile.inc
 SDL2.dll
 \visualstudio
 \xcode
+game_debug.exe

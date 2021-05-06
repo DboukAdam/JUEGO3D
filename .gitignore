@@ -348,3 +348,12 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Nuestros ignores
+glew32.dll
+Makefile
+README.txt
+Makefile.inc
+SDL2.dll
+\visualstudio
+\xcode

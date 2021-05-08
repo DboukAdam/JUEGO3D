@@ -48,7 +48,8 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
  	texture->load("data/texture.tga");
 
 	// example of loading Mesh from Mesh Manager
-	mesh = Mesh::Get("data/box.ASE");
+	//mesh = Mesh::Get("data/box.ASE");
+	mesh = Mesh::Get("data/modelos/ambulance.obj");
 
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");

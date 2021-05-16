@@ -8,7 +8,7 @@ public:
 	Matrix44 m;
 	Mesh* mesh;
 	Texture* texture;
-	
+	Entity();
 	Entity(Vector3 pos, Matrix44 m, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos = pos;
 		this->m = m;
@@ -38,4 +38,10 @@ public:
 	void loadTexture(const char* filename) {
 		texture = Texture::Get(filename);
 	}
+
+};
+
+class Zombie : public Entity {
+public:
+	Zombie();
 };

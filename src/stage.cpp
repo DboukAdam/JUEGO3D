@@ -23,3 +23,27 @@ void EndStage::render() {
 void EndStage::update() {
 
 }
+
+void MenuStage::render()
+{
+}
+
+void MenuStage::update()
+{
+}
+
+void HomeStage::render()
+{
+}
+
+void HomeStage::update()
+{
+}
+
+void MarketStage::render()
+{
+}
+
+void MarketStage::update()
+{
+}

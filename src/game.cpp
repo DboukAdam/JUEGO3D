@@ -6,6 +6,7 @@
 #include "shader.h"
 #include "input.h"
 #include "animation.h"
+#include "entity.h"
 
 #include <cmath>
 
@@ -17,6 +18,10 @@ Animation* anim = NULL;
 float angle = 0;
 float mouse_speed = 100.0f;
 FBO* fbo = NULL;
+
+Entity* shop;
+Entity* suelo;
+Entity* zombie;
 
 Game* Game::instance = NULL;
 
@@ -45,14 +50,28 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//load one texture without using the Texture Manager (Texture::Get would use the manager)
 	texture = new Texture();
- 	texture->load("data/texture.tga");
-
+ 	//texture->load("data/texture.tga");
+	texture->load("data/modelos/ambulance.png");
 	// example of loading Mesh from Mesh Manager
 	//mesh = Mesh::Get("data/box.ASE");
 	mesh = Mesh::Get("data/modelos/ambulance.obj");
-
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+
+	Matrix44 m;
+	m.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
+	suelo = new Entity(0, 0, 0, m);
+	suelo->loadMesh("data/Shop/Shop-4-GroundTile.obj");
+	suelo->loadTexture("data/Shop/Shop-4-GroundTile.png");
+
+	zombie = new Entity(0, 0, 0, m);
+	zombie->loadMesh("data/Zombie/Zed_1.obj");
+	zombie->loadTexture("data/Zombie/Zed_1.png");
+	m.translate(0.0f, 3.5f, 0.0f);
+	shop = new Entity(0, 5, 0, m);
+	shop->loadMesh("data/Shop/Shop-1-ShopBuilding_2.obj");
+	shop->loadTexture("data/Shop/Shop-1-ShopBuilding_2.png");
+	
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -92,7 +111,17 @@ void Game::render(void)
 		shader->setUniform("u_time", time);
 
 		//do the draw call
-		mesh->render( GL_TRIANGLES );
+		//mesh->render( GL_TRIANGLES );
+
+		shader->setUniform("u_texture", shop->texture, 0);
+		shader->setUniform("u_model", shop->m);
+		shop->mesh->render(GL_TRIANGLES);
+		shader->setUniform("u_texture", zombie->texture, 0);
+		shader->setUniform("u_model", zombie->m);
+		zombie->mesh->render(GL_TRIANGLES);
+		shader->setUniform("u_model", suelo->m);
+		shader->setUniform("u_texture", suelo->texture, 0);
+		suelo->mesh->render(GL_TRIANGLES);
 
 		//disable shader
 		shader->disable();

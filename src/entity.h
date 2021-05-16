@@ -9,13 +9,13 @@ public:
 	Mesh* mesh;
 	Texture* texture;
 	
-	Entity(Vector3 pos, Matrix44 m, Mesh* mesh, Texture* texture) {
+	Entity(Vector3 pos, Matrix44 m, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos = pos;
 		this->m = m;
 		this->mesh = mesh;
 		this->texture = texture;
 	}
-	Entity(int x, int y, int z, Matrix44 m, Mesh* mesh, Texture* texture) {
+	Entity(int x, int y, int z, Matrix44 m, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos.x = x;
 		this->pos.y = y;
 		this->pos.z = z;

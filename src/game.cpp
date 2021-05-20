@@ -9,7 +9,7 @@
 #include "entity.h"
 
 #include <cmath>
-#include "world.h"
+
 
 //some globals
 Game* Game::instance = NULL;

@@ -1,4 +1,6 @@
 #include "world.h"
+#include "game.h"
+#include "shader.h"
 
 World::World()
 {
@@ -36,9 +38,9 @@ void World::initWorld()
 	shop->loadMesh("data/Shop/Shop-1-ShopBuilding_2.obj");
 	shop->loadTexture("data/Shop/Shop-1-ShopBuilding_2.png");
 
-	zzz = new Zombie();
+	/*zzz = new Zombie();
 	zzz->m = modelZ;
 	zzz->pos.set(0.0f, 3.5f, 5.0f);
 	zzz->loadMesh("data/Zombie/Zed_1.obj");
-	zzz->loadTexture("data/Zombie/Zed_1.png");
+	zzz->loadTexture("data/Zombie/Zed_1.png");*/
 }

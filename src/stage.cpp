@@ -1,6 +1,7 @@
-#include "stage.h"
-#include "world.h"
+#include "game.h"
 #include "input.h"
+#include "stage.h"
+#include "shader.h"
 
 Game* game = Game::instance;
 
@@ -78,9 +79,9 @@ void MarketStage::render()
 		world->shader->setUniform("u_texture", world->shop->texture, 0);
 		world->shader->setUniform("u_model", world->shop->m);
 		world->shop->mesh->render(GL_TRIANGLES);
-		world->shader->setUniform("u_texture", world->zzz->texture, 0);
-		world->shader->setUniform("u_model", world->zzz->m);
-		world->zzz->mesh->render(GL_TRIANGLES);
+		//world->shader->setUniform("u_texture", world->zzz->texture, 0);
+		//world->shader->setUniform("u_model", world->zzz->m);
+		//world->zzz->mesh->render(GL_TRIANGLES);
 		world->shader->setUniform("u_model", world->suelo->m);
 		world->shader->setUniform("u_texture", world->suelo->texture, 0);
 		world->suelo->mesh->render(GL_TRIANGLES);
@@ -94,10 +95,10 @@ void MarketStage::update(double seconds_elapsed)
 {
 	World* world = Game::instance->world;
 	float speed = 5.0f;
-	if (Input::isKeyPressed(SDL_SCANCODE_UP)) world->zzz->pos.z += 1.0f * speed;
-	if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) world->zzz->pos.z -= 1.0f * speed;
-	if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) world->zzz->pos.x += 1.0f * speed;
-	if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) world->zzz->pos.x -= 1.0f * speed;
+	//if (Input::isKeyPressed(SDL_SCANCODE_UP)) world->zzz->pos.z += 1.0f * speed;
+	//if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) world->zzz->pos.z -= 1.0f * speed;
+	//if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) world->zzz->pos.x += 1.0f * speed;
+	//if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) world->zzz->pos.x -= 1.0f * speed;
 
 	World* world = Game::instance->world;
 	if (Input::isKeyPressed(SDL_SCANCODE_A)) world->current = world->home;

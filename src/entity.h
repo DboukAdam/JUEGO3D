@@ -9,39 +9,16 @@ public:
 	Mesh* mesh;
 	Texture* texture;
 	Entity();
-	Entity(Vector3 pos, Matrix44 m, Mesh* mesh = NULL, Texture* texture = NULL) {
-		this->pos = pos;
-		this->m = m;
-		this->mesh = mesh;
-		this->texture = texture;
-	}
-	Entity(int x, int y, int z, Matrix44 m, Mesh* mesh = NULL, Texture* texture = NULL) {
-		this->pos.x = x;
-		this->pos.y = y;
-		this->pos.z = z;
-		this->m = m;
-		this->mesh = mesh;
-		this->texture = texture;
-	}
+	Entity(Vector3 pos, Matrix44 m, Mesh* mesh, Texture* texture);
+	Entity(int x, int y, int z, Matrix44 m, Mesh* mesh, Texture* texture);
 
-	void setPos(Vector3 pos) {
-		this->pos = pos;
-	}
-	void setPos(int x, int y, int z) {
-		this->pos.x = x;
-		this->pos.y = y;
-		this->pos.z = z;
-	}
-	void loadMesh(const char* filename) {
-		mesh = Mesh::Get(filename);
-	}
-	void loadTexture(const char* filename) {
-		texture = Texture::Get(filename);
-	}
-
+	void setPos(Vector3 pos);
+	void setPos(int x, int y, int z);
+	void loadMesh(const char* filename);
+	void loadTexture(const char* filename);
 };
 
-class Zombie : public Entity {
+/*class Zombie : public Entity {
 public:
 	Zombie();
-};
+};*/

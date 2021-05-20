@@ -1,10 +1,8 @@
-#include "utils.h"
 #include "stage.h"
 #include "mesh.h"
-#include "texture.h"
 #include "animation.h"
+#include "texture.h"
 #include "entity.h"
-#include "shader.h"
 
 class World {
 
@@ -24,7 +22,7 @@ public:
 	Shader* shader;
 	Animation* anim;
 	FBO* fbo;
-	Zombie* zzz;
+	//Zombie* zzz;
 	Entity* shop;
 	Entity* suelo;
 };

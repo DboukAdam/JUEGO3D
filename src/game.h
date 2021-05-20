@@ -7,7 +7,8 @@
 
 #include "includes.h"
 #include "camera.h"
-#include "world.h"
+#include "utils.h"
+#include "stage.h"
 
 class Game
 {
@@ -25,13 +26,18 @@ public:
 	float elapsed_time;
 	int fps;
 	bool must_exit;
-	World* world;
-	float angle = 0;
-	float mouse_speed = 100.0f;
 
 	//some vars
 	Camera* camera; //our global camera
 	bool mouse_locked; //tells if the mouse is locked (not seen)
+
+	//Our stuff
+	/*Stage* current;
+	IntroStage* intro = new IntroStage();
+	HomeStage* home = new HomeStage();
+	MarketStage* market = new MarketStage();
+	MenuStage* menu = new MenuStage();
+	EndStage* end = new EndStage();*/
 
 	Game( int window_width, int window_height, SDL_Window* window );
 

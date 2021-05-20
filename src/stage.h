@@ -1,15 +1,8 @@
 
-
 class Stage {
 public:
 	virtual void render() {};
-	virtual void update(double seconds_elapsed) {};
-};
-
-class MenuStage : public Stage {
-public:
-	virtual void render();
-	virtual void update(double seconds_elapsed);
+	virtual void update() {};
 };
 
 class IntroStage : public Stage {

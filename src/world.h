@@ -1,28 +1,18 @@
-#include "stage.h"
-#include "mesh.h"
-#include "animation.h"
-#include "texture.h"
+#include "utils.h"
+#include "shader.h"
 #include "entity.h"
 
+#define MAX_ENTITIES 155
+#define MAX_ZOMBIES 30
+
 class World {
-
 public:
+	Entity* entities[MAX_ENTITIES];
+	Zombie* zombies[MAX_ZOMBIES];
 
-	World();
-	void initWorld();
+	World(Entity* entities[], Zombie* zombies[]) {
+		
+	}
 
-	Stage* current;
-	IntroStage* intro = new IntroStage();
-	HomeStage* home = new HomeStage();
-	MarketStage* market = new MarketStage();
-	MenuStage* menu = new MenuStage();
-	EndStage* end = new EndStage();
-	Mesh* mesh;
-	Texture* texture;
 	Shader* shader;
-	Animation* anim;
-	FBO* fbo;
-	//Zombie* zzz;
-	Entity* shop;
-	Entity* suelo;
 };

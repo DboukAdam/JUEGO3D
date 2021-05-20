@@ -10,11 +10,20 @@
 
 #include <cmath>
 
-
 //some globals
+Mesh* mesh = NULL;
+Texture* texture = NULL;
+Shader* shader = NULL;
+Animation* anim = NULL;
+float angle = 0;
+float mouse_speed = 100.0f;
+FBO* fbo = NULL;
+
+Entity* shop;
+Entity* suelo;
+Entity* zombie;
+
 Game* Game::instance = NULL;
-
-
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -39,8 +48,30 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	camera->lookAt(Vector3(0.f,100.f, 100.f),Vector3(0.f,0.f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
 	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
 
-	world->initWorld();
+	//load one texture without using the Texture Manager (Texture::Get would use the manager)
+	texture = new Texture();
+ 	//texture->load("data/texture.tga");
+	texture->load("data/modelos/ambulance.png");
+	// example of loading Mesh from Mesh Manager
+	//mesh = Mesh::Get("data/box.ASE");
+	mesh = Mesh::Get("data/modelos/ambulance.obj");
+	// example of shader loading using the shaders manager
+	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
+	Matrix44 m;
+	m.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
+	suelo = new Entity(0, 0, 0, m);
+	suelo->loadMesh("data/Shop/Shop-4-GroundTile.obj");
+	suelo->loadTexture("data/Shop/Shop-4-GroundTile.png");
+
+	zombie = new Entity(0, 0, 0, m);
+	zombie->loadMesh("data/Zombie/Zed_1.obj");
+	zombie->loadTexture("data/Zombie/Zed_1.png");
+	m.translate(0.0f, 3.5f, 0.0f);
+	shop = new Entity(0, 5, 0, m);
+	shop->loadMesh("data/Shop/Shop-1-ShopBuilding_2.obj");
+	shop->loadTexture("data/Shop/Shop-1-ShopBuilding_2.png");
+	
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -63,7 +94,38 @@ void Game::render(void)
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
    
-	world->current->render();
+	//create model matrix for cube
+	Matrix44 m;
+	m.rotate(angle*DEG2RAD, Vector3(0, 1, 0));
+
+	if(shader)
+	{
+		//enable shader
+		shader->enable();
+
+		//upload uniforms
+		shader->setUniform("u_color", Vector4(1,1,1,1));
+		shader->setUniform("u_viewprojection", camera->viewprojection_matrix );
+		shader->setUniform("u_texture", texture, 0);
+		shader->setUniform("u_model", m);
+		shader->setUniform("u_time", time);
+
+		//do the draw call
+		//mesh->render( GL_TRIANGLES );
+
+		shader->setUniform("u_texture", shop->texture, 0);
+		shader->setUniform("u_model", shop->m);
+		shop->mesh->render(GL_TRIANGLES);
+		shader->setUniform("u_texture", zombie->texture, 0);
+		shader->setUniform("u_model", zombie->m);
+		zombie->mesh->render(GL_TRIANGLES);
+		shader->setUniform("u_model", suelo->m);
+		shader->setUniform("u_texture", suelo->texture, 0);
+		suelo->mesh->render(GL_TRIANGLES);
+
+		//disable shader
+		shader->disable();
+	}
 
 	//Draw the floor grid
 	drawGrid();
@@ -90,12 +152,12 @@ void Game::update(double seconds_elapsed)
 	}
 
 	//async input to move the camera around
-	if(Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
-	if (Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
-	if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f,-1.0f) * speed);
-	if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
-	if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f,0.0f, 0.0f) * speed);
-	world->current->update(seconds_elapsed);
+	if(Input::isKeyPressed(SDL_SCANCODE_LSHIFT) ) speed *= 10; //move faster with left shift
+	if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
+	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f,-1.0f) * speed);
+	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
+	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f,0.0f, 0.0f) * speed);
+
 	//to navigate with the mouse fixed in the middle
 	if (mouse_locked)
 		Input::centerMouse();

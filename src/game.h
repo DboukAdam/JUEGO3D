@@ -8,7 +8,7 @@
 #include "includes.h"
 #include "camera.h"
 #include "utils.h"
-#include "stage.h"
+#include "world.h"
 
 class Game
 {
@@ -32,12 +32,10 @@ public:
 	bool mouse_locked; //tells if the mouse is locked (not seen)
 
 	//Our stuff
-	/*Stage* current;
-	IntroStage* intro = new IntroStage();
-	HomeStage* home = new HomeStage();
-	MarketStage* market = new MarketStage();
-	MenuStage* menu = new MenuStage();
-	EndStage* end = new EndStage();*/
+	World* tienda;
+	World* casa;
+	World* currentWorld;
+	float mouse_speed = 100.0f;
 
 	Game( int window_width, int window_height, SDL_Window* window );
 
@@ -54,6 +52,8 @@ public:
 	void onGamepadButtonDown(SDL_JoyButtonEvent event);
 	void onGamepadButtonUp(SDL_JoyButtonEvent event);
 	void onResize(int width, int height);
+
+	void initWorldTienda();
 
 };
 

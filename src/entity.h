@@ -53,3 +53,10 @@ public:
 
 	void AStarPath(); //Cambiar lo que devuelve
 };
+
+class Player : public Entity {
+public:
+	Vector3 dir;
+	float vel;
+
+};

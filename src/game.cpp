@@ -126,26 +126,28 @@ void Game::onResize(int width, int height)
 void Game::initWorldTienda(){
 	//create our camera
 	camera = new Camera();
-	camera->lookAt(Vector3(0.f, 100.f, 100.f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
+	camera->lookAt(Vector3(0.f, 7.0f, 1.f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
 	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
+	Camera::current = camera;
 
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
-	tienda = new World(camera, shader);
+	tienda = new World();
 
 	Matrix44 m;
 	m.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
-	Entity* suelo = new Entity(0, 0, 0, m);
+	Entity* suelo = new Entity(0, 0, 0, m, shader);
 	suelo->loadMesh("data/Shop/Shop-4-GroundTile.obj");
 	suelo->loadTexture("data/Shop/Shop-4-GroundTile.png");
 
 	tienda->addEntity(suelo);
 
-	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
+	m.translate(0, 3.5, 1);
+	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m, shader);
 	zombie->loadMesh("data/Zombie/Zed_1.obj");
 	zombie->loadTexture("data/Zombie/Zed_1.png");
-
+	zombie->setVel(2.0f);
 	tienda->addZombie(zombie);
 	
 	/*m.translate(0.0f, 3.5f, 0.0f);

@@ -1,6 +1,7 @@
 #include "utils.h"
 #include "mesh.h"
 #include "texture.h"
+#include "shader.h"
 
 class Entity {
 public:
@@ -8,18 +9,21 @@ public:
 	Matrix44 m;
 	Mesh* mesh;
 	Texture* texture;
+	Shader* shader;
 	
-	Entity(Vector3 pos, Matrix44 m, Mesh* mesh = NULL, Texture* texture = NULL) {
+	Entity(Vector3 pos, Matrix44 m, Shader* shader, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos = pos;
 		this->m = m;
+		this->shader = shader;
 		this->mesh = mesh;
 		this->texture = texture;
 	}
-	Entity(int x, int y, int z, Matrix44 m, Mesh* mesh = NULL, Texture* texture = NULL) {
+	Entity(int x, int y, int z, Matrix44 m, Shader* shader, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos.x = x;
 		this->pos.y = y;
 		this->pos.z = z;
 		this->m = m;
+		this->shader = shader;
 		this->mesh = mesh;
 		this->texture = texture;
 	}
@@ -43,6 +47,8 @@ public:
 	void loadTexture(const char* filename) {
 		texture = Texture::Get(filename);
 	}
+
+	void render();
 };
 
 class Zombie : public Entity {
@@ -52,11 +58,12 @@ public:
 	bool triggered;
 
 	void AStarPath(); //Cambiar lo que devuelve
+	void setVel(float v);
 };
 
 class Player : public Entity {
 public:
 	Vector3 dir;
 	float vel;
-
+	int vida;
 };

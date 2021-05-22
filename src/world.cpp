@@ -1,14 +1,12 @@
 #include "world.h"
 
-World::World(Camera* camera, Shader* shader) {
+World::World() {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		entities[i] = NULL;
 	}
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		zombies[i] = NULL;
 	}
-	this->camera = camera;
-	this->shader = shader;
 }
 
 void World::addEntity(Entity* entity) {

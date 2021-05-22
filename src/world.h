@@ -10,10 +10,8 @@ class World {
 public:
 	Entity* entities[MAX_ENTITIES];
 	Zombie* zombies[MAX_ZOMBIES];
-	Camera* camera;
-	Shader* shader;
 
-	World(Camera* camera, Shader* shader);
+	World();
 	void addEntity(Entity* entity);
 	void addZombie(Zombie* zombie);
 	

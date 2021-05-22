@@ -25,3 +25,7 @@ void World::addZombie(Zombie* zombie) {
 		}
 	}
 }
+
+void World::addPlayer(Player* player) {
+	this->player = player;
+}

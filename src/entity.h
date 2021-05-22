@@ -66,4 +66,5 @@ public:
 	Vector3 dir;
 	float vel;
 	int vida;
+	void setVel(float v);
 };

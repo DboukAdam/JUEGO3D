@@ -20,6 +20,13 @@ void PlayStage::render(World* world) {
 	//set the camera as default
 	Camera* camera = Camera::current;
 	camera->enable();
+	Player* player = world->player;
+
+	Vector3 eye = player->m * Vector3(0.f, 6.f, 0.f);// donde la X sera la pos de la cabeza
+	Vector3 center = player->m * Vector3(0.f, 0.f, 1.f);
+	camera->lookAt(eye, center, Vector3(0.f,1.f,0.f));//, donde el up sera(0, 1, 0) y no hara falta preocuparse por ahora por el hecho de que el zombie no rotara sobre si mismo
+
+	
 
 	//set flags
 	glDisable(GL_BLEND);
@@ -72,26 +79,20 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 	if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 	
 	if (Input::isKeyPressed(SDL_SCANCODE_W)) {
-		Zombie* zombie = world->zombies[0];
-		zombie->m.translate(0, 0, zombie->vel);
-		Vector3 trans = zombie->m.getTranslation();
-		//camera->eye.set(trans.x, trans.y, trans.z);
-		camera->eye = zombie->m.getTranslation() + Vector3(0, 3, 0.5);
+		Player* player = world->player;
+		player->m.translate(0, 0, player->vel);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_S)) {
-		Zombie* zombie = world->zombies[0];
-		zombie->m.translate(0, 0, -zombie->vel);
-		camera->eye = zombie->m.getTranslation() + Vector3(0, 3, 0.5);
+		Player* player = world->player;
+		player->m.translate(0, 0, -player->vel);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_A)) {
-		Zombie* zombie = world->zombies[0];
-		zombie->m.translate(zombie->vel, 0, 0);
-		camera->eye = zombie->m.getTranslation() + Vector3(0, 3, 0.5);
+		Player* player = world->player;
+		player->m.translate(player->vel, 0, 0);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_D)) {
-		Zombie* zombie = world->zombies[0];
-		zombie->m.translate(-zombie->vel, 0, 0);
-		camera->eye = zombie->m.getTranslation() + Vector3(0, 3, 0.5);
+		Player* player = world->player;
+		player->m.translate(-player->vel, 0, 0);
 	}
 
 	//to navigate with the mouse fixed in the middle

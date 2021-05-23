@@ -10,6 +10,10 @@ void Zombie::setVel(float v){
 	this->vel = v;
 }
 
+void Player::setVel(float v) {
+	this->vel = v;
+}
+
 void Entity::render() {
 	Camera* camera = Camera::current;
 	if (shader)

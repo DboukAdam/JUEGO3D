@@ -10,9 +10,10 @@ class World {
 public:
 	Entity* entities[MAX_ENTITIES];
 	Zombie* zombies[MAX_ZOMBIES];
+	Player* player;
 
 	World();
 	void addEntity(Entity* entity);
 	void addZombie(Zombie* zombie);
-	
+	void addPlayer(Player* player);
 };

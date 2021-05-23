@@ -21,10 +21,10 @@ void PlayStage::render(World* world) {
 	
 	Camera* camera = Camera::current;
 	camera->enable();
-	Vector3 eye = world->zombies[0]->m * Vector3(0.f, 2.f, 0.f);
-	Vector3 center = world->zombies[0]->m * Vector3(0.f, 2.f, 1.f);
+	camera->eye = world->zombies[0]->m * Vector3(0.f, 2.f, 0.f);
+	/*Vector3 center = world->zombies[0]->m * Vector3(0.f, 2.f, 1.f);
 	Vector3 up = world->zombies[0]->m.rotateVector(Vector3(0.f, 1.f, 0.f));
-	camera->lookAt(eye, center, up);
+	camera->lookAt(eye, center, up);*/
 
 	//set flags
 	glDisable(GL_BLEND);
@@ -66,15 +66,16 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 	if ((Input::mouse_state & SDL_BUTTON_LEFT) || game->mouse_locked) //is left button pressed?
 	{
 		camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
-		camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
+		//camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
+		camera->center = camera->unproject(Vector3(Input::mouse_position.x, Input::mouse_position.y, 1), game->window_width, game->window_height);
 	}
 
 	//async input to move the camera around
-	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
-	if (Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
-	if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
-	if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
-	if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
+	//if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
+	//if (Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
+	//if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
+	//if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
+	//if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 	
 	if (Input::isKeyPressed(SDL_SCANCODE_W)) {
 		world->zombies[0]->m.translate(0, 0, world->zombies[0]->vel);

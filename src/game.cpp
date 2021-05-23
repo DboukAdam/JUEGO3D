@@ -124,11 +124,6 @@ void Game::onResize(int width, int height)
 }
 
 void Game::initWorldTienda(){
-	//create our camera
-	camera = new Camera();
-	camera->lookAt(Vector3(0.f, 7.0f, 1.f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
-	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
-	Camera::current = camera;
 
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
@@ -150,6 +145,12 @@ void Game::initWorldTienda(){
 	zombie->setVel(2.0f);
 	tienda->addZombie(zombie);
 	
+	//create our camera
+	camera = new Camera();
+	
+	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
+	Camera::current = camera;
+
 	/*m.translate(0.0f, 3.5f, 0.0f);
 	Entity* shop = new Entity(0, 5, 0, m);
 	shop->loadMesh("data/Shop/Shop-1-ShopBuilding_2.obj");

@@ -155,9 +155,9 @@ void Game::initWorldTienda(){
 	camera = new Camera();
 	Camera::current = camera;
 	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
-	Vector3 eye = tienda->zombies[0]->m * Vector3(0.f, 2.f, 0.f);
-	Vector3 center = tienda->zombies[0]->m * Vector3(0.f, 2.f, 1.f);
-	Vector3 up = tienda->zombies[0]->m.rotateVector(Vector3(0.f, 1.f, 0.f));
+	Vector3 eye = player->m * Vector3(0.f, 2.f, 0.f);
+	Vector3 center = player->m * Vector3(0.f, 2.f, 1.f);
+	Vector3 up = player->m.rotateVector(Vector3(0.f, 1.f, 0.f));
 	camera->lookAt(eye, center, up);
 
 	/*m.translate(0.0f, 3.5f, 0.0f);

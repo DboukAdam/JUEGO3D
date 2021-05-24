@@ -25,16 +25,9 @@ void PlayStage::render(World* world) {
 	camera->enable();
 
 	Player* player = world->player;
-	Matrix44 playerModel = player->m;
-	playerModel.translate(player->pos.x, player->pos.y, player->pos.z);
-	playerModel.rotate(player->angle * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
-	
-	if (!free_camera) {
-		Vector3 eye = playerModel * Vector3(0.f, 2.f, 0.f);
-		Vector3 center = playerModel * Vector3(0.f, 2.f, 1.f);
-		Vector3 up = Vector3(0.f, 1.f, 0.f);
-		camera->lookAt(eye, center, up);
-	}
+	player->m.setTranslation(player->pos.x, player->pos.y, player->pos.z);
+	player->m.rotate(player->angle * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
+	camera->eye = player->m * Vector3(0.f, 2.f, 0.f);
 
 	//set flags
 	glDisable(GL_BLEND);
@@ -86,9 +79,10 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 		// mouse input to rotate the cam
 		if ((Input::mouse_state & SDL_BUTTON_LEFT) || game->mouse_locked) //is left button pressed?
 		{
-			camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
-			camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
-			//camera->center = camera->unproject(Vector3(Input::mouse_position.x, Input::mouse_position.y, 1), game->window_width, game->window_height);
+			//camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
+			//camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
+			player->angle = Input::mouse_delta.x * 0.005f;
+			camera->center = camera->unproject(Vector3(Input::mouse_position.x, Input::mouse_position.y, 1), game->window_width, game->window_height);
 		}
 
 		Matrix44 playerRot;

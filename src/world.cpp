@@ -44,3 +44,18 @@ void World::createZombies() {
 		addZombie(zombie);
 	}
 }
+
+void World::disparar() {
+	Camera* camera = Camera::current;
+	Vector3 colPoint;
+	Vector3 colNormal;
+	float maxDistance = 10;
+	for (int i = 0; i < MAX_ZOMBIES; i++) {
+		Zombie* zombie = zombies[i];
+		if (zombie == NULL)	break;
+		if (zombie->mesh->testRayCollision(zombie->m, camera->eye, camera->center, colPoint, colNormal, maxDistance, false)) {
+			//zombie->~Zombie();
+			std::cerr << "Buena punteria!" << std::endl;;
+		}
+	}
+}

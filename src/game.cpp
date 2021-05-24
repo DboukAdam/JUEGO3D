@@ -11,11 +11,7 @@
 #include "stage.h"
 
 //some globals
-Mesh* mesh = NULL;
-Texture* texture = NULL;
-Shader* shader = NULL;
 Animation* anim = NULL;
-float angle = 0;
 
 FBO* fbo = NULL;
 
@@ -66,10 +62,6 @@ void Game::render(void)
 void Game::update(double seconds_elapsed)
 {
 	current->update(seconds_elapsed, currentWorld);
-
-	//example
-	angle += (float)seconds_elapsed * 10.0f;
-
 }
 
 //Keyboard event handler (sync input)
@@ -126,12 +118,11 @@ void Game::onResize(int width, int height)
 void Game::initWorldTienda(){
 
 	// example of shader loading using the shaders manager
-	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
 	tienda = new World(shader);
 
 	Matrix44 m;
-	m.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
 	m.setTranslation(9.99, 0.000, -7.08);
 	Entity* suelo = new Entity(9.99, 0.000, -7.08, m);
 	suelo->loadMesh("data/Shop/Shop-4-GroundTile.obj");
@@ -170,11 +161,4 @@ void Game::initWorldTienda(){
 	Vector3 center = player->m * Vector3(0.f, 5.f, -1.f);
 	Vector3 up = player->m.rotateVector(Vector3(0.f, 1.f, 0.f));
 	camera->lookAt(eye, center, up);
-
-	/*m.translate(0.0f, 3.5f, 0.0f);
-	Entity* shop = new Entity(0, 5, 0, m);
-	shop->loadMesh("data/Shop/Shop-1-ShopBuilding_2.obj");
-	shop->loadTexture("data/Shop/Shop-1-ShopBuilding_2.png");
-
-	tienda->addEntity(shop);*/
 }

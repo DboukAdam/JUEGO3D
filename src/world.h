@@ -18,4 +18,5 @@ public:
 	void addZombie(Zombie* zombie);
 	void addPlayer(Player* player);
 	void createZombies();
+	void disparar();
 };

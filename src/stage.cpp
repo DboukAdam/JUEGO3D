@@ -117,6 +117,10 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 		free_camera = !free_camera;
 	}
 
+	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
+		world->disparar();
+	}
+
 	//to navigate with the mouse fixed in the middle
 	if (game->mouse_locked)
 		Input::centerMouse();

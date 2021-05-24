@@ -10,8 +10,20 @@ void Zombie::setVel(float v){
 	this->vel = v;
 }
 
+Zombie::~Zombie()
+{
+	mesh->clear();
+	texture->clear();
+}
+
 void Player::setVel(float v) {
 	this->vel = v;
+}
+
+Entity::~Entity()
+{
+	mesh->clear();
+	texture->clear();
 }
 
 void Entity::render(Shader* shader) {

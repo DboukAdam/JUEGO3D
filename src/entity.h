@@ -27,6 +27,7 @@ public:
 		this->texture = texture;
 		this->angle = angle;
 	}
+	~Entity();
 
 	void setPos(Vector3 pos) {
 		this->pos = pos;
@@ -57,6 +58,7 @@ public:
 	float vel;
 	bool triggered;
 
+	~Zombie();
 	void AStarPath(); //Cambiar lo que devuelve
 	void setVel(float v);
 };

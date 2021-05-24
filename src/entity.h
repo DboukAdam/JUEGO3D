@@ -11,19 +11,17 @@ public:
 	Texture* texture;
 	Shader* shader;
 	
-	Entity(Vector3 pos, Matrix44 m, Shader* shader, Mesh* mesh = NULL, Texture* texture = NULL) {
+	Entity(Vector3 pos, Matrix44 m, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos = pos;
 		this->m = m;
-		this->shader = shader;
 		this->mesh = mesh;
 		this->texture = texture;
 	}
-	Entity(int x, int y, int z, Matrix44 m, Shader* shader, Mesh* mesh = NULL, Texture* texture = NULL) {
+	Entity(int x, int y, int z, Matrix44 m, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos.x = x;
 		this->pos.y = y;
 		this->pos.z = z;
 		this->m = m;
-		this->shader = shader;
 		this->mesh = mesh;
 		this->texture = texture;
 	}
@@ -48,7 +46,7 @@ public:
 		texture = Texture::Get(filename);
 	}
 
-	void render();
+	void render(Shader* shader);
 };
 
 class Zombie : public Entity {

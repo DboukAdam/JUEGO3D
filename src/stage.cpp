@@ -21,7 +21,7 @@ void PlayStage::render(World* world) {
 	
 	Camera* camera = Camera::current;
 	camera->enable();
-	camera->eye = world->zombies[0]->m * Vector3(0.f, 2.f, 0.f);
+	camera->eye = world->player->m * Vector3(0.f, 2.f, 0.f);
 	/*Vector3 center = world->zombies[0]->m * Vector3(0.f, 2.f, 1.f);
 	Vector3 up = world->zombies[0]->m.rotateVector(Vector3(0.f, 1.f, 0.f));
 	camera->lookAt(eye, center, up);*/
@@ -34,21 +34,25 @@ void PlayStage::render(World* world) {
 	//create model matrix for cube
 	Matrix44 m;
 	//m.rotate(game->angle * DEG2RAD, Vector3(0, 1, 0));
+	//enable shader
+	Shader* shader = world->shader;
+	shader->enable();
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		Entity* entity = world->entities[i];
 		if (entity == NULL) {
 			break;
 		}
-		entity->render();
+		entity->render(shader);
 	}
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = world->zombies[i];
 		if (zombie == NULL) {
 			break;
 		}
-		zombie->render();
+		zombie->render(shader);
 	}
-
+	//disable shader
+	shader->disable();
 	//Draw the floor grid
 	drawGrid();
 
@@ -78,19 +82,16 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 	//if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 	
 	if (Input::isKeyPressed(SDL_SCANCODE_W)) {
-		world->zombies[0]->m.translate(0, 0, world->zombies[0]->vel);
+		world->player->m.translate(0, 0, world->player->vel);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_S)) {
-		world->zombies[0]->m.translate(0, 0, -world->zombies[0]->vel);
-		
+		world->player->m.translate(0, 0, -world->player->vel);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_A)) {
-		world->zombies[0]->m.translate(world->zombies[0]->vel,0, 0);
-		
+		world->player->m.translate(world->player->vel,0, 0);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_D)) {
-		world->zombies[0]->m.translate(-world->zombies[0]->vel, 0, 0);
-		
+		world->player->m.translate(-world->player->vel, 0, 0);
 	}
 
 	//to navigate with the mouse fixed in the middle

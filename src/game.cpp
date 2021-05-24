@@ -128,18 +128,24 @@ void Game::initWorldTienda(){
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
-	tienda = new World();
+	tienda = new World(shader);
 
 	Matrix44 m;
 	m.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
-	Entity* suelo = new Entity(0, 0, 0, m, shader);
+	Entity* suelo = new Entity(0, 0, 0, m);
 	suelo->loadMesh("data/Shop/Shop-4-GroundTile.obj");
 	suelo->loadTexture("data/Shop/Shop-4-GroundTile.png");
-
 	tienda->addEntity(suelo);
 
-	m.translate(0, 3.5, 1);
-	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m, shader);
+	m.translate(0, 3.5, 0);
+	Player* player = (Player*) new Entity(0, 0, 0, m);
+	player->loadMesh("data/Zombie/Zed_1.obj");
+	player->loadTexture("data/Zombie/Zed_1.png");
+	player->setVel(2.0f);
+	tienda->addPlayer(player);
+
+	m.translate(4, 0, 4);
+	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
 	zombie->loadMesh("data/Zombie/Zed_1.obj");
 	zombie->loadTexture("data/Zombie/Zed_1.png");
 	zombie->setVel(2.0f);

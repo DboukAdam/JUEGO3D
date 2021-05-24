@@ -1,12 +1,13 @@
 #include "world.h"
 
-World::World() {
+World::World(Shader* shader) {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		entities[i] = NULL;
 	}
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		zombies[i] = NULL;
 	}
+	this->shader = shader;
 }
 
 void World::addEntity(Entity* entity) {

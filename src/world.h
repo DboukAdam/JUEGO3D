@@ -11,8 +11,9 @@ public:
 	Entity* entities[MAX_ENTITIES];
 	Zombie* zombies[MAX_ZOMBIES];
 	Player* player;
+	Shader* shader;
 
-	World();
+	World(Shader* shader);
 	void addEntity(Entity* entity);
 	void addZombie(Zombie* zombie);
 	void addPlayer(Player* player);

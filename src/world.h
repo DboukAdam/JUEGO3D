@@ -4,7 +4,7 @@
 #include "camera.h"
 
 #define MAX_ENTITIES 155
-#define MAX_ZOMBIES 30
+#define MAX_ZOMBIES 10
 
 class World {
 public:
@@ -17,4 +17,5 @@ public:
 	void addEntity(Entity* entity);
 	void addZombie(Zombie* zombie);
 	void addPlayer(Player* player);
+	void createZombies();
 };

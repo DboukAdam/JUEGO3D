@@ -132,31 +132,42 @@ void Game::initWorldTienda(){
 
 	Matrix44 m;
 	m.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
-	Entity* suelo = new Entity(0, 0, 0, m);
+	m.setTranslation(9.99, 0.000, -7.08);
+	Entity* suelo = new Entity(9.99, 0.000, -7.08, m);
 	suelo->loadMesh("data/Shop/Shop-4-GroundTile.obj");
 	suelo->loadTexture("data/Shop/Shop-4-GroundTile.png");
 	tienda->addEntity(suelo);
+	m.setTranslation(-10.01, 0.000, -7.07);
+	Entity* suelo2 = new Entity(-10.01, 0.000, -7.07, m);
+	suelo2->loadMesh("data/Shop/Shop-4-GroundTile.obj");
+	suelo2->loadTexture("data/Shop/Shop-4-GroundTile.png");
+	tienda->addEntity(suelo2);
+	m.setTranslation(0.000, 4.04, -3.34);
+	Entity* shop = new Entity(0.000, 4.04, -3.34, m);
+	shop->loadMesh("data/Shop/Shop-0-ShopBuilding_1.obj");
+	shop->loadTexture("data/Shop/Shop-0-ShopBuilding_1.png");
+	tienda->addEntity(shop);
 
-	m.translate(0, 3.5, 0);
-	Player* player = (Player*) new Entity(0, 3.5, 0, m);
+	m.setTranslation(0, 0.5, 0);
+	Player* player = (Player*) new Entity(0, 0.5, 0, m);
 	player->loadMesh("data/Zombie/Zed_1.obj");
 	player->loadTexture("data/Zombie/Zed_1.png");
 	player->setVel(2.0f);
 	tienda->addPlayer(player);
 
-	m.translate(4, 0, 4);
-	Zombie* zombie = (Zombie*) new Entity(4, 3.5, 4, m);
-	zombie->loadMesh("data/Zombie/Zed_1.obj");
-	zombie->loadTexture("data/Zombie/Zed_1.png");
-	zombie->setVel(2.0f);
-	tienda->addZombie(zombie);
+	tienda->createZombies();
 	
+	Entity* sky = new Entity(0, 0, 0, m);
+	sky->loadMesh("data/Ambiente/cielo.ASE");
+	sky->loadTexture("data/Ambiente/cielo.tga");
+	tienda->addEntity(sky);
+
 	//create our camera
 	camera = new Camera();
 	Camera::current = camera;
 	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
 	Vector3 eye = player->m * Vector3(0.f, 2.f, 0.f);
-	Vector3 center = player->m * Vector3(0.f, 2.f, 1.f);
+	Vector3 center = player->m * Vector3(0.f, 5.f, -1.f);
 	Vector3 up = player->m.rotateVector(Vector3(0.f, 1.f, 0.f));
 	camera->lookAt(eye, center, up);
 
@@ -167,4 +178,3 @@ void Game::initWorldTienda(){
 
 	tienda->addEntity(shop);*/
 }
-

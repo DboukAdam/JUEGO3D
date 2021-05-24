@@ -18,7 +18,7 @@ public:
 		this->texture = texture;
 		this->angle = angle;
 	}
-	Entity(int x, int y, int z, Matrix44 m, float angle = 0, Mesh* mesh = NULL, Texture* texture = NULL) {
+	Entity(float x, float y, float z, Matrix44 m, float angle = 0, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos.x = x;
 		this->pos.y = y;
 		this->pos.z = z;

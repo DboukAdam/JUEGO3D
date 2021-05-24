@@ -35,7 +35,7 @@ public:
 	World* tienda;
 	World* casa;
 	World* currentWorld;
-	float mouse_speed = 100.0f;
+	float mouse_speed = 10.0f;
 
 	Game( int window_width, int window_height, SDL_Window* window );
 
@@ -54,7 +54,6 @@ public:
 	void onResize(int width, int height);
 
 	void initWorldTienda();
-
 };
 
 

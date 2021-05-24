@@ -1,6 +1,8 @@
 #include "stage.h"
 #include "input.h"
 
+bool free_camera = false;
+
 void IntroStage::render(World* world) {
 	
 }
@@ -21,19 +23,24 @@ void PlayStage::render(World* world) {
 	
 	Camera* camera = Camera::current;
 	camera->enable();
-	camera->eye = world->player->m * Vector3(0.f, 2.f, 0.f);
-	/*Vector3 center = world->zombies[0]->m * Vector3(0.f, 2.f, 1.f);
-	Vector3 up = world->zombies[0]->m.rotateVector(Vector3(0.f, 1.f, 0.f));
-	camera->lookAt(eye, center, up);*/
+
+	Player* player = world->player;
+	Matrix44 playerModel = player->m;
+	playerModel.translate(player->pos.x, player->pos.y, player->pos.z);
+	playerModel.rotate(player->angle * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
+	
+	if (!free_camera) {
+		Vector3 eye = playerModel * Vector3(0.f, 2.f, 0.f);
+		Vector3 center = playerModel * Vector3(0.f, 2.f, 1.f);
+		Vector3 up = Vector3(0.f, 1.f, 0.f);
+		camera->lookAt(eye, center, up);
+	}
 
 	//set flags
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	//create model matrix for cube
-	Matrix44 m;
-	//m.rotate(game->angle * DEG2RAD, Vector3(0, 1, 0));
 	//enable shader
 	Shader* shader = world->shader;
 	shader->enable();
@@ -63,35 +70,53 @@ void PlayStage::render(World* world) {
 void PlayStage::update(double seconds_elapsed, World* world) {
 	Game* game = Game::instance;
 	Camera* camera = Camera::current;
+	Player* player = world->player;
 
 	float speed = seconds_elapsed * game->mouse_speed; //the speed is defined by the seconds_elapsed so it goes constant
-
-	//mouse input to rotate the cam
-	if ((Input::mouse_state & SDL_BUTTON_LEFT) || game->mouse_locked) //is left button pressed?
-	{
-		camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
-		//camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
-		camera->center = camera->unproject(Vector3(Input::mouse_position.x, Input::mouse_position.y, 1), game->window_width, game->window_height);
-	}
-
-	//async input to move the camera around
-	//if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
-	//if (Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
-	//if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
-	//if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
-	//if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 	
-	if (Input::isKeyPressed(SDL_SCANCODE_W)) {
-		world->player->m.translate(0, 0, world->player->vel);
+	if (free_camera) {
+		//async input to move the camera around
+		if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
+		if (Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
+		if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
+		if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
+		if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 	}
-	if (Input::isKeyPressed(SDL_SCANCODE_S)) {
-		world->player->m.translate(0, 0, -world->player->vel);
+	else {
+		// mouse input to rotate the cam
+		if ((Input::mouse_state & SDL_BUTTON_LEFT) || game->mouse_locked) //is left button pressed?
+		{
+			camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
+			camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
+			//camera->center = camera->unproject(Vector3(Input::mouse_position.x, Input::mouse_position.y, 1), game->window_width, game->window_height);
+		}
+
+		Matrix44 playerRot;
+		playerRot.setRotation(player->angle * DEG2RAD, Vector3(0, 1, 0));
+
+		Vector3 playerFront = playerRot.rotateVector(Vector3(0.0f, 0.0f, -1.0f));
+		Vector3 playerRight = playerRot.rotateVector(Vector3(1.0f, 0.0f, 0.0f));
+		Vector3 playerSpeed;
+
+		if (Input::isKeyPressed(SDL_SCANCODE_W)) {
+			playerSpeed = playerSpeed + (playerFront * -speed);
+		}
+		if (Input::isKeyPressed(SDL_SCANCODE_S)) {
+			playerSpeed = playerSpeed + (playerFront * speed);
+		}
+		if (Input::isKeyPressed(SDL_SCANCODE_A)) {
+			playerSpeed = playerSpeed + (playerRight * speed);
+		}
+		if (Input::isKeyPressed(SDL_SCANCODE_D)) {
+			playerSpeed = playerSpeed + (playerRight * -speed);
+		}
+
+		Vector3 targetPos = player->pos + playerSpeed;
+		player->pos = targetPos;
 	}
-	if (Input::isKeyPressed(SDL_SCANCODE_A)) {
-		world->player->m.translate(world->player->vel,0, 0);
-	}
-	if (Input::isKeyPressed(SDL_SCANCODE_D)) {
-		world->player->m.translate(-world->player->vel, 0, 0);
+
+	if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) {
+		free_camera = !free_camera;
 	}
 
 	//to navigate with the mouse fixed in the middle

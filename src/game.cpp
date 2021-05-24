@@ -38,7 +38,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	frame = 0;
 	time = 0.0f;
 	elapsed_time = 0.0f;
-	mouse_locked = false;
+	mouse_locked = true;
 
 	//OpenGL flags
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
@@ -138,14 +138,14 @@ void Game::initWorldTienda(){
 	tienda->addEntity(suelo);
 
 	m.translate(0, 3.5, 0);
-	Player* player = (Player*) new Entity(0, 0, 0, m);
+	Player* player = (Player*) new Entity(0, 3.5, 0, m);
 	player->loadMesh("data/Zombie/Zed_1.obj");
 	player->loadTexture("data/Zombie/Zed_1.png");
 	player->setVel(2.0f);
 	tienda->addPlayer(player);
 
 	m.translate(4, 0, 4);
-	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
+	Zombie* zombie = (Zombie*) new Entity(4, 3.5, 4, m);
 	zombie->loadMesh("data/Zombie/Zed_1.obj");
 	zombie->loadTexture("data/Zombie/Zed_1.png");
 	zombie->setVel(2.0f);

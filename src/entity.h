@@ -9,21 +9,23 @@ public:
 	Matrix44 m;
 	Mesh* mesh;
 	Texture* texture;
-	Shader* shader;
+	float angle;
 	
-	Entity(Vector3 pos, Matrix44 m, Mesh* mesh = NULL, Texture* texture = NULL) {
+	Entity(Vector3 pos, Matrix44 m, float angle = 0, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos = pos;
 		this->m = m;
 		this->mesh = mesh;
 		this->texture = texture;
+		this->angle = angle;
 	}
-	Entity(int x, int y, int z, Matrix44 m, Mesh* mesh = NULL, Texture* texture = NULL) {
+	Entity(int x, int y, int z, Matrix44 m, float angle = 0, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos.x = x;
 		this->pos.y = y;
 		this->pos.z = z;
 		this->m = m;
 		this->mesh = mesh;
 		this->texture = texture;
+		this->angle = angle;
 	}
 
 	void setPos(Vector3 pos) {

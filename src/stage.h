@@ -14,6 +14,7 @@ public:
 
 class PlayStage : public Stage {
 public:
+	void addObjectEditor();
 	virtual void render(World* world);
 	virtual void update(double seconds_elapsed, World* world);
 };

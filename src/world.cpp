@@ -8,6 +8,7 @@ World::World(Shader* shader) {
 		zombies[i] = NULL;
 	}
 	this->shader = shader;
+	this->player = NULL;
 }
 
 void World::addEntity(Entity* entity) {

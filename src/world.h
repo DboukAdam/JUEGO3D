@@ -12,6 +12,9 @@ public:
 	Zombie* zombies[MAX_ZOMBIES];
 	Player* player;
 	Shader* shader;
+	Entity* sky;
+	Entity* cesped;
+	Entity* crossHair;
 
 	World(Shader* shader);
 	void addEntity(Entity* entity);

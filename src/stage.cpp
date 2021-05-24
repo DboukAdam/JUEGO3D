@@ -11,6 +11,24 @@ void IntroStage::update(double seconds_elapsed, World* world) {
 
 }
 
+std::vector<Entity*> entities;
+
+void PlayStage::addObjectEditor()
+{
+	Game* game = Game::instance;
+	Camera* camera = Camera::current;
+
+	Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
+	Vector3 origin = camera->eye;
+	Vector3 pos = RayPlaneCollision(Vector3(0, -4.5, 0), Vector3(0,1,0), origin, dir);
+	Matrix44 entityModel;
+	Entity* entity = new Entity(0,0,0, entityModel);
+	entity->m.setTranslation(pos.x, pos.y, pos.z);
+	entity->loadMesh("data/Shop/Shop-0-ShopBuilding_1.obj");
+	entity->loadTexture("data/Shop/Shop-0-ShopBuilding_1.png");
+	entities.push_back(entity);
+}
+
 void PlayStage::render(World* world) {
 	Game* game = Game::instance;
 	//set the clear color (the background color)
@@ -24,6 +42,9 @@ void PlayStage::render(World* world) {
 	Camera* camera = Camera::current;
 	camera->enable();
 
+	world->sky->m.setTranslation(camera->eye.x, camera->eye.y, camera->eye.z);
+	world->crossHair->m.setTranslation(camera->center.x, camera->center.y, camera->center.z);
+
 	Player* player = world->player;
 	player->m.setTranslation(player->pos.x, player->pos.y, player->pos.z);
 	player->m.rotate(player->angle * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
@@ -36,14 +57,27 @@ void PlayStage::render(World* world) {
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
+	
+
 	//enable shader
 	Shader* shader = world->shader;
 	shader->enable();
+
+	world->crossHair->render(shader);
+
+	for (int i = 0; i < entities.size(); i++)
+	{
+		entities[i]->render(shader);
+	}
+
+	world->sky->render(shader);
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		Entity* entity = world->entities[i];
 		if (entity == NULL) {
 			break;
 		}
+		Vector3 current_pos_world = entity->m * entity->mesh->box.center;
+		if (!camera->testSphereInFrustum(current_pos_world,entity->mesh->radius)) continue;
 		entity->render(shader);
 	}
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
@@ -51,8 +85,13 @@ void PlayStage::render(World* world) {
 		if (zombie == NULL) {
 			break;
 		}
+		Vector3 current_pos_world = zombie->m * zombie->mesh->box.center;
+		if (!camera->testSphereInFrustum(current_pos_world, zombie->mesh->radius)) continue;
 		zombie->render(shader);
 	}
+
+	world->cesped->render(shader, 100);
+
 	//disable shader
 	shader->disable();
 	//Draw the floor grid
@@ -66,6 +105,7 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 	Game* game = Game::instance;
 	Camera* camera = Camera::current;
 	Player* player = world->player;
+	Shader* shader = world->shader;
 
 	float speed = seconds_elapsed * game->mouse_speed; //the speed is defined by the seconds_elapsed so it goes constant
 	
@@ -76,7 +116,7 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 			camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
 		}
 
-		if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10;
+		if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 100;
 		if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
 		if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
 		if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
@@ -119,7 +159,13 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 
 	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
 		world->disparar();
+		addObjectEditor();
 	}
+
+	if (Input::wasKeyPressed(SDL_SCANCODE_3)) {
+		addObjectEditor();
+	}
+
 
 	//to navigate with the mouse fixed in the middle
 	if (game->mouse_locked)

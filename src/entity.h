@@ -17,7 +17,7 @@ public:
 		this->mesh = mesh;
 		this->texture = texture;
 		this->angle = angle;
-	}
+	};
 	Entity(float x, float y, float z, Matrix44 m, float angle = 0, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos.x = x;
 		this->pos.y = y;
@@ -26,30 +26,30 @@ public:
 		this->mesh = mesh;
 		this->texture = texture;
 		this->angle = angle;
-	}
+	};
 	~Entity();
 
 	void setPos(Vector3 pos) {
 		this->pos = pos;
-	}
+	};
 	void setPos(int x, int y, int z) {
 		this->pos.x = x;
 		this->pos.y = y;
 		this->pos.z = z;
-	}
+	};
 
 	Vector3 getPos() {
 		m.getTranslation();
-	}
+	};
 
 	void loadMesh(const char* filename) {
 		mesh = Mesh::Get(filename);
-	}
+	};
 	void loadTexture(const char* filename) {
 		texture = Texture::Get(filename);
-	}
+	};
 
-	void render(Shader* shader);
+	void render(Shader* shader, float tiling = 1.0f);
 };
 
 class Zombie : public Entity {

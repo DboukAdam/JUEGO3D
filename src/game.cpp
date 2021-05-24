@@ -123,16 +123,16 @@ void Game::initWorldTienda(){
 	tienda = new World(shader);
 
 	Matrix44 m;
-	m.setTranslation(9.99, 0.000, -7.08);
-	Entity* suelo = new Entity(9.99, 0.000, -7.08, m);
-	suelo->loadMesh("data/Shop/Shop-4-GroundTile.obj");
+	m.setTranslation(0, -0.65, 0);
+	Entity* suelo = new Entity(0, -0.65, 0, m);
+	suelo->loadMesh("data/Shop/groundScale.obj");
 	suelo->loadTexture("data/Shop/Shop-4-GroundTile.png");
 	tienda->addEntity(suelo);
-	m.setTranslation(-10.01, 0.000, -7.07);
+	/*m.setTranslation(-10.01, 0.000, -7.07);
 	Entity* suelo2 = new Entity(-10.01, 0.000, -7.07, m);
 	suelo2->loadMesh("data/Shop/Shop-4-GroundTile.obj");
 	suelo2->loadTexture("data/Shop/Shop-4-GroundTile.png");
-	tienda->addEntity(suelo2);
+	tienda->addEntity(suelo2);*/
 	m.setTranslation(0.000, 4.04, -3.34);
 	Entity* shop = new Entity(0.000, 4.04, -3.34, m);
 	shop->loadMesh("data/Shop/Shop-0-ShopBuilding_1.obj");
@@ -147,18 +147,33 @@ void Game::initWorldTienda(){
 	tienda->addPlayer(player);
 
 	tienda->createZombies();
-	
-	Entity* sky = new Entity(0, 0, 0, m);
-	sky->loadMesh("data/Ambiente/cielo.ASE");
-	sky->loadTexture("data/Ambiente/cielo.tga");
-	tienda->addEntity(sky);
+
+	m.setTranslation(0, 0, 0);
+	tienda->sky = new Entity(0,0,0, m);
+	tienda->sky->loadMesh("data/cielo.ASE");
+	tienda->sky->loadTexture("data/cielo.tga");
 
 	//create our camera
 	camera = new Camera();
 	Camera::current = camera;
 	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
-	Vector3 eye = player->m * Vector3(0.f, 2.f, 0.f);
+	Vector3 eye = player->m * Vector3(0.f, 1.f, 0.f);
 	Vector3 center = player->m * Vector3(0.f, 5.f, -1.f);
 	Vector3 up = player->m.rotateVector(Vector3(0.f, 1.f, 0.f));
 	camera->lookAt(eye, center, up);
+
+
+	m.setTranslation(0, -0.6, 0);
+	tienda->cesped = new Entity(0,-0.63,0, m);
+	tienda->cesped->mesh = new Mesh();
+	tienda->cesped->mesh->createPlane(2000);
+	tienda->cesped->loadTexture("data/town/grass.tga");
+
+
+	m.setTranslation(0, 0, 0);
+	tienda->crossHair = new Entity(0, 0, 0, m);
+	tienda->crossHair->mesh = new Mesh();
+	tienda->crossHair->mesh->createPlane(20);
+	tienda->crossHair->loadTexture("data/crosshair.png");
+
 }

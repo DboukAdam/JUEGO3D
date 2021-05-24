@@ -26,7 +26,7 @@ Entity::~Entity()
 	texture->clear();
 }
 
-void Entity::render(Shader* shader) {
+void Entity::render(Shader* shader, float tiling) {
 	Camera* camera = Camera::current;
 	if (shader)
 	{
@@ -36,7 +36,7 @@ void Entity::render(Shader* shader) {
 		shader->setUniform("u_time", time);
 		shader->setUniform("u_texture", texture, 0);
 		shader->setUniform("u_model", m);
-
+		shader->setUniform("u_texture_tiling", tiling);
 		mesh->render(GL_TRIANGLES);
 	}
 }

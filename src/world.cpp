@@ -60,3 +60,32 @@ void World::disparar() {
 		}
 	}
 }
+
+void World::addObjectEditor(Mesh* mesh, Texture* texture, Vector3 dir) {
+	Camera* camera = Camera::current;
+	Vector3 origin = camera->eye;
+	Vector3 pos = RayPlaneCollision(Vector3(0, -4.5, 0), Vector3(0, 1, 0), origin, dir);
+	Matrix44 entityModel;
+	Entity* entity = new Entity(0, 0, 0, entityModel);
+	entity->m.setTranslation(pos.x, pos.y, pos.z);
+	entity->mesh = mesh;
+	entity->texture = texture;
+	addEntity(entity);
+}
+
+void World::selectEntityEditor(Vector3 dir){
+	Camera* camera = Camera::current;
+	Vector3 origin = camera->eye;
+	for (int i = 1; i < MAX_ENTITIES; i++)
+	{
+		Entity* current = entities[i];
+		Vector3 col;
+		Vector3 normal;
+		if (current == NULL) break;
+		if (!current->mesh->testRayCollision(current->m, origin, dir, col, normal, 10000)) continue;
+		if (selectedEntity != NULL) selectedEntity->bounding = false;
+		current->bounding = true;
+		selectedEntity = current;
+		break;
+	}
+}

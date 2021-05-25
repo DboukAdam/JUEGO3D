@@ -23,4 +23,7 @@ public:
 	void addPlayer(Player* player);
 	void createZombies();
 	void disparar();
+
+	void addObjectEditor(Mesh* mesh, Texture* texture, Vector3 dir);
+	void selectEntityEditor(Vector3 dir);
 };

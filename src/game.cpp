@@ -135,29 +135,14 @@ void Game::initWorldTienda(){
 	shop->loadTexture("data/Shop/Shop-0-ShopBuilding_1.png");
 	tienda->addEntity(shop);
 
-	m.setTranslation(0, 0.5, 0);
-	Player* player = (Player*) new Entity(0, 0.5, 0, m);
-	player->loadMesh("data/Zombie/Zed_1.obj");
-	player->loadTexture("data/Zombie/Zed_1.png");
-	player->setVel(2.0f);
-	tienda->addPlayer(player);
+	Vector3 playerInitPos = Vector3(0, 0.5, 0);
+	initPlayer(playerInitPos, tienda);
 
 	tienda->createZombies();
 
-	m.setTranslation(0, -50, 0);
-	tienda->sky = new Entity(0,-50,0, m);
-	tienda->sky->loadMesh("data/cielo.ASE");
-	tienda->sky->loadTexture("data/cielo.tga");
-
-	//create our camera
-	camera = new Camera();
-	Camera::current = camera;
-	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
-	Vector3 eye = player->m * Vector3(0.f, 1.f, 0.f);
-	Vector3 center = player->m * Vector3(0.f, 5.f, -1.f);
-	Vector3 up = player->m.rotateVector(Vector3(0.f, 1.f, 0.f));
-	camera->lookAt(eye, center, up);
-
+	initSky(tienda);
+	
+	initCamera(tienda);
 
 	m.setTranslation(0, -0.6, 0);
 	tienda->cesped = new Entity(0,-0.6,0, m);
@@ -165,11 +150,39 @@ void Game::initWorldTienda(){
 	tienda->cesped->mesh->createPlane(2000);
 	tienda->cesped->loadTexture("data/town/grass.tga");
 
-
 	m.setTranslation(0, 0, 0);
 	tienda->crossHair = new Entity(0, 0, 0, m);
 	tienda->crossHair->mesh = new Mesh();
 	tienda->crossHair->mesh->createPlane(20);
 	tienda->crossHair->loadTexture("data/crosshair.png");
 
+}
+
+void Game::initPlayer(Vector3 pos, World* world) {
+	Matrix44 m;
+	m.setTranslation(pos.x, pos.y, pos.z);
+	Player* player = (Player*) new Entity(pos, m);
+	player->loadMesh("data/Zombie/Zed_1.obj");
+	player->loadTexture("data/Zombie/Zed_1.png");
+	player->setVel(2.0f);
+	world->addPlayer(player);
+}
+
+void Game::initSky(World* world) {
+	Matrix44 m;
+	Vector3 playerPos = world->player->getPos();
+	m.setTranslation(playerPos.x, playerPos.y, playerPos.z);
+	world->sky = new Entity(playerPos, m);
+	world->sky->loadMesh("data/cielo.ASE");
+	world->sky->loadTexture("data/cielo.tga");
+}
+
+void Game::initCamera(World* world) {
+	camera = new Camera();
+	Camera::current = camera;
+	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
+	Vector3 eye = world->player->m * Vector3(0.f, 1.f, 0.f);
+	Vector3 center = world->player->m * Vector3(0.f, 5.f, -1.f);
+	Vector3 up = world->player->m.rotateVector(Vector3(0.f, 1.f, 0.f));
+	camera->lookAt(eye, center, up);
 }

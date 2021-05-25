@@ -11,46 +11,6 @@ void IntroStage::update(double seconds_elapsed, World* world) {
 
 }
 
-
-void PlayStage::addObjectEditor(Mesh* mesh, Texture* texture)
-{
-	Game* game = Game::instance;
-	Camera* camera = Camera::current;
-
-	Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
-	Vector3 origin = camera->eye;
-	Vector3 pos = RayPlaneCollision(Vector3(0, -4.5, 0), Vector3(0,1,0), origin, dir);
-	Matrix44 entityModel;
-	Entity* entity = new Entity(0,0,0, entityModel);
-	entity->m.setTranslation(pos.x, pos.y, pos.z);
-	entity->mesh = mesh;
-	entity->texture = texture;
-	game->currentWorld->addEntity(entity);
-}
-
-void PlayStage::selectEntityEditor()
-{
-	Game* game = Game::instance;
-	Camera* camera = Camera::current;
-	World* world = game->currentWorld;
-	Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
-	Vector3 origin = camera->eye;
-	
-	for (int i = 1; i < sizeof(world->entities); i++)
-	{
-		Entity* current = world->entities[i];
-		Vector3 col;
-		Vector3 normal;
-		if (current == NULL) break;
-		if (!current->mesh->testRayCollision(current->m, origin, dir, col, normal, 10000)) continue;
-		
-		world->selectedEntity = current;
-		break;
-	}
-
-	
-}
-
 void PlayStage::render(World* world) {
 	Game* game = Game::instance;
 	//set the clear color (the background color)
@@ -116,22 +76,16 @@ void PlayStage::render(World* world) {
 	shader->disable();
 	
 	//pintando bounding muy feo
-
-	world->sky->render(shader);
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		Entity* entity = world->entities[i];
-		if (entity == NULL) {
-			break;
-		}
+		if (entity == NULL) break;
 		BoundingBox currentBox = transformBoundingBox(entity->m, entity->mesh->box);
 		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
 		if(entity->bounding) entity->mesh->renderBounding(entity->m);
 	}
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = world->zombies[i];
-		if (zombie == NULL) {
-			break;
-		}
+		if (zombie == NULL) break;
 		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
 		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
 		if (zombie->bounding) zombie->mesh->renderBounding(zombie->m);
@@ -205,15 +159,18 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 	}
 
 	if (Input::wasKeyPressed(SDL_SCANCODE_1)) {
-		addObjectEditor(Mesh::Get("data/Shop/Shop-0-ShopBuilding_1.obj"), Texture::Get("data/Shop/Shop-0-ShopBuilding_1.png"));
+		Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
+		world->addObjectEditor(Mesh::Get("data/Shop/Shop-0-ShopBuilding_1.obj"), Texture::Get("data/Shop/Shop-0-ShopBuilding_1.png"), dir);
 	}
 
 	if (Input::wasKeyPressed(SDL_SCANCODE_2)) {
-		addObjectEditor(Mesh::Get("data/ZombieScale.obj"), Texture::Get("data/Zombie/Zed_1.png"));
+		Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
+		world->addObjectEditor(Mesh::Get("data/ZombieScale.obj"), Texture::Get("data/Zombie/Zed_1.png"), dir);
 	}
 
 	if (Input::wasKeyPressed(SDL_SCANCODE_0)) {
-		selectEntityEditor(); 
+		Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
+		world->selectEntityEditor(dir);
 	}
 
 	if (Input::wasKeyPressed(SDL_SCANCODE_9)) {

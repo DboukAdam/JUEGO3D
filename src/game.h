@@ -54,6 +54,9 @@ public:
 	void onResize(int width, int height);
 
 	void initWorldTienda();
+	void initPlayer(Vector3 initPos, World* world);
+	void initSky(World* world);
+	void initCamera(World* world);
 };
 
 

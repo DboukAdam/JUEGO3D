@@ -10,7 +10,7 @@ public:
 	Mesh* mesh;
 	Texture* texture;
 	float angle;
-	bool bounding = true;
+	bool bounding = false;
 	
 	Entity(Vector3 pos, Matrix44 m, float angle = 0, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos = pos;
@@ -40,7 +40,7 @@ public:
 	};
 
 	Vector3 getPos() {
-		m.getTranslation();
+		return m.getTranslation();
 	};
 
 	void loadMesh(const char* filename) {

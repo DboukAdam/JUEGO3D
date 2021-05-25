@@ -50,11 +50,13 @@ void World::disparar() {
 	Camera* camera = Camera::current;
 	Vector3 colPoint;
 	Vector3 colNormal;
+	Vector3 origin = camera->eye;
+	Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, 800, 600);
 	float maxDistance = 100;
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = zombies[i];
 		if (zombie == NULL)	break;
-		if (zombie->mesh->testRayCollision(zombie->m, camera->eye, camera->center, colPoint, colNormal, maxDistance, false)) {
+		if (zombie->mesh->testRayCollision(zombie->m, origin, dir, colPoint, colNormal, maxDistance, false)) {
 			//zombie->~Zombie();
 			std::cerr << "Buena punteria!" << std::endl;;
 		}

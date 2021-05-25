@@ -2,6 +2,7 @@
 #include "shader.h"
 #include "entity.h"
 #include "camera.h"
+#include "input.h"
 
 #define MAX_ENTITIES 155
 #define MAX_ZOMBIES 10

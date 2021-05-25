@@ -34,9 +34,11 @@ void PlayStage::render(World* world) {
 		Vector3 center = eye + forward;
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		camera->lookAt(eye, center, up);
-		world->crossHair->m.setTranslation(camera->center.x, camera->center.y, camera->center.z);
+		//world->crossHair->m.setTranslation(camera->center.x, camera->center.y, camera->center.z);
 	}
 	world->sky->m.setTranslation(camera->eye.x, camera->eye.y, camera->eye.z);
+
+
 	//set flags
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
@@ -45,8 +47,24 @@ void PlayStage::render(World* world) {
 	//enable shader
 	Shader* shader = world->shader;
 	shader->enable();
+	
+	const int planewidth = 100;
+	const int planeheight = 100;
+	const float padding = world->cesped->mesh->box.center.distance(world->cesped->mesh->box.halfsize);
+	const float offset = 300;
 
-	world->crossHair->render(shader);
+	for (int i = 0; i < planewidth; i++)
+	{
+		for (int j = 0; j < planeheight; j++)
+		{
+			world->cesped->m.setTranslation((i * padding)-offset, -0.60f, (j * padding)-offset);
+			BoundingBox currentBox = transformBoundingBox(world->cesped->m, world->cesped->mesh->box);
+			if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
+			world->cesped->render(shader);
+		}
+	}
+
+	//world->crossHair->render(shader);
 
 
 	world->sky->render(shader);

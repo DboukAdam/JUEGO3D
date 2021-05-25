@@ -128,11 +128,7 @@ void Game::initWorldTienda(){
 	suelo->loadMesh("data/Shop/groundScale.obj");
 	suelo->loadTexture("data/Shop/Shop-4-GroundTile.png");
 	tienda->addEntity(suelo);
-	/*m.setTranslation(-10.01, 0.000, -7.07);
-	Entity* suelo2 = new Entity(-10.01, 0.000, -7.07, m);
-	suelo2->loadMesh("data/Shop/Shop-4-GroundTile.obj");
-	suelo2->loadTexture("data/Shop/Shop-4-GroundTile.png");
-	tienda->addEntity(suelo2);*/
+	
 	m.setTranslation(0.000, 4.04, -3.34);
 	Entity* shop = new Entity(0.000, 4.04, -3.34, m);
 	shop->loadMesh("data/Shop/Shop-0-ShopBuilding_1.obj");
@@ -148,8 +144,8 @@ void Game::initWorldTienda(){
 
 	tienda->createZombies();
 
-	m.setTranslation(0, 0, 0);
-	tienda->sky = new Entity(0,0,0, m);
+	m.setTranslation(0, -50, 0);
+	tienda->sky = new Entity(0,-50,0, m);
 	tienda->sky->loadMesh("data/cielo.ASE");
 	tienda->sky->loadTexture("data/cielo.tga");
 
@@ -164,7 +160,7 @@ void Game::initWorldTienda(){
 
 
 	m.setTranslation(0, -0.6, 0);
-	tienda->cesped = new Entity(0,-0.63,0, m);
+	tienda->cesped = new Entity(0,-0.6,0, m);
 	tienda->cesped->mesh = new Mesh();
 	tienda->cesped->mesh->createPlane(2000);
 	tienda->cesped->loadTexture("data/town/grass.tga");

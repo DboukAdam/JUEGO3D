@@ -24,6 +24,7 @@ Entity::~Entity()
 {
 	mesh->clear();
 	texture->clear();
+	this->bounding = false;
 }
 
 void Entity::render(Shader* shader, float tiling) {

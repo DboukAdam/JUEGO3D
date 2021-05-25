@@ -15,6 +15,7 @@ public:
 	Entity* sky;
 	Entity* cesped;
 	Entity* crossHair;
+	Entity* selectedEntity = NULL;
 
 	World(Shader* shader);
 	void addEntity(Entity* entity);

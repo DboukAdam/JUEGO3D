@@ -11,9 +11,8 @@ void IntroStage::update(double seconds_elapsed, World* world) {
 
 }
 
-std::vector<Entity*> entities;
 
-void PlayStage::addObjectEditor()
+void PlayStage::addObjectEditor(Mesh* mesh, Texture* texture)
 {
 	Game* game = Game::instance;
 	Camera* camera = Camera::current;
@@ -24,9 +23,32 @@ void PlayStage::addObjectEditor()
 	Matrix44 entityModel;
 	Entity* entity = new Entity(0,0,0, entityModel);
 	entity->m.setTranslation(pos.x, pos.y, pos.z);
-	entity->loadMesh("data/Shop/Shop-0-ShopBuilding_1.obj");
-	entity->loadTexture("data/Shop/Shop-0-ShopBuilding_1.png");
-	entities.push_back(entity);
+	entity->mesh = mesh;
+	entity->texture = texture;
+	game->currentWorld->addEntity(entity);
+}
+
+void PlayStage::selectEntityEditor()
+{
+	Game* game = Game::instance;
+	Camera* camera = Camera::current;
+	World* world = game->currentWorld;
+	Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
+	Vector3 origin = camera->eye;
+	
+	for (int i = 1; i < sizeof(world->entities); i++)
+	{
+		Entity* current = world->entities[i];
+		Vector3 col;
+		Vector3 normal;
+		if (current == NULL) break;
+		if (!current->mesh->testRayCollision(current->m, origin, dir, col, normal, 10000)) continue;
+		
+		world->selectedEntity = current;
+		break;
+	}
+
+	
 }
 
 void PlayStage::render(World* world) {
@@ -65,10 +87,6 @@ void PlayStage::render(World* world) {
 
 	world->crossHair->render(shader);
 
-	for (int i = 0; i < entities.size(); i++)
-	{
-		entities[i]->render(shader);
-	}
 
 	world->sky->render(shader);
 	for (int i = 0; i < MAX_ENTITIES; i++) {
@@ -76,24 +94,49 @@ void PlayStage::render(World* world) {
 		if (entity == NULL) {
 			break;
 		}
-		Vector3 current_pos_world = entity->m * entity->mesh->box.center;
-		if (!camera->testSphereInFrustum(current_pos_world,entity->mesh->radius)) continue;
+		BoundingBox currentBox = transformBoundingBox(entity->m, entity->mesh->box);
+		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
 		entity->render(shader);
+		
 	}
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = world->zombies[i];
 		if (zombie == NULL) {
 			break;
 		}
-		Vector3 current_pos_world = zombie->m * zombie->mesh->box.center;
-		if (!camera->testSphereInFrustum(current_pos_world, zombie->mesh->radius)) continue;
+		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
+		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
 		zombie->render(shader);
+		
 	}
 
 	world->cesped->render(shader, 100);
 
 	//disable shader
 	shader->disable();
+	
+	//pintando bounding muy feo
+
+	world->sky->render(shader);
+	for (int i = 0; i < MAX_ENTITIES; i++) {
+		Entity* entity = world->entities[i];
+		if (entity == NULL) {
+			break;
+		}
+		BoundingBox currentBox = transformBoundingBox(entity->m, entity->mesh->box);
+		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
+		if(entity->bounding) entity->mesh->renderBounding(entity->m);
+	}
+	for (int i = 0; i < MAX_ZOMBIES; i++) {
+		Zombie* zombie = world->zombies[i];
+		if (zombie == NULL) {
+			break;
+		}
+		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
+		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
+		if (zombie->bounding) zombie->mesh->renderBounding(zombie->m);
+	}
+	
 	//Draw the floor grid
 	drawGrid();
 
@@ -159,14 +202,46 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 
 	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
 		world->disparar();
-		addObjectEditor();
 	}
 
-	if (Input::wasKeyPressed(SDL_SCANCODE_3)) {
-		addObjectEditor();
+	if (Input::wasKeyPressed(SDL_SCANCODE_1)) {
+		addObjectEditor(Mesh::Get("data/Shop/Shop-0-ShopBuilding_1.obj"), Texture::Get("data/Shop/Shop-0-ShopBuilding_1.png"));
 	}
 
+	if (Input::wasKeyPressed(SDL_SCANCODE_2)) {
+		addObjectEditor(Mesh::Get("data/ZombieScale.obj"), Texture::Get("data/Zombie/Zed_1.png"));
+	}
 
+	if (Input::wasKeyPressed(SDL_SCANCODE_0)) {
+		selectEntityEditor(); 
+	}
+
+	if (Input::wasKeyPressed(SDL_SCANCODE_9)) {
+		if (!world->selectedEntity == NULL) {
+			world->selectedEntity->m.rotate(10.0f * DEG2RAD, Vector3(0, 1, 0));
+		}
+	}
+
+	if (Input::wasKeyPressed(SDL_SCANCODE_8)) {
+		if (!world->selectedEntity == NULL) {
+			world->selectedEntity->m.rotate(-10.0f * DEG2RAD, Vector3(0, 1, 0));
+		}
+	}
+	if (Input::wasKeyPressed(SDL_SCANCODE_7)) {
+		if (!world->selectedEntity == NULL) {
+			world->selectedEntity->m.translate(0, -1, 0);
+		}
+	}
+	if (Input::wasKeyPressed(SDL_SCANCODE_6)) {
+		if (!world->selectedEntity == NULL) {
+			world->selectedEntity->m.translate(0, 1, 0);
+		}
+	}
+	if (Input::wasKeyPressed(SDL_SCANCODE_P)) {
+		if (!world->selectedEntity == NULL) {
+			world->selectedEntity->~Entity();
+		}
+	}
 	//to navigate with the mouse fixed in the middle
 	if (game->mouse_locked)
 		Input::centerMouse();

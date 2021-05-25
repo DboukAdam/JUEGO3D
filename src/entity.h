@@ -10,6 +10,7 @@ public:
 	Mesh* mesh;
 	Texture* texture;
 	float angle;
+	bool bounding = true;
 	
 	Entity(Vector3 pos, Matrix44 m, float angle = 0, Mesh* mesh = NULL, Texture* texture = NULL) {
 		this->pos = pos;

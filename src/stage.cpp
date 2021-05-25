@@ -23,23 +23,24 @@ void PlayStage::render(World* world) {
 	
 	Camera* camera = Camera::current;
 	camera->enable();
-
-	world->sky->m.setTranslation(camera->eye.x, camera->eye.y, camera->eye.z);
-	world->crossHair->m.setTranslation(camera->center.x, camera->center.y, camera->center.z);
-
+	
 	Player* player = world->player;
 	player->m.setTranslation(player->pos.x, player->pos.y, player->pos.z);
 	player->m.rotate(player->angle * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
 	if (!free_camera) {
-		camera->eye = player->m * Vector3(0.f, 2.f, 0.f);
+		//camera->eye = player->m * Vector3(0.f, 2.f, 0.f);
+		Vector3 eye = player->m * Vector3(0.0f, 2.0f, -0.5f);
+		Vector3 forward = player->m.rotateVector(Vector3(0.0f, 0.0f, -1.0f));
+		Vector3 center = eye + forward;
+		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+		camera->lookAt(eye, center, up);
+		world->crossHair->m.setTranslation(camera->center.x, camera->center.y, camera->center.z);
 	}
-
+	world->sky->m.setTranslation(camera->eye.x, camera->eye.y, camera->eye.z);
 	//set flags
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
-
-	
 
 	//enable shader
 	Shader* shader = world->shader;
@@ -70,7 +71,8 @@ void PlayStage::render(World* world) {
 		
 	}
 
-	world->cesped->render(shader, 100);
+	//world->cesped->render(shader, 100);
+	world->cesped->render(shader);
 
 	//disable shader
 	shader->disable();
@@ -123,7 +125,7 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 		if ((Input::mouse_state & SDL_BUTTON_LEFT) || game->mouse_locked)
 		{
 			player->angle += -Input::mouse_delta.x * 0.1f;
-			camera->center = camera->unproject(Vector3(Input::mouse_position.x, Input::mouse_position.y, 1), game->window_width, game->window_height);
+			//camera->center = camera->unproject(Vector3(Input::mouse_position.x, Input::mouse_position.y, 1), game->window_width, game->window_height);
 		}
 
 		Matrix44 playerRot;
@@ -134,16 +136,16 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 		Vector3 playerSpeed;
 
 		if (Input::isKeyPressed(SDL_SCANCODE_W)) {
-			playerSpeed = playerSpeed + (playerFront * -speed);
-		}
-		if (Input::isKeyPressed(SDL_SCANCODE_S)) {
 			playerSpeed = playerSpeed + (playerFront * speed);
 		}
+		if (Input::isKeyPressed(SDL_SCANCODE_S)) {
+			playerSpeed = playerSpeed + (playerFront * -speed);
+		}
 		if (Input::isKeyPressed(SDL_SCANCODE_A)) {
-			playerSpeed = playerSpeed + (playerRight * speed);
+			playerSpeed = playerSpeed + (playerRight * -speed);
 		}
 		if (Input::isKeyPressed(SDL_SCANCODE_D)) {
-			playerSpeed = playerSpeed + (playerRight * -speed);
+			playerSpeed = playerSpeed + (playerRight * speed);
 		}
 
 		Vector3 targetPos = player->pos + playerSpeed;

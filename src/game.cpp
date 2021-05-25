@@ -146,9 +146,10 @@ void Game::initWorldTienda(){
 
 	m.setTranslation(0, -0.6, 0);
 	tienda->cesped = new Entity(0,-0.6,0, m);
-	tienda->cesped->mesh = new Mesh();
-	tienda->cesped->mesh->createPlane(2000);
-	tienda->cesped->loadTexture("data/town/grass.tga");
+	//tienda->cesped->mesh = new Mesh();
+	//tienda->cesped->mesh->createPlane(2000);
+	tienda->cesped->loadMesh("data/country/CountrySide-3-GroundTile1.obj");
+	tienda->cesped->loadTexture("data/country/obj/CountrySide-3-GroundTile1.png");
 
 	m.setTranslation(0, 0, 0);
 	tienda->crossHair = new Entity(0, 0, 0, m);

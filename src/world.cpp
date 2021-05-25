@@ -50,7 +50,7 @@ void World::disparar() {
 	Camera* camera = Camera::current;
 	Vector3 colPoint;
 	Vector3 colNormal;
-	float maxDistance = 10;
+	float maxDistance = 100;
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = zombies[i];
 		if (zombie == NULL)	break;

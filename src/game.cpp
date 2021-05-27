@@ -118,27 +118,26 @@ void Game::onResize(int width, int height)
 void Game::initWorldTienda(){
 
 	// example of shader loading using the shaders manager
-	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	//Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/flat.fs");
 
 	tienda = new World(shader);
 
 	Matrix44 m;
-	m.setTranslation(0, -0.65, 0);
+	/*m.setTranslation(0, -0.65, 0);
 	Entity* suelo = new Entity(0, -0.65, 0, m);
 	suelo->loadMesh("data/Shop/groundScale.obj");
 	suelo->loadTexture("data/Shop/Shop-4-GroundTile.png");
-	tienda->addEntity(suelo);
+	tienda->addEntity(suelo);*/
 	
-	m.setTranslation(0.000, 4.04, -3.34);
+	/*m.setTranslation(0.000, 4.04, -3.34);
 	Entity* shop = new Entity(0.000, 4.04, -3.34, m);
 	shop->loadMesh("data/Shop/Shop-0-ShopBuilding_1.obj");
 	shop->loadTexture("data/Shop/Shop-0-ShopBuilding_1.png");
-	tienda->addEntity(shop);
+	tienda->addEntity(shop);*/
 
 	Vector3 playerInitPos = Vector3(0, 0.5, 0);
 	initPlayer(playerInitPos, tienda);
-
-	tienda->createZombies();
 
 	initSky(tienda);
 	
@@ -157,6 +156,17 @@ void Game::initWorldTienda(){
 	tienda->crossHair->mesh->createPlane(20);
 	tienda->crossHair->loadTexture("data/crosshair.png");
 
+	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
+	zombie->loadMesh("data/ZombieScale.obj");
+	zombie->loadTexture("data/ZombieScale.png");
+	tienda->addZombie(zombie);
+
+	//Init mapa para caminar los zombies
+	int width = 300;
+	int height = 300;
+	int length = width * height;
+	tienda->map = new uint8[length];
+	for (int i = 0; i < length; i++) tienda->map[i] = 1;
 }
 
 void Game::initPlayer(Vector3 pos, World* world) {

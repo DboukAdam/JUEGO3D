@@ -5,7 +5,7 @@
 #include "input.h"
 
 #define MAX_ENTITIES 155
-#define MAX_ZOMBIES 10
+#define MAX_ZOMBIES 100
 
 class World {
 public:
@@ -17,12 +17,12 @@ public:
 	Entity* cesped;
 	Entity* crossHair;
 	Entity* selectedEntity = NULL;
+	uint8* map;
 
 	World(Shader* shader);
 	void addEntity(Entity* entity);
 	void addZombie(Zombie* zombie);
 	void addPlayer(Player* player);
-	void createZombies();
 	void disparar();
 
 	void addObjectEditor(Mesh* mesh, Texture* texture, Vector3 dir);

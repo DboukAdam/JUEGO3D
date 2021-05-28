@@ -1,6 +1,18 @@
 #include "stage.h"
 #include "input.h"
 
+#include "pathfinders.h"
+
+
+int startx; //ULTRA SUCIO
+int starty;
+int output[100];
+int path_steps = -1;
+float tileSizeX = 10.f; //MEGA SUCIO
+float tileSizeY = 10.f;
+int width = 300;
+int height = 300; //SUPER SUCIO
+
 bool free_camera = false;
 
 void IntroStage::render(World* world) {
@@ -53,7 +65,7 @@ void PlayStage::render(World* world) {
 	Shader* shader = world->shader;
 	shader->enable();
 	
-	const int planewidth = 100;
+	/*const int planewidth = 100;
 	const int planeheight = 100;
 	const float padding = world->cesped->mesh->box.center.distance(world->cesped->mesh->box.halfsize);
 	const float offset = 300;
@@ -67,10 +79,31 @@ void PlayStage::render(World* world) {
 			if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
 			world->cesped->render(shader);
 		}
-	}
+	}*/
 
 	//world->crossHair->render(shader);
+	if (path_steps > 0) {
+		Mesh mesh;
+		for (size_t i = 0; i < path_steps; i++) {
+			int gridIndex = output[i];
+			int posxgrid = gridIndex % width;
+			int posygrid = gridIndex / width;
 
+			Vector3 pos = Vector3(posxgrid*tileSizeX, 1.0f, posygrid*tileSizeY);
+			mesh.vertices.push_back(pos);
+		}
+		if (shader)
+		{
+			//upload uniforms
+			shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+			shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
+			shader->setUniform("u_time", time);
+			//shader->setUniform("u_texture", texture, 0);
+			shader->setUniform("u_model", Matrix44());
+			//shader->setUniform("u_texture_tiling", tiling);
+			mesh.render(GL_LINE_STRIP);
+		}
+	}
 
 	world->sky->render(shader);
 	for (int i = 0; i < MAX_ENTITIES; i++) {
@@ -228,6 +261,38 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 			world->selectedEntity->~Entity();
 		}
 	}
+	
+	
+
+	if (Input::wasKeyPressed(SDL_SCANCODE_J)) {
+		Vector3 origion = camera->eye;
+		Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
+		Vector3 pos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), origion, dir);
+
+		//startx = clamp(pos.x / tileSizeX, 0, width);
+		//starty = clamp(pos.y / tileSizeY, 0, height);
+		startx = pos.x / tileSizeX;
+		starty = pos.y / tileSizeY;
+	}
+	if (Input::wasKeyPressed(SDL_SCANCODE_K)) {
+		Vector3 origion = camera->eye;
+		Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
+		Vector3 pos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), origion, dir);
+
+		float targetx = clamp(pos.x / tileSizeX, 0, width);
+		float targetz = clamp(pos.z / tileSizeY, 0, height);
+
+		path_steps = AStarFindPathNoTieDiag(
+			startx, starty, //origin (tienen que ser enteros)
+			targetx, targetz, //target (tienen que ser enteros)
+			world->map, //pointer to map data
+			width, height, //map width and height
+			output, //pointer where the final path will be stored
+			100); //max supported steps of the final path
+
+		std::cerr << "Number of steps: " << path_steps << std::endl;
+	}
+
 	//to navigate with the mouse fixed in the middle
 	if (game->mouse_locked)
 		Input::centerMouse();

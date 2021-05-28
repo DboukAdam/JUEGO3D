@@ -32,20 +32,6 @@ void World::addPlayer(Player* player) {
 	this->player = player;
 }
 
-void World::createZombies() {
-	Matrix44 m;
-	for (int i = 0; i < MAX_ZOMBIES; i++) {
-		float randX = random(20, -10);
-		float randZ = random(20, -10);
-		m.setTranslation(randX, 0, randZ);
-		Zombie* zombie = (Zombie*) new Entity(randX, 0, randZ, m);
-		zombie->loadMesh("data/ZombieScale.obj");
-		zombie->loadTexture("data/Zombie/Zed_1.png");
-		zombie->setVel(2.0f);
-		addZombie(zombie);
-	}
-}
-
 void World::disparar() {
 	Camera* camera = Camera::current;
 	Vector3 colPoint;

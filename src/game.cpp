@@ -125,37 +125,19 @@ void Game::initWorldTienda(){
 	Matrix44 m;
 	m.setTranslation(0, -0.65, 0);
 	Entity* suelo = new Entity(0, -0.65, 0, m);
-	suelo->loadMesh("data/Shop/groundScale.obj");
-	suelo->loadTexture("data/Shop/Shop-4-GroundTile.png");
+	suelo->loadMesh("data/LowPolyCharacterPack/mujeh1.obj");
+	suelo->loadTexture("data/LowPolyCharacterPack/mujeh1.png");
 	tienda->addEntity(suelo);
 	
-	m.setTranslation(0.000, 0.0, -3.34);
-	Entity* shop = new Entity(0.000, 4.04, -3.34, m);
-	shop->loadMesh("data/Shop/Shop-0-ShopBuilding_1.obj");
-	shop->loadTexture("data/Shop/Shop-0-ShopBuilding_1.png");
-	tienda->addEntity(shop);
-
+	
 	Vector3 playerInitPos = Vector3(0, 0.5, 0);
 	initPlayer(playerInitPos, tienda);
 
-	tienda->createZombies();
+	//tienda->createZombies();
 
 	initSky(tienda);
 	
 	initCamera(tienda);
-
-	m.setTranslation(0, -0.6, 0);
-	tienda->cesped = new Entity(0,-0.6,0, m);
-	//tienda->cesped->mesh = new Mesh();
-	//tienda->cesped->mesh->createPlane(2000);
-	tienda->cesped->loadMesh("data/country/CountrySide-3-GroundTile1.obj");
-	tienda->cesped->loadTexture("data/country/obj/CountrySide-3-GroundTile1.png");
-
-	m.setTranslation(0, 0, 0);
-	tienda->crossHair = new Entity(0, 0, 0, m);
-	tienda->crossHair->mesh = new Mesh();
-	tienda->crossHair->mesh->createPlane(2);
-	tienda->crossHair->loadTexture("data/crosshair.png");
 
 }
 
@@ -163,8 +145,8 @@ void Game::initPlayer(Vector3 pos, World* world) {
 	Matrix44 m;
 	m.setTranslation(pos.x, pos.y, pos.z);
 	Player* player = (Player*) new Entity(pos, m);
-	player->loadMesh("data/Zombie/Zed_1.obj");
-	player->loadTexture("data/Zombie/Zed_1.png");
+	player->loadMesh("data/LowPolyCharacterPack/mujeh1.obj");
+	player->loadTexture("data/LowPolyCharacterPack/mujeh1.png");
 	player->setVel(2.0f);
 	world->addPlayer(player);
 }
@@ -174,8 +156,8 @@ void Game::initSky(World* world) {
 	Vector3 playerPos = world->player->getPos();
 	m.setTranslation(playerPos.x, playerPos.y, playerPos.z);
 	world->sky = new Entity(playerPos, m);
-	world->sky->loadMesh("data/cielo.ASE");
-	world->sky->loadTexture("data/cielo.tga");
+	world->sky->loadMesh("data/Ambiente/cielo.ASE");
+	world->sky->loadTexture("data/Ambiente/cielo.tga");
 }
 
 void Game::initCamera(World* world) {

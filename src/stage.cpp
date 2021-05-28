@@ -128,7 +128,7 @@ void PlayStage::render(World* world) {
 	}
 
 	//world->cesped->render(shader, 100);
-	world->cesped->render(shader);
+	
 
 	//disable shader
 	shader->disable();
@@ -222,12 +222,12 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 
 	if (Input::wasKeyPressed(SDL_SCANCODE_1)) {
 		Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
-		world->addObjectEditor(Mesh::Get("data/Shop/Shop-0-ShopBuilding_1.obj"), Texture::Get("data/Shop/Shop-0-ShopBuilding_1.png"), dir);
+		world->addObjectEditor(Mesh::Get("data/LowPolyCharacterPack/mujeh1.obj"), Texture::Get("data/LowPolyCharacterPack/mujeh1.png"), dir);
 	}
 
 	if (Input::wasKeyPressed(SDL_SCANCODE_2)) {
 		Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
-		world->addObjectEditor(Mesh::Get("data/ZombieScale.obj"), Texture::Get("data/Zombie/Zed_1.png"), dir);
+		world->addObjectEditor(Mesh::Get("data/LowPolyCharacterPack/mujeh1.obj"), Texture::Get("data/LowPolyCharacterPack/mujeh1.png"), dir);
 	}
 
 	if (Input::wasKeyPressed(SDL_SCANCODE_0)) {

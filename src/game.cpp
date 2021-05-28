@@ -129,7 +129,7 @@ void Game::initWorldTienda(){
 	suelo->loadTexture("data/Shop/Shop-4-GroundTile.png");
 	tienda->addEntity(suelo);
 	
-	m.setTranslation(0.000, 4.04, -3.34);
+	m.setTranslation(0.000, 0.0, -3.34);
 	Entity* shop = new Entity(0.000, 4.04, -3.34, m);
 	shop->loadMesh("data/Shop/Shop-0-ShopBuilding_1.obj");
 	shop->loadTexture("data/Shop/Shop-0-ShopBuilding_1.png");
@@ -154,7 +154,7 @@ void Game::initWorldTienda(){
 	m.setTranslation(0, 0, 0);
 	tienda->crossHair = new Entity(0, 0, 0, m);
 	tienda->crossHair->mesh = new Mesh();
-	tienda->crossHair->mesh->createPlane(20);
+	tienda->crossHair->mesh->createPlane(2);
 	tienda->crossHair->loadTexture("data/crosshair.png");
 
 }

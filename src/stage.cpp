@@ -26,12 +26,17 @@ void PlayStage::render(World* world) {
 	
 	Player* player = world->player;
 	player->m.setTranslation(player->pos.x, player->pos.y, player->pos.z);
-	player->m.rotate(player->angle * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
+	player->m.rotate(player->yaw * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
 	if (!free_camera) {
+		Matrix44 pitchM;
+		pitchM.rotate(player->pitch * DEG2RAD, Vector3(1.0f, 0.0f, 0.0f));
 		//camera->eye = player->m * Vector3(0.f, 2.f, 0.f);
+		Vector3 forward = pitchM.rotateVector(Vector3(0.0f, 0.0f, -1.0f));
+		forward = player->m.rotateVector(forward);
+
 		Vector3 eye = player->m * Vector3(0.0f, 2.0f, -0.5f);
-		Vector3 forward = player->m.rotateVector(Vector3(0.0f, 0.0f, -1.0f));
 		Vector3 center = eye + forward;
+
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		camera->lookAt(eye, center, up);
 		//world->crossHair->m.setTranslation(camera->center.x, camera->center.y, camera->center.z);
@@ -133,7 +138,7 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 			camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
 		}
 
-		if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 100;
+		if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 30;
 		if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
 		if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
 		if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
@@ -142,12 +147,16 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 	else {
 		if ((Input::mouse_state & SDL_BUTTON_LEFT) || game->mouse_locked)
 		{
-			player->angle += -Input::mouse_delta.x * 0.1f;
-			//camera->center = camera->unproject(Vector3(Input::mouse_position.x, Input::mouse_position.y, 1), game->window_width, game->window_height);
+			float camera_speed = 10.0f;
+			float targetPitch = player->pitch - (Input::mouse_delta.y * seconds_elapsed * camera_speed);
+
+			player->yaw -= Input::mouse_delta.x * seconds_elapsed * camera_speed;
+			if(targetPitch > -80 && targetPitch < 80) player->pitch -= Input::mouse_delta.y * seconds_elapsed * camera_speed;
+			Input::centerMouse();
 		}
 
 		Matrix44 playerRot;
-		playerRot.setRotation(player->angle * DEG2RAD, Vector3(0, 1, 0));
+		playerRot.setRotation(player->yaw * DEG2RAD, Vector3(0, 1, 0));
 
 		Vector3 playerFront = playerRot.rotateVector(Vector3(0.0f, 0.0f, -1.0f));
 		Vector3 playerRight = playerRot.rotateVector(Vector3(1.0f, 0.0f, 0.0f));
@@ -206,12 +215,12 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 	}
 	if (Input::wasKeyPressed(SDL_SCANCODE_7)) {
 		if (!world->selectedEntity == NULL) {
-			world->selectedEntity->m.translate(0, -1, 0);
+			world->selectedEntity->m.translate(-1, 0, 0);
 		}
 	}
 	if (Input::wasKeyPressed(SDL_SCANCODE_6)) {
 		if (!world->selectedEntity == NULL) {
-			world->selectedEntity->m.translate(0, 1, 0);
+			world->selectedEntity->m.translate(1, 0, 0);
 		}
 	}
 	if (Input::wasKeyPressed(SDL_SCANCODE_P)) {

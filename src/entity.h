@@ -9,24 +9,27 @@ public:
 	Matrix44 m;
 	Mesh* mesh;
 	Texture* texture;
-	float angle;
+	float yaw;
+	float pitch;
 	bool bounding = false;
 	
-	Entity(Vector3 pos, Matrix44 m, float angle = 0, Mesh* mesh = NULL, Texture* texture = NULL) {
+	Entity(Vector3 pos, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) {
 		this->pos = pos;
 		this->m = m;
 		this->mesh = mesh;
 		this->texture = texture;
-		this->angle = angle;
+		this->yaw = yaw;
+		this->pitch = pitch;
 	};
-	Entity(float x, float y, float z, Matrix44 m, float angle = 0, Mesh* mesh = NULL, Texture* texture = NULL) {
+	Entity(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) {
 		this->pos.x = x;
 		this->pos.y = y;
 		this->pos.z = z;
 		this->m = m;
 		this->mesh = mesh;
 		this->texture = texture;
-		this->angle = angle;
+		this->yaw = yaw;
+		this->pitch = pitch;
 	};
 	~Entity();
 

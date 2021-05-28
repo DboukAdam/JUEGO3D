@@ -66,7 +66,7 @@ void World::disparar() {
 void World::addObjectEditor(Mesh* mesh, Texture* texture, Vector3 dir) {
 	Camera* camera = Camera::current;
 	Vector3 origin = camera->eye;
-	Vector3 pos = RayPlaneCollision(Vector3(0, -4.5, 0), Vector3(0, 1, 0), origin, dir);
+	Vector3 pos = RayPlaneCollision(Vector3(0, 0, 0), Vector3(0, 1, 0), origin, dir);
 	Matrix44 entityModel;
 	Entity* entity = new Entity(0, 0, 0, entityModel);
 	entity->m.setTranslation(pos.x, pos.y, pos.z);

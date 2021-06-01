@@ -16,7 +16,48 @@ int height = 300; //SUPER SUCIO
 bool free_camera = false;
 
 void IntroStage::render(World* world) {
+
+	//set the clear color (the background color)
+	glClearColor(0.0, 0.0, 1.0, 1.0);
+
+	// Clear the window and the depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	Game* game = Game::instance;
 	
+	Camera cam2D;
+	cam2D.setOrthographic(0, game->window_width, game->window_height, 0, -1, 1);
+	cam2D.enable();
+
+	Mesh quad;
+	quad.createQuad(100, 100, 512, 128, false);
+
+	Shader* shader = world->shader;
+	Texture* texture = world->entities[0]->texture;
+	shader->enable();
+	if (shader)
+	{
+		//upload uniforms
+		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+		shader->setUniform("u_viewprojection", cam2D.viewprojection_matrix);
+		shader->setUniform("u_tex_range", Vector4(0, 0, 1, 1)); //rango de 0 a 1
+		shader->setUniform("u_texture", texture, 0);
+		shader->setUniform("u_model", Matrix44());
+		shader->setUniform("u_texture_tiling", 1.0f);
+		quad.render(GL_LINE_STRIP);
+	}
+	//hacer draw call
+	quad.render(GL_TRIANGLES);
+
+	shader->disable();
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
 }
 
 void IntroStage::update(double seconds_elapsed, World* world) {

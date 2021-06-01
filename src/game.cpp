@@ -34,17 +34,27 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	frame = 0;
 	time = 0.0f;
 	elapsed_time = 0.0f;
-	mouse_locked = true;
+	mouse_locked = false;
 
 	//OpenGL flags
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
 	glEnable( GL_DEPTH_TEST ); //check the occlusions using the Z buffer
 
-	current = play;
+	//current = play;
+	current = intro;
 
-	initWorldTienda();
+	//CAMBIAR:
+	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
+	World* menuInicio = new World(shader);
 
-	currentWorld = tienda;
+	Entity* boton = new Entity(0, 0, 0, Matrix44());
+	boton->loadTexture("data/Button_Flesh.png");
+	menuInicio->addEntity(boton);
+
+	//initWorldTienda();
+
+	//currentWorld = tienda;
+	currentWorld = menuInicio;
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse

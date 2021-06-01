@@ -73,4 +73,5 @@ public:
 	float vel;
 	int vida;
 	void setVel(float v);
+	void CamPlayer(Camera* camera);
 };

@@ -65,6 +65,7 @@
     <ClCompile Include="..\..\src\world.cpp" />
     <ClCompile Include="..\..\src\entity.cpp" />
     <ClCompile Include="..\..\src\pathfinders.cpp" />
+    <ClCompile Include="..\..\src\gui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\camera.h" />
@@ -127,6 +128,7 @@
     <ClInclude Include="..\..\src\stage.h" />
     <ClInclude Include="..\..\src\world.h" />
     <ClInclude Include="..\..\src\pathfinders.h" />
+    <ClInclude Include="..\..\src\gui.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extra">

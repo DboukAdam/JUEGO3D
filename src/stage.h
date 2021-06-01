@@ -23,3 +23,10 @@ public:
 	virtual void render(World* world) {};
 	virtual void update(double seconds_elapsed, World* world) {};
 };
+
+class EditorStage : public Stage {
+public:
+	virtual void render(World* world);
+	virtual void update(double seconds_elapsed, World* world);
+};
+

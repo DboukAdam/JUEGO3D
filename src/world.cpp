@@ -77,3 +77,56 @@ void World::selectEntityEditor(Vector3 dir){
 		break;
 	}
 }
+
+void World::RenderEntities(Camera* camera)
+{
+	for (int i = 0; i < MAX_ENTITIES; i++) {
+		Entity* entity = entities[i];
+		if (entity == NULL) {
+			break;
+		}
+		BoundingBox currentBox = transformBoundingBox(entity->m, entity->mesh->box);
+		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
+		entity->render(shader);
+
+	}
+}
+
+void World::RenderZombies(Camera* camera)
+{
+
+	for (int i = 0; i < MAX_ZOMBIES; i++) {
+		Zombie* zombie = zombies[i];
+		if (zombie == NULL) {
+			break;
+		}
+		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
+		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
+		zombie->render(shader);
+
+	}
+}
+
+void World::RenderBoundingEntities(Camera* camera)
+{
+	for (int i = 0; i < MAX_ENTITIES; i++) {
+		Entity* entity = entities[i];
+		if (entity == NULL) break;
+		BoundingBox currentBox = transformBoundingBox(entity->m, entity->mesh->box);
+		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
+		if (entity->bounding) entity->mesh->renderBounding(entity->m);
+	}
+}
+
+void World::RenderBoundingZombies(Camera* camera)
+{
+	for (int i = 0; i < MAX_ZOMBIES; i++) {
+		Zombie* zombie = zombies[i];
+		if (zombie == NULL) break;
+		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
+		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
+		if (zombie->bounding) zombie->mesh->renderBounding(zombie->m);
+	}
+}
+
+

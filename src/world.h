@@ -25,4 +25,10 @@ public:
 
 	void addObjectEditor(Mesh* mesh, Texture* texture, Vector3 dir);
 	void selectEntityEditor(Vector3 dir);
+
+	void RenderEntities(Camera* camera);
+	void RenderZombies(Camera* camera);
+
+	void RenderBoundingEntities(Camera* camera);
+	void RenderBoundingZombies(Camera* camera);
 };

@@ -12,11 +12,8 @@
 
 //some globals
 Animation* anim = NULL;
-
 FBO* fbo = NULL;
-
 Game* Game::instance = NULL;
-
 Stage* current;
 IntroStage* intro = new IntroStage();
 PlayStage* play = new PlayStage();
@@ -43,18 +40,11 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//current = play;
 	current = intro;
 
-	//CAMBIAR:
-	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
-	World* menuInicio = new World(shader);
-
-	Entity* boton = new Entity(0, 0, 0, Matrix44());
-	boton->loadTexture("data/Button_Flesh.png");
-	menuInicio->addEntity(boton);
-
+	
 	//initWorldTienda();
 
 	//currentWorld = tienda;
-	currentWorld = menuInicio;
+	//currentWorld = menuInicio;
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -63,8 +53,9 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 //what to do when the image has to be draw
 void Game::render(void)
 {
+	
 	current->render(currentWorld);
-
+	
 	//swap between front buffer and back buffer
 	SDL_GL_SwapWindow(this->window);
 }
@@ -82,20 +73,6 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 		case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
 		case SDLK_F1: Shader::ReloadAll(); break; 
 	}
-}
-
-void Game::onKeyUp(SDL_KeyboardEvent event)
-{
-}
-
-void Game::onGamepadButtonDown(SDL_JoyButtonEvent event)
-{
-
-}
-
-void Game::onGamepadButtonUp(SDL_JoyButtonEvent event)
-{
-
 }
 
 void Game::onMouseButtonDown( SDL_MouseButtonEvent event )

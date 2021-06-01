@@ -118,7 +118,7 @@ void Game::onResize(int width, int height)
 void Game::initWorldTienda(){
 
 	// example of shader loading using the shaders manager
-	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/normal.fs");
 
 	tienda = new World(shader);
 
@@ -130,6 +130,12 @@ void Game::initWorldTienda(){
 	tienda->addEntity(suelo);
 	
 	
+	m.setTranslation(0, 0, 0);
+	Entity* ciudad = new Entity(0, 0, 0, m);
+	ciudad->loadMesh("data/export.obj");
+	ciudad->loadTexture("data/image.png");
+	tienda->addEntity(ciudad);
+
 	Vector3 playerInitPos = Vector3(0, 0.5, 0);
 	initPlayer(playerInitPos, tienda);
 

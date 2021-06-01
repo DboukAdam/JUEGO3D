@@ -14,8 +14,6 @@ public:
 	Player* player;
 	Shader* shader;
 	Entity* sky;
-	Entity* cesped;
-	Entity* crossHair;
 	Entity* selectedEntity = NULL;
 	uint8* map;
 

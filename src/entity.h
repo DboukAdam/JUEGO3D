@@ -2,7 +2,9 @@
 #include "mesh.h"
 #include "texture.h"
 #include "shader.h"
+#include "camera.h"
 
+#pragma once
 class Entity {
 public:
 	Vector3 pos; //Mirar si es util por culpa del setTranslation ese que dice el feo del Adam

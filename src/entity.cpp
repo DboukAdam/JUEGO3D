@@ -1,5 +1,5 @@
 #include "entity.h"
-#include "camera.h"
+
 
 void Zombie::AStarPath()
 {

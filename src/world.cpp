@@ -114,7 +114,7 @@ void World::RenderBoundingEntities(Camera* camera)
 		if (entity == NULL) break;
 		BoundingBox currentBox = transformBoundingBox(entity->m, entity->mesh->box);
 		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
-		if (entity->bounding) entity->mesh->renderBounding(entity->m);
+		entity->mesh->renderBounding(entity->m);
 	}
 }
 

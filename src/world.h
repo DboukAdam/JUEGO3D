@@ -4,11 +4,14 @@
 #include "camera.h"
 #include "input.h"
 
+
 #define MAX_ENTITIES 155
 #define MAX_ZOMBIES 100
 
+#pragma once
 class World {
 public:
+
 	Entity* entities[MAX_ENTITIES];
 	Zombie* zombies[MAX_ZOMBIES];
 	Player* player;

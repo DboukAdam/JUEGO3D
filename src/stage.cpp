@@ -1,6 +1,6 @@
 #include "stage.h"
 #include "input.h"
-
+#include "game.h"
 #include "pathfinders.h"
 
 
@@ -14,7 +14,6 @@ int width = 300;
 int height = 300; //SUPER SUCIO
 
 bool free_camera = false;
-
 
 
 void IntroStage::render(World* world) {
@@ -58,9 +57,9 @@ void PlayStage::render(World* world) {
 	//set the camera as default
 	Camera* camera = Camera::current;
 
-	if (!free_camera) {
-		world->player->CamPlayer(camera);
-	}
+	
+	world->player->CamPlayer(camera);
+	
 
 	//skymap
 	world->sky->m.setTranslation(camera->eye.x, camera->eye.y, camera->eye.z);
@@ -107,10 +106,6 @@ void PlayStage::render(World* world) {
 
 	//disable shader
 	shader->disable();
-	
-	//pintando bounding muy feo
-	world->RenderBoundingEntities(camera);
-	world->RenderBoundingZombies(camera);
 
 	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
@@ -163,13 +158,10 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 	
 	//dejar solo mientras desarrollamos
 	if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) {
-		free_camera = !free_camera;
+		Game* game = Game::instance;
+		game->currentStage = game->editor;
 	}
-
-	if (Input::mouse_state & SDL_BUTTON_LEFT)
-	{
-		world->disparar();
-	}
+	
 
 	
 	//.................................................................................................................................................
@@ -278,10 +270,10 @@ void EditorStage::update(double seconds_elapsed, World* world)
 			world->addObjectEditor(Mesh::Get("data/LowPolyCharacterPack/mujeh1.obj"), Texture::Get("data/LowPolyCharacterPack/mujeh1.png"), dir);
 		}
 
-		if (Input::mouse_state & SDL_BUTTON_LEFT) {
+		/*if (Input::mouse_state & SDL_BUTTON_LEFT) {
 			Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
 			world->selectEntityEditor(dir);
-		}
+		}*/
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_Q)) {
 			if (!world->selectedEntity == NULL) {
@@ -329,6 +321,11 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				//no funciona bien
 				world->selectedEntity->~Entity();
 			}
+		}
+
+		if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) {
+			Game* game = Game::instance;
+			game->currentStage = game->play;
 		}
 		
 	}

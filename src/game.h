@@ -9,6 +9,7 @@
 #include "camera.h"
 #include "utils.h"
 #include "world.h"
+#include "stage.h"
 
 class Game
 {
@@ -31,11 +32,19 @@ public:
 	Camera* camera; //our global camera
 	bool mouse_locked; //tells if the mouse is locked (not seen)
 
+	//stages
+	Stage* currentStage;
+	IntroStage* intro = new IntroStage();
+	PlayStage* play = new PlayStage();
+	EndStage* end = new EndStage();
+	EditorStage* editor = new EditorStage();
+
 	//Our stuff
 	World* tienda;
 	World* casa;
 	World* currentWorld;
 	float mouse_speed = 10.0f;
+	
 
 	Game( int window_width, int window_height, SDL_Window* window );
 

@@ -8,16 +8,14 @@
 #include "animation.h"
 
 #include <cmath>
-#include "stage.h"
+
 
 //some globals
 Animation* anim = NULL;
 FBO* fbo = NULL;
 Game* Game::instance = NULL;
-Stage* current;
-IntroStage* intro = new IntroStage();
-PlayStage* play = new PlayStage();
-EndStage* end = new EndStage();
+
+
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -31,20 +29,16 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	frame = 0;
 	time = 0.0f;
 	elapsed_time = 0.0f;
-	mouse_locked = false;
+	mouse_locked = true;
 
 	//OpenGL flags
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
 	glEnable( GL_DEPTH_TEST ); //check the occlusions using the Z buffer
-
-	//current = play;
-	current = intro;
-
 	
-	//initWorldTienda();
+	initWorldTienda();
 
-	//currentWorld = tienda;
-	//currentWorld = menuInicio;
+	currentWorld = tienda;
+	currentStage = play;
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -54,7 +48,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 void Game::render(void)
 {
 	
-	current->render(currentWorld);
+	currentStage->render(currentWorld);
 	
 	//swap between front buffer and back buffer
 	SDL_GL_SwapWindow(this->window);
@@ -62,7 +56,7 @@ void Game::render(void)
 
 void Game::update(double seconds_elapsed)
 {
-	current->update(seconds_elapsed, currentWorld);
+	currentStage->update(seconds_elapsed, currentWorld);
 }
 
 //Keyboard event handler (sync input)
@@ -75,6 +69,10 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 	}
 }
 
+void Game::onKeyUp(SDL_KeyboardEvent event)
+{
+}
+
 void Game::onMouseButtonDown( SDL_MouseButtonEvent event )
 {
 	if (event.button == SDL_BUTTON_MIDDLE) //middle mouse
@@ -82,15 +80,34 @@ void Game::onMouseButtonDown( SDL_MouseButtonEvent event )
 		mouse_locked = !mouse_locked;
 		SDL_ShowCursor(!mouse_locked);
 	}
+
+	
 }
 
 void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 {
+	if (event.button == SDL_BUTTON_LEFT) //left mouse
+	{
+		Camera* camera = Camera::current;
+		if (currentStage == play) currentWorld->disparar();
+		if (currentStage == editor) {
+			Vector3 dir = camera->getRayDirection(this->window_width/2, this->window_height/2, this->window_width, this->window_height);
+			currentWorld->selectEntityEditor(dir);
+		}
+	}
 }
 
 void Game::onMouseWheel(SDL_MouseWheelEvent event)
 {
 	mouse_speed *= event.y > 0 ? 1.1 : 0.9;
+}
+
+void Game::onGamepadButtonDown(SDL_JoyButtonEvent event)
+{
+}
+
+void Game::onGamepadButtonUp(SDL_JoyButtonEvent event)
+{
 }
 
 void Game::onResize(int width, int height)
@@ -105,21 +122,24 @@ void Game::onResize(int width, int height)
 void Game::initWorldTienda(){
 
 	// example of shader loading using the shaders manager
-	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/normal.fs");
+	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
 	tienda = new World(shader);
 
 	Matrix44 m;
 	m.setTranslation(0, -0.65, 0);
-	Entity* suelo = new Entity(0, -0.65, 0, m);
-	suelo->loadMesh("data/LowPolyCharacterPack/mujeh1.obj");
-	suelo->loadTexture("data/LowPolyCharacterPack/mujeh1.png");
-	tienda->addEntity(suelo);
+	Entity* chica = new Entity(0, -0.65, 0, m);
+	chica->loadMesh("data/LowPolyCharacterPack/mujeh1.obj");
+	chica->loadTexture("data/LowPolyCharacterPack/mujeh1.png");
+	tienda->addEntity(chica);
 	
 	
 	m.setTranslation(0, 0, 0);
 	Entity* ciudad = new Entity(0, 0, 0, m);
-	ciudad->loadMesh("data/export.obj");
+
+	ciudad->mesh = new Mesh();
+	ciudad->mesh->createPlane(2000);
+	
 	ciudad->loadTexture("data/image.png");
 	tienda->addEntity(ciudad);
 

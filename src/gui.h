@@ -2,15 +2,17 @@
 class gui
 {
 
-	//CAMBIAR:
-	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
-	World* menuInicio = new World(shader);
-
-	Entity* boton = new Entity(0, 0, 0, Matrix44());
-	boton->loadTexture("data/Button_Flesh.png");
-	menuInicio->addEntity(boton);
+	
 
 };
+/*
+//CAMBIAR:
+Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
+World* menuInicio = new World(shader);
+
+Entity* boton = new Entity(0, 0, 0, Matrix44());
+boton->loadTexture("data/Button_Flesh.png");
+menuInicio->addEntity(boton);
 
 
 Game* game = Game::instance;
@@ -40,3 +42,4 @@ if (shader)
 quad.render(GL_TRIANGLES);
 
 shader->disable();
+*/

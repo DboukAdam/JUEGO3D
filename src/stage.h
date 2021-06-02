@@ -1,5 +1,6 @@
-#include "game.h"
+#include "world.h"
 
+#pragma once
 class Stage {
 public:
 	virtual void render(World* world) {};

@@ -15,6 +15,6 @@ void main()
 {
 	vec2 uv = v_uv;
 	uv.x = (u_tex_range.z) * uv.x + u_tex_range.x;
-	uv.y = 1.0 - ((u_tex_range.w) * uv.y + u_tex_range.y + u_tex_range.w);
+	uv.y = ((u_tex_range.w) * uv.y + u_tex_range.y);
 	gl_FragColor = u_color * texture2D( u_texture, uv * u_texture_tiling);
 }

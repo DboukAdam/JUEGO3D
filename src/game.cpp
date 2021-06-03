@@ -38,7 +38,11 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	initWorldTienda();
 
 	currentWorld = tienda;
-	currentStage = play;
+	currentStage = intro; //play;
+
+	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
+	Texture* atlas = Texture::Get("data/gui/Button_Zombie.png");
+	gui = new Gui(shader, atlas);
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse

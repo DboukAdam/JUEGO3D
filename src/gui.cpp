@@ -15,7 +15,9 @@ void Gui::Render()
 	cam2D.enable();
 
 	Mesh quad; //MODIFICAR
-	quad.createQuad(100, 100, 512, 128, false);
+	quad.createQuad(400, 100, 512, 128, false);
+	Mesh quad2;
+	quad2.createQuad(400, 400, 512, 128, false);
 
 	shader->enable();
 	if (shader)
@@ -28,9 +30,11 @@ void Gui::Render()
 		shader->setUniform("u_model", Matrix44());
 		shader->setUniform("u_texture_tiling", 1.0f);
 		quad.render(GL_LINE_STRIP);
+		quad2.render(GL_LINE_STRIP);
 	}
 	//hacer draw call
 	quad.render(GL_TRIANGLES);
+	quad2.render(GL_TRIANGLES);
 
 	shader->disable();
 }

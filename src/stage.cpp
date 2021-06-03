@@ -15,10 +15,6 @@ int height = 300; //SUPER SUCIO
 
 bool free_camera = false;
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 void IntroStage::render(World* world) {
 	Game* game = Game::instance;
 

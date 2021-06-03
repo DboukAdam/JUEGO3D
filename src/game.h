@@ -10,6 +10,7 @@
 #include "utils.h"
 #include "world.h"
 #include "stage.h"
+#include "gui.h"
 
 class Game
 {
@@ -41,8 +42,8 @@ public:
 
 	//Our stuff
 	World* tienda;
-	World* casa;
 	World* currentWorld;
+	Gui* gui;
 	float mouse_speed = 10.0f;
 	
 

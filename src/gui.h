@@ -1,7 +1,7 @@
 #pragma once
-class gui
-{
+#include "texture.h"
 
+<<<<<<< Updated upstream
 	
 
 };
@@ -43,3 +43,13 @@ quad.render(GL_TRIANGLES);
 
 shader->disable();
 */
+=======
+class Gui{
+public:
+	Shader* shader;
+	Texture* atlas;
+
+	Gui(Shader* shader, Texture* atlas);
+	void Render();
+};
+>>>>>>> Stashed changes

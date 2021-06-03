@@ -15,8 +15,12 @@ int height = 300; //SUPER SUCIO
 
 bool free_camera = false;
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 void IntroStage::render(World* world) {
+	Game* game = Game::instance;
 
 	//set the clear color (the background color)
 	glClearColor(0.0, 0.0, 1.0, 1.0);
@@ -29,7 +33,7 @@ void IntroStage::render(World* world) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	//gui class
+	game->gui->Render();
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);

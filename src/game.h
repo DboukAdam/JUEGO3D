@@ -2,7 +2,6 @@
 	This class encapsulates the game, is in charge of creating the game, getting the user input, process the update and render.
 */
 
-#ifndef GAME_H
 #define GAME_H
 
 #include "includes.h"
@@ -73,7 +72,10 @@ public:
 	void initPlayer(Vector3 initPos, World* world);
 	void initSky(World* world);
 	void initCamera(World* world);
+
+	void setIntroStage();
+	void setPlayStage();
+	void setEditorStage();
+	void setEndStage();
 };
 
-
-#endif 

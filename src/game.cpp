@@ -15,8 +15,6 @@ Animation* anim = NULL;
 FBO* fbo = NULL;
 Game* Game::instance = NULL;
 
-
-
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
 	this->window_width = window_width;
@@ -29,7 +27,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	frame = 0;
 	time = 0.0f;
 	elapsed_time = 0.0f;
-	mouse_locked = true;
+	mouse_locked = false;
 
 	//OpenGL flags
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
@@ -38,11 +36,14 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	initWorldTienda();
 
 	currentWorld = tienda;
-	currentStage = play; //play;
+	currentStage = intro;
 
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
-	Texture* atlas = Texture::Get("data/gui/Crosshair.png");
+	Texture* atlas = Texture::Get("data/atlas.png");
+	//Texture* atlas = Texture::Get("data/gui/Crosshair.png");
+
 	gui = new Gui(shader, atlas);
+	gui->initAtlas();
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -190,4 +191,28 @@ void Game::initCamera(World* world) {
 	Vector3 center = world->player->m * Vector3(0.f, 5.f, -1.f);
 	Vector3 up = world->player->m.rotateVector(Vector3(0.f, 1.f, 0.f));
 	camera->lookAt(eye, center, up);
+}
+
+void Game::setIntroStage(){
+	currentStage = intro;
+	mouse_locked = false;
+	SDL_ShowCursor(!mouse_locked);
+}
+
+void Game::setPlayStage(){
+	currentStage = play;
+	mouse_locked = true;
+	SDL_ShowCursor(!mouse_locked);
+}
+
+void Game::setEditorStage(){
+	currentStage = editor;
+	mouse_locked = true;
+	SDL_ShowCursor(!mouse_locked);
+}
+
+void Game::setEndStage(){
+	currentStage = end;
+	mouse_locked = false;
+	SDL_ShowCursor(!mouse_locked);
 }

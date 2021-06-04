@@ -19,7 +19,7 @@ void IntroStage::render(World* world) {
 	Game* game = Game::instance;
 
 	//set the clear color (the background color)
-	glClearColor(0.0, 0.0, 1.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	// Clear the window and the depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -29,7 +29,7 @@ void IntroStage::render(World* world) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	game->gui->Render();
+	game->gui->RenderIntroGui();
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -40,9 +40,11 @@ void IntroStage::render(World* world) {
 }
 
 void IntroStage::update(double seconds_elapsed, World* world) {
-
+	Game* game = Game::instance;
 	if (Input::mouse_state & SDL_BUTTON_LEFT) {
-
+		if (Input::mouse_position.y >= game->window_height / 5) {
+			game->setPlayStage();
+		}
 	}
 
 	
@@ -54,10 +56,10 @@ void PlayStage::render(World* world) {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
 	//set the camera as default
 	Camera* camera = Camera::current;
 
-	
 	world->player->CamPlayer(camera);
 	
 
@@ -102,11 +104,12 @@ void PlayStage::render(World* world) {
 	//.........................................................................................
 
 	world->RenderEntities(camera);
-	world->RenderZombies(camera);	
+	world->RenderZombies(camera);
 
 	//disable shader
 	shader->disable();
 
+	//GUI STUFF
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
@@ -165,8 +168,7 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 	
 	//dejar solo mientras desarrollamos
 	if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) {
-		Game* game = Game::instance;
-		game->currentStage = game->editor;
+		game->setEditorStage();
 	}
 	
 
@@ -241,7 +243,6 @@ void EditorStage::render(World* world)
 	//pintando bounding muy feo
 	world->RenderBoundingEntities(camera);
 	world->RenderBoundingZombies(camera);
-
 
 	//Draw the floor grid
 	drawGrid();
@@ -348,8 +349,7 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) {
-			Game* game = Game::instance;
-			game->currentStage = game->play;
+			game->setPlayStage();
 		}
 		if (game->mouse_locked)
 			Input::centerMouse();

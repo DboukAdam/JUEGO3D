@@ -44,7 +44,7 @@ void IntroStage::update(double seconds_elapsed, World* world) {
 	if (Input::mouse_state & SDL_BUTTON_LEFT) {
 
 	}
-	
+
 	
 }
 
@@ -106,6 +106,13 @@ void PlayStage::render(World* world) {
 
 	//disable shader
 	shader->disable();
+
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	game->gui->RenderCrosshair();
 
 	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
@@ -230,15 +237,31 @@ void EditorStage::render(World* world)
 	//disable shader
 	shader->disable();
 
+
 	//pintando bounding muy feo
 	world->RenderBoundingEntities(camera);
 	world->RenderBoundingZombies(camera);
 
+
 	//Draw the floor grid
 	drawGrid();
 
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	game->gui->RenderCrosshair();
 	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+
+	//draw text para ver la mesh que voy a pintar
+	string asset;
+	if (world->numEntity == 0) {
+		asset = "armario";
+		drawText(10, 10, asset, Vector3(1, 1, 1), 2);
+	}
+	
 }
 
 void EditorStage::update(double seconds_elapsed, World* world)
@@ -260,20 +283,20 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
 		if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 
-		if (Input::wasKeyPressed(SDL_SCANCODE_Z)) {
-			Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
-			world->addObjectEditor(Mesh::Get("data/LowPolyCharacterPack/mujeh1.obj"), Texture::Get("data/LowPolyCharacterPack/mujeh1.png"), dir);
+		if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
+			
+			Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, 800, 600);
+			world->addObjectEditor(world->editorEntities[world->numEntity], dir);
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_X)) {
-			Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
-			world->addObjectEditor(Mesh::Get("data/LowPolyCharacterPack/mujeh1.obj"), Texture::Get("data/LowPolyCharacterPack/mujeh1.png"), dir);
+			world->numEntity += 1;
 		}
 
-		/*if (Input::mouse_state & SDL_BUTTON_LEFT) {
-			Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
-			world->selectEntityEditor(dir);
-		}*/
+		if (Input::wasKeyPressed(SDL_SCANCODE_Z)) {
+			if(world->numEntity > 0) world->numEntity -= 1;
+		}
+
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_Q)) {
 			if (!world->selectedEntity == NULL) {
@@ -288,7 +311,8 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_A)) {
 			if (!world->selectedEntity == NULL) {
-				world->selectedEntity->m.translate(-1, 0, 0);
+				Vector3 local = world->player->m * Vector3(-1, 0, 0);
+				world->selectedEntity->m.translate(local.x, local.y, local.z);
 			}
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_D)) {
@@ -306,12 +330,12 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				world->selectedEntity->m.translate(0, 0, 1);
 			}
 		}
-		if (Input::wasKeyPressed(SDL_SCANCODE_S)) {
+		if (Input::wasKeyPressed(SDL_SCANCODE_1)) {
 			if (!world->selectedEntity == NULL) {
 				world->selectedEntity->m.translate(0, 1, 0);
 			}
 		}
-		if (Input::wasKeyPressed(SDL_SCANCODE_W)) {
+		if (Input::wasKeyPressed(SDL_SCANCODE_2)) {
 			if (!world->selectedEntity == NULL) {
 				world->selectedEntity->m.translate(0, -1, 0);
 			}
@@ -327,7 +351,15 @@ void EditorStage::update(double seconds_elapsed, World* world)
 			Game* game = Game::instance;
 			game->currentStage = game->play;
 		}
-		
+		if (game->mouse_locked)
+			Input::centerMouse();
+
+		if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
+			world->saveWorldInfo();
+		}
+		if (Input::wasKeyPressed(SDL_SCANCODE_L)) {
+			world->loadWorldInfo();
+		}
 	}
 	else { //menu de pause
 

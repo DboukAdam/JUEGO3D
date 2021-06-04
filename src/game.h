@@ -11,6 +11,8 @@
 #include "world.h"
 #include "stage.h"
 #include "gui.h"
+#define MAX_EDITOR_ENTITIES 69
+
 
 class Game
 {
@@ -40,12 +42,14 @@ public:
 	EndStage* end = new EndStage();
 	EditorStage* editor = new EditorStage();
 
+
 	//Our stuff
 	World* tienda;
 	World* currentWorld;
 	Gui* gui;
 	float mouse_speed = 10.0f;
 	
+
 
 	Game( int window_width, int window_height, SDL_Window* window );
 
@@ -62,6 +66,8 @@ public:
 	void onGamepadButtonDown(SDL_JoyButtonEvent event);
 	void onGamepadButtonUp(SDL_JoyButtonEvent event);
 	void onResize(int width, int height);
+
+	void addEditorEntity(Entity* entity);
 
 	void initWorldTienda();
 	void initPlayer(Vector3 initPos, World* world);

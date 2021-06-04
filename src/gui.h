@@ -8,5 +8,6 @@ public:
 
 	Gui(Shader* shader, Texture* atlas);
 	void Render();
+	void RenderCrosshair();
 };
 

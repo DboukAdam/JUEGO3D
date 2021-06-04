@@ -61,3 +61,9 @@ void Entity::render(Shader* shader, float tiling) {
 		mesh->render(GL_TRIANGLES);
 	}
 }
+
+void Entity::copy(Entity* entity) {
+	this->mesh = entity->mesh;
+	this->texture = entity->texture;
+	this->m = entity->m;
+}

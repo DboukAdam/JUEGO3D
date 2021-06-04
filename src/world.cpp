@@ -7,6 +7,9 @@ World::World(Shader* shader) {
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		zombies[i] = NULL;
 	}
+	for (int i = 0; i < MAX_ENTITIES; i++) {
+		editorEntities[i] = NULL;
+	}
 	this->shader = shader;
 	this->player = NULL;
 }
@@ -32,6 +35,15 @@ void World::addPlayer(Player* player) {
 	this->player = player;
 }
 
+void World::addEditorEntity(Entity* entity) {
+	for (int i = 0; i < MAX_ENTITIES; i++) {
+		if (editorEntities[i] == NULL) {
+			editorEntities[i] = entity;
+			break;
+		}
+	}
+}
+
 void World::disparar() {
 	Camera* camera = Camera::current;
 	Vector3 colPoint;
@@ -49,16 +61,14 @@ void World::disparar() {
 	}
 }
 
-void World::addObjectEditor(Mesh* mesh, Texture* texture, Vector3 dir) {
+void World::addObjectEditor(Entity* entity, Vector3 dir) {
 	Camera* camera = Camera::current;
 	Vector3 origin = camera->eye;
 	Vector3 pos = RayPlaneCollision(Vector3(0, 0, 0), Vector3(0, 1, 0), origin, dir);
-	Matrix44 entityModel;
-	Entity* entity = new Entity(0, 0, 0, entityModel);
-	entity->m.setTranslation(pos.x, pos.y, pos.z);
-	entity->mesh = mesh;
-	entity->texture = texture;
-	addEntity(entity);
+	Entity* copia = new Entity(0,0,0,Matrix44());
+	copia->copy(entity);
+	copia->m.setTranslation(pos.x, pos.y, pos.z);
+	addEntity(copia);
 }
 
 void World::selectEntityEditor(Vector3 dir){
@@ -114,7 +124,7 @@ void World::RenderBoundingEntities(Camera* camera)
 		if (entity == NULL) break;
 		BoundingBox currentBox = transformBoundingBox(entity->m, entity->mesh->box);
 		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
-		entity->mesh->renderBounding(entity->m);
+		if (entity->bounding)entity->mesh->renderBounding(entity->m);
 	}
 }
 
@@ -127,6 +137,65 @@ void World::RenderBoundingZombies(Camera* camera)
 		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
 		if (zombie->bounding) zombie->mesh->renderBounding(zombie->m);
 	}
+}
+
+
+void World::saveWorldInfo()
+{
+	World* world_info = new World(shader);
+	//fill here game_info with all game data
+	for (int i = 0; i < MAX_ENTITIES; i++)
+	{
+		if (entities[i] == NULL) break;
+		world_info->entities[i] = this->entities[i];
+		
+	}
+	for (int j = 0; j < MAX_ENTITIES; j++)
+	{
+		if (zombies[j] == NULL) break;
+		world_info->zombies[j] = this->zombies[j];
+
+	}
+	
+	world_info->player = this->player;
+	world_info->sky = this->sky;
+	world_info->map = this->map;
+	//save to file
+	FILE* fp = fopen("savegame.bin", "wb");
+	fwrite(world_info, sizeof(World), 1, fp);
+	fclose(fp);
+}
+
+bool World::loadWorldInfo()
+{
+	World* world_info = new World(shader);
+
+	//load file
+	FILE* fp = fopen("savegame.bin", "rb");
+	if (fp == NULL) //no savegame found
+		return false;
+
+	fread(world_info, sizeof(World), 1, fp);
+	fclose(fp);
+
+	//transfer data from game_info to Game
+	for (int i = 0; i < MAX_ENTITIES; i++)
+	{
+		if (world_info->entities[i] == NULL) break;
+		this->entities[i] = world_info->entities[i];
+
+	}
+	for (int j = 0; j < MAX_ENTITIES; j++)
+	{
+		if (world_info->zombies[j] == NULL) break;
+		this->zombies[j] = world_info->zombies[j];
+
+	}
+	this->player = world_info->player;
+	this->sky = world_info->sky;
+	this->map = world_info->map;
+
+	return true;
 }
 
 

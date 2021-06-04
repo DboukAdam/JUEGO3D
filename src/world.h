@@ -13,6 +13,8 @@ class World {
 public:
 
 	Entity* entities[MAX_ENTITIES];
+	Entity* editorEntities[MAX_ENTITIES];
+	int numEntity = 0;
 	Zombie* zombies[MAX_ZOMBIES];
 	Player* player;
 	Shader* shader;
@@ -23,10 +25,11 @@ public:
 	World(Shader* shader);
 	void addEntity(Entity* entity);
 	void addZombie(Zombie* zombie);
+	void addEditorEntity(Entity* entity);
 	void addPlayer(Player* player);
 	void disparar();
 
-	void addObjectEditor(Mesh* mesh, Texture* texture, Vector3 dir);
+	void addObjectEditor(Entity* entity, Vector3 dir);
 	void selectEntityEditor(Vector3 dir);
 
 	void RenderEntities(Camera* camera);
@@ -34,4 +37,6 @@ public:
 
 	void RenderBoundingEntities(Camera* camera);
 	void RenderBoundingZombies(Camera* camera);
+	void saveWorldInfo();
+	bool loadWorldInfo();
 };

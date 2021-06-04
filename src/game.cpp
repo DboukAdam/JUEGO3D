@@ -38,10 +38,10 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	initWorldTienda();
 
 	currentWorld = tienda;
-	currentStage = intro; //play;
+	currentStage = play; //play;
 
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
-	Texture* atlas = Texture::Get("data/gui/Button_Zombie.png");
+	Texture* atlas = Texture::Get("data/gui/Crosshair.png");
 	gui = new Gui(shader, atlas);
 
 	//hide the cursor
@@ -95,7 +95,7 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 		Camera* camera = Camera::current;
 		if (currentStage == play) currentWorld->disparar();
 		if (currentStage == editor) {
-			Vector3 dir = camera->getRayDirection(this->window_width/2, this->window_height/2, this->window_width, this->window_height);
+			Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, this->window_width, this->window_height);
 			currentWorld->selectEntityEditor(dir);
 		}
 	}
@@ -123,24 +123,29 @@ void Game::onResize(int width, int height)
 	window_height = height;
 }
 
+
+
 void Game::initWorldTienda(){
 
 	// example of shader loading using the shaders manager
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
 	tienda = new World(shader);
-
 	Matrix44 m;
-	m.setTranslation(0, -0.65, 0);
-	Entity* chica = new Entity(0, -0.65, 0, m);
-	chica->loadMesh("data/LowPolyCharacterPack/mujeh1.obj");
-	chica->loadTexture("data/LowPolyCharacterPack/mujeh1.png");
-	tienda->addEntity(chica);
-	
-	
 	m.setTranslation(0, 0, 0);
-	Entity* ciudad = new Entity(0, 0, 0, m);
 
+	//libros se ve to mal
+	Entity* bbook =  new Entity(0,0,0 , m);
+	bbook->loadMesh("data/classic/Books/book_black.obj");
+	bbook->loadTexture("data/classic/Books/Materials/book_black.png");
+	tienda->addEditorEntity(bbook);
+	
+	Entity* box = new Entity(0, 20, 0, m);
+	box->loadMesh("data/classic/Boxes/caja.obj");
+	box->loadTexture("data/classic/Boxes/Materials/box1.png");
+	tienda->addEditorEntity(box);
+	
+	Entity* ciudad = new Entity(0, 0, 0, m);
 	ciudad->mesh = new Mesh();
 	ciudad->mesh->createPlane(2000);
 	

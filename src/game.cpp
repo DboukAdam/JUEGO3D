@@ -45,6 +45,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	gui = new Gui(shader, atlas);
 	gui->initAtlas();
 	gui->initIntroButtons();
+	gui->initPauseButtons();
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -70,7 +71,7 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 {
 	switch(event.keysym.sym)
 	{
-		case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
+		//case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
 		case SDLK_F1: Shader::ReloadAll(); break; 
 	}
 }
@@ -95,18 +96,28 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 	if (event.button == SDL_BUTTON_LEFT) //left mouse
 	{
 		Camera* camera = Camera::current;
-		if (currentStage == play) currentWorld->disparar();
+		if (currentStage == intro) {
+			gui->introButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+		}
+		if (currentStage == play) {
+			if (mouse_locked) currentWorld->disparar();
+			else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+		}
 		if (currentStage == editor) {
-			Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, this->window_width, this->window_height);
-			currentWorld->selectEntityEditor(dir);
+			if (mouse_locked) {
+				Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, this->window_width, this->window_height);
+				currentWorld->selectEntityEditor(dir);
+			}
+			else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
 		}
 	}
 	if (event.button == SDL_BUTTON_RIGHT) //right mouse
 	{
 		if (currentStage == editor) {
-			currentWorld->selectedEntity->bounding = false;
-			currentWorld->selectedEntity = NULL;
-
+			if (currentWorld->selectedEntity != NULL) {
+				currentWorld->selectedEntity->bounding = false;
+				currentWorld->selectedEntity = NULL;
+			}
 		}
 	}
 

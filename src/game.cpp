@@ -44,6 +44,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	gui = new Gui(shader, atlas);
 	gui->initAtlas();
+	gui->initIntroButtons();
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse

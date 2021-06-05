@@ -13,20 +13,23 @@ void Gui::initAtlas() {
 	atlasRanges[2] = Vector4(1 - 80 / atlas->width, 0, 80 / atlas->width, 80 / atlas->height); //crosshair
 }
 
+void Gui::initIntroButtons() {
+	Game* game = Game::instance;
+	float button_width = 320;
+	float button_height = 80;
+	float buttonOffset = 10;
+	float xPos = button_width / 2 + buttonOffset;
+	float yPos = game->window_height / 5;
+	for (int i = 1; i < numIntroButtons + 1; i++) {
+		introButtons[i - 1] = new Button(Vector2(xPos, yPos * i), atlasRanges[greenButton], button_width, button_height);
+	}
+}
+
 void Gui::RenderIntroGui()
 {
 	Game* game = Game::instance;
 	Camera cam2D;
 	cam2D.setOrthographic(0, game->window_width, game->window_height, 0, -1, 1);
-	
-	float button_width = 320;
-	float button_height = 80;
-	float buttonOffset = 10;
-	float xPos = button_width/2 + buttonOffset;
-	float yPos = game->window_height / 5;
-
-	Mesh quad; //MODIFICAR
-	quad.createQuad(xPos, yPos, button_width, button_height, false);
 
 	shader->enable();
 	if (shader)
@@ -37,36 +40,25 @@ void Gui::RenderIntroGui()
 		shader->setUniform("u_texture", atlas, 0);
 		shader->setUniform("u_model", Matrix44());
 		shader->setUniform("u_texture_tiling", 1.0f);
-		//First button
-		shader->setUniform("u_tex_range", atlasRanges[greenButton]);
-		quad.render(GL_LINE_STRIP);
-		quad.render(GL_TRIANGLES);
-		//Second button
-		quad.createQuad(xPos, yPos * 2, button_width, button_height, false);
-		shader->setUniform("u_tex_range", atlasRanges[greenButton]);
-		quad.render(GL_LINE_STRIP);
-		quad.render(GL_TRIANGLES);
-		//Third button
-		quad.createQuad(xPos, yPos * 3, button_width, button_height, false);
-		shader->setUniform("u_tex_range", atlasRanges[greenButton]);
-		quad.render(GL_LINE_STRIP);
-		quad.render(GL_TRIANGLES);
-		//Fourth button
-		quad.createQuad(xPos, yPos * 4, button_width, button_height, false);
-		shader->setUniform("u_tex_range", atlasRanges[greenButton]);
-		quad.render(GL_LINE_STRIP);
-		quad.render(GL_TRIANGLES);
+
+		for (int i = 0; i < numIntroButtons; i++) {
+			Button* button = introButtons[i];
+			shader->setUniform("u_tex_range", button->range);
+			button->mesh.render(GL_LINE_STRIP);
+			button->mesh.render(GL_TRIANGLES);
+		}
 	}
 	shader->disable();
 	
 	float scale = 5.0f;
 	float textSize = 7 * scale;
 	float yOffset = 14.0f;
-	float xOffset = buttonOffset + 20;
-	drawText(xOffset, yPos - yOffset - textSize/2, "play", Vector3(1, 1, 1), scale);
-	drawText(xOffset, yPos * 2 - yOffset - textSize / 2, "editor", Vector3(1, 1, 1), scale);
-	drawText(xOffset, yPos * 3 - yOffset - textSize / 2, "settings", Vector3(1, 1, 1), scale);
-	drawText(xOffset, yPos * 4 - yOffset - textSize / 2, "exit", Vector3(1, 1, 1), scale);
+	float xOffset = 20;
+	std::string text[] = { "play", "editor", "settings", "exit" };
+	for (int i = 0; i < numIntroButtons; i++) {
+		float yPos = introButtons[i]->pos.y;
+		drawText(xOffset, yPos - yOffset - textSize/2, text[i], Vector3(1, 1, 1), scale);
+	}
 }
 
 void Gui::RenderCrosshair(){

@@ -101,6 +101,15 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 			currentWorld->selectEntityEditor(dir);
 		}
 	}
+	if (event.button == SDL_BUTTON_RIGHT) //right mouse
+	{
+		if (currentStage == editor) {
+			currentWorld->selectedEntity->bounding = false;
+			currentWorld->selectedEntity = NULL;
+
+		}
+	}
+
 }
 
 void Game::onMouseWheel(SDL_MouseWheelEvent event)

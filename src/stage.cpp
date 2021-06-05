@@ -236,6 +236,18 @@ void EditorStage::render(World* world)
 	world->RenderEntities(camera);
 	world->RenderZombies(camera);
 
+	if (world->selectedEntity == NULL) {
+
+	Vector3 origin = camera->eye;
+	Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, 800, 600);
+	Vector3 pos = RayPlaneCollision(Vector3(0, 0, 0), Vector3(0, 1, 0), origin, dir);
+	Entity* entidad = world->editorEntities[world->numEntity];
+	entidad->m.setTranslation(pos.x, pos.y, pos.z);
+	entidad->render(shader);
+
+	}
+
+
 	//disable shader
 	shader->disable();
 
@@ -276,8 +288,8 @@ void EditorStage::update(double seconds_elapsed, World* world)
 
 	if (game->mouse_locked)
 	{
-		camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
-		camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
+		camera->rotate(Input::mouse_delta.x * 0.0005f, Vector3(0.0f, -1.0f, 0.0f));
+		camera->rotate(Input::mouse_delta.y * 0.0005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
 		if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 30;
 		if (Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
 		if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
@@ -310,10 +322,9 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				world->selectedEntity->m.rotate(-10.0f * DEG2RAD, Vector3(0, 1, 0));
 			}
 		}
-		if (Input::wasKeyPressed(SDL_SCANCODE_A)) {
+		/*if (Input::wasKeyPressed(SDL_SCANCODE_A)) {
 			if (!world->selectedEntity == NULL) {
-				Vector3 local = world->player->m * Vector3(-1, 0, 0);
-				world->selectedEntity->m.translate(local.x, local.y, local.z);
+				world->selectedEntity->m.translate(-1, 0, 0);
 			}
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_D)) {
@@ -323,14 +334,14 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_S)) {
 			if (!world->selectedEntity == NULL) {
-				world->selectedEntity->m.translate(0, 0, -1);
+				world->selectedEntity->m.translate(0, 0, 1);
 			}
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_W)) {
 			if (!world->selectedEntity == NULL) {
-				world->selectedEntity->m.translate(0, 0, 1);
+				world->selectedEntity->m.translate(0, 0, -1);
 			}
-		}
+		}*/
 		if (Input::wasKeyPressed(SDL_SCANCODE_1)) {
 			if (!world->selectedEntity == NULL) {
 				world->selectedEntity->m.translate(0, 1, 0);
@@ -347,6 +358,7 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				world->selectedEntity->~Entity();
 			}
 		}
+
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) {
 			game->setPlayStage();

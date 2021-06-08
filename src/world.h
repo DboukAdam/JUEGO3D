@@ -12,30 +12,43 @@
 class World {
 public:
 
-	Entity* entities[MAX_ENTITIES];
-	Entity* editorEntities[MAX_ENTITIES];
+	Entity* staticEntities[MAX_ENTITIES];
+	Entity* dynamicEntities[MAX_ENTITIES];
+	Entity* structures[MAX_ENTITIES];
+	Entity* decoration[MAX_ENTITIES];
 	int numEntity = 0;
+	int numStructure = 0;
+	int numDecoration = 0;
 	Zombie* zombies[MAX_ZOMBIES];
 	Player* player;
 	Shader* shader;
 	Entity* sky;
 	Entity* selectedEntity = NULL;
 	uint8* map;
+	Entity* ground;
+	bool isStaticObject = false;
 
 	World(Shader* shader);
-	void addEntity(Entity* entity);
+	void addStaticEntity(Entity* entity);
+	void addDynamicEntity(Entity* entity);
 	void addZombie(Zombie* zombie);
-	void addEditorEntity(Entity* entity);
 	void addPlayer(Player* player);
-	void disparar();
-
+	void addStructure(Entity* entity);
+	void addDecoration(Entity* entity);
 	void addObjectEditor(Entity* entity, Vector3 dir);
+	void initCamera(Camera* camera);
+	void initPlayer(Vector3 pos, Mesh* mesh, Texture* text);
+	void initSky(Mesh* mesh, Texture* texture);
+	void initGround(Texture* texture);
+	void disparar();
 	void selectEntityEditor(Vector3 dir);
 
-	void RenderEntities(Camera* camera);
+	void RenderStatic(Camera* camera);
+	void RenderDynamic(Camera* camera);
 	void RenderZombies(Camera* camera);
 
-	void RenderBoundingEntities(Camera* camera);
+	void RenderBoundingStatic(Camera* camera);
+	void RenderBoundingDynamic(Camera* camera);
 	void RenderBoundingZombies(Camera* camera);
 	void saveWorldInfo();
 	bool loadWorldInfo();

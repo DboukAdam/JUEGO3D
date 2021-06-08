@@ -2,7 +2,7 @@
 #include "input.h"
 #include "game.h"
 #include "pathfinders.h"
-
+#define MAX_ENTITIES 155
 
 int startx; //ULTRA SUCIO
 int starty;
@@ -69,7 +69,7 @@ void PlayStage::render(World* world) {
 	Shader* shader = world->shader;
 	shader->enable();
 	world->sky->render(shader);
-
+	world->ground->render(shader);
 
 	//.........................................................................................
 	//IA CAMBIAR
@@ -96,8 +96,8 @@ void PlayStage::render(World* world) {
 	//	}
 	//}
 	//.........................................................................................
-
-	world->RenderEntities(camera);
+	world->RenderStatic(camera);
+	world->RenderDynamic(camera);
 	world->RenderZombies(camera);
 
 	//disable shader
@@ -158,6 +158,35 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 		}
 
 		Vector3 targetPos = player->pos + playerSpeed;
+		Vector3 playerTargetCenter = targetPos + Vector3(0, 1, 0);
+		for (int i = 0; i < MAX_ENTITIES; i++) {
+			
+			if (!world->staticEntities[i] == NULL) {
+
+			Entity* current = world->staticEntities[i];
+			
+			Vector3 coll;
+			Vector3 collNormal;
+			if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.5, coll, collNormal)) continue;
+			
+			Vector3 push_away = normalize(coll - playerTargetCenter) * seconds_elapsed;
+			targetPos = player->pos - push_away;
+			targetPos.y = player->pos.y;
+			}
+
+			if (!world->dynamicEntities[i] == NULL) {
+
+				Entity* current = world->dynamicEntities[i];
+
+				Vector3 coll;
+				Vector3 collNormal;
+
+				if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.5, coll, collNormal)) continue;
+				current->m.translate(0,0,-1);
+
+			}
+			
+		}
 		player->pos = targetPos;
 	}
 	else {
@@ -234,19 +263,26 @@ void EditorStage::render(World* world)
 	Shader* shader = world->shader;
 	shader->enable();
 	world->sky->render(shader);
-
-	world->RenderEntities(camera);
+	world->ground->render(shader);
+	world->RenderStatic(camera);
+	world->RenderDynamic(camera);
 	world->RenderZombies(camera);
 
 	if (world->selectedEntity == NULL) {
 
-	Vector3 origin = camera->eye;
+	Vector3 origin = camera->eye;//unproject center coord of the screen
 	Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, 800, 600);
 	Vector3 pos = RayPlaneCollision(Vector3(0, 0, 0), Vector3(0, 1, 0), origin, dir);
-	Entity* entidad = world->editorEntities[world->numEntity];
-	entidad->m.setTranslation(pos.x, pos.y, pos.z);
-	entidad->render(shader);
-
+		if (world->isStaticObject) {
+			Entity* entidad = world->structures[world->numEntity];
+			entidad->m.setTranslation(pos.x, pos.y, pos.z);
+			entidad->render(shader);
+		}
+		else {
+			Entity* entidad = world->decoration[world->numEntity];
+			entidad->m.setTranslation(pos.x, pos.y, pos.z);
+			entidad->render(shader);
+		}
 	}
 
 
@@ -254,8 +290,16 @@ void EditorStage::render(World* world)
 	shader->disable();
 
 
+	if (world->isStaticObject) {
+		world->numEntity = world->numStructure;
+	}
+	else {
+		world->numEntity = world->numDecoration;
+	}
+
 	//pintando bounding muy feo
-	world->RenderBoundingEntities(camera);
+	world->RenderBoundingStatic(camera);
+	world->RenderBoundingDynamic(camera);
 	world->RenderBoundingZombies(camera);
 
 	//Draw the floor grid
@@ -279,7 +323,7 @@ void EditorStage::render(World* world)
 	string asset;
 	if (world->numEntity == 0) {
 		asset = "armario";
-		drawText(10, 10, asset, Vector3(1, 1, 1), 2);
+		drawText(20,20, asset, Vector3(1, 1, 1), 2);
 	}
 	
 }
@@ -303,28 +347,68 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
 		if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 
+		if (Input::wasKeyPressed(SDL_SCANCODE_C)) {
+			world->isStaticObject = !world->isStaticObject;
+			if (world->isStaticObject) {
+				std::cout << "Cambio de objectos a Structure" << std::endl;
+			}
+			else {
+				std::cout << "Cambio de objectos a Decoration" << std::endl;
+			}
+		}
+
 		if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
 			
 			Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, 800, 600);
-			world->addObjectEditor(world->editorEntities[world->numEntity], dir);
+			if (world->isStaticObject) {
+				world->addObjectEditor(world->structures[world->numEntity], dir);
+			}
+			else {
+				world->addObjectEditor(world->decoration[world->numEntity], dir);
+			}
+			
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_X)) {
-			int tmp = world->numEntity + 1;
-			if (tmp > game->maxEditorEntities) {
-				world->numEntity = 0;
+			if (world->isStaticObject) {
+				int tmp = world->numStructure + 1;
+				if (tmp > game->maxStructures) {
+					world->numStructure = 0;
+				}
+				else {
+					world->numStructure += 1;
+				}
 			}
 			else {
-				world->numEntity += 1;
+				int tmp = world->numDecoration + 1;
+				if (tmp > game->maxDecorations) {
+					world->numDecoration = 0;
+				}
+				else {
+					world->numDecoration += 1;
+				}
 			}
+			
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_Z)) {
-			int tmp = world->numEntity - 1;
-			if (tmp < 0){
-				world->numEntity = game->maxEditorEntities;
-			}else{
-				world->numEntity -= 1;
+			if (world->isStaticObject) {
+				int tmp = world->numStructure - 1;
+				if (tmp < 0) {
+					world->numStructure = game->maxStructures;
+				}
+				else {
+					world->numStructure -= 1;
+				}
+			}
+			else {
+				int tmp = world->numDecoration - 1;
+				if (tmp < 0) {
+					world->numDecoration = game->maxDecorations;
+				}
+				else {
+					world->numDecoration -= 1;
+				}
 			}
 		}
 
@@ -363,12 +447,12 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		if (game->mouse_locked)
 			Input::centerMouse();
 
-		if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
+		/*if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
 			world->saveWorldInfo();
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_L)) {
 			world->loadWorldInfo();
-		}
+		}*/
 	}
 	else { //menu de pause
 

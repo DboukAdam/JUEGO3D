@@ -3,10 +3,13 @@
 #include "texture.h"
 #include "shader.h"
 #include "camera.h"
+#include <string>
+
 
 #pragma once
 class Entity {
 public:
+	
 	Vector3 pos; //Mirar si es util por culpa del setTranslation ese que dice el feo del Adam
 	Matrix44 m;
 	Mesh* mesh;
@@ -14,6 +17,7 @@ public:
 	float yaw;
 	float pitch;
 	bool bounding = false;
+	char type[20];
 	
 	Entity(Vector3 pos, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) {
 		this->pos = pos;

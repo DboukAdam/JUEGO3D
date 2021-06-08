@@ -156,75 +156,41 @@ void Game::initWorldTienda(){
 	Matrix44 m;
 	m.setTranslation(0, 0, 0);
 
-	//libros se ve to mal
-	Entity* barba =  new Entity(0,0,0 , m);
-	barba->loadMesh("data/classic/2.Structure/Doors/marco_grande.obj");
-	barba->loadTexture("data/classic/2.Structure/Doors/Materials/cabinet.png");
-	tienda->addEditorEntity(barba);
+	
 
 	/*world->loadEntity(Entity, patata);*/
 	
-	maxEditorEntities += 1;
-	Entity* box = new Entity(0, 0, 0, m);
-	box->loadMesh("data/classic/1.Decoration/Boxes/caja.obj");
-	box->loadTexture("data/classic/1.Decoration/Boxes/Materials/box4.png");
-	tienda->addEditorEntity(box);
-	
-	
-	maxEditorEntities += 1;
-	Entity* player = new Entity(0, 0, 0, m);
-	player->loadMesh("data/players/export_man.obj");
-	player->loadTexture("data/players/man.png");
-	tienda->addEditorEntity(player);
+	Entity* caja = new Entity(0, 0, 0, m);
+	caja->loadMesh("data/classic/1.Decoration/Boxes/caja.obj");
+	caja->loadTexture("data/classic/1.Decoration/Boxes/Materials/box1.png");
+	tienda->addDecoration(caja);
+	//structure o decoration
 
+	Entity* marco = new Entity(0, 0, 0, m);
+	marco->loadMesh("data/classic/2.Structure/Doors/marco_grande.obj");
+	marco->loadTexture("data/classic/2.Structure/Doors/Materials/cabinet.png");
+	tienda->addStructure(marco);
 	
-	Entity* ciudad = new Entity(0, 0, 0, m);
-	ciudad->mesh = new Mesh();
-	ciudad->mesh->createPlane(2000);
-	//hacerlo tiled
-	ciudad->loadTexture("data/classic/2.Structure/Ground/Materials/Rocks_05.png");
-	tienda->addEntity(ciudad);
 
 	Vector3 playerInitPos = Vector3(0, 0.5, 0);
-	initPlayer(playerInitPos, tienda);
+	Mesh* mesh = Mesh::Get("data/LowPolyCharacterPack/mujeh1.obj");
+	Texture* text = Texture::Get("data/LowPolyCharacterPack/mujeh1.png");
+	tienda->initPlayer(playerInitPos, mesh , text);
 
 	//tienda->createZombies();
 
-	initSky(tienda);
-	
-	initCamera(tienda);
-
-}
-
-void Game::initPlayer(Vector3 pos, World* world) {
-	Matrix44 m;
-	m.setTranslation(pos.x, pos.y, pos.z);
-	Player* player = (Player*) new Entity(pos, m);
-	player->loadMesh("data/LowPolyCharacterPack/mujeh1.obj");
-	player->loadTexture("data/LowPolyCharacterPack/mujeh1.png");
-	player->setVel(2.0f);
-	world->addPlayer(player);
-}
-
-void Game::initSky(World* world) {
-	Matrix44 m;
-	Vector3 playerPos = world->player->getPos();
-	m.setTranslation(playerPos.x, playerPos.y, playerPos.z);
-	world->sky = new Entity(playerPos, m);
-	world->sky->loadMesh("data/Ambiente/cielo.ASE");
-	world->sky->loadTexture("data/Ambiente/cielo.tga");
-}
-
-void Game::initCamera(World* world) {
+	mesh = Mesh::Get("data/Ambiente/cielo.ASE");
+	text = Texture::Get("data/Ambiente/cielo.tga");
+	tienda->initSky(mesh, text);
+	text = Texture::Get("data/classic/2.Structure/Ground/Materials/Rocks_05.png");
+	tienda->initGround(text);
 	camera = new Camera();
-	Camera::current = camera;
-	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
-	Vector3 eye = world->player->m * Vector3(0.f, 1.f, 0.f);
-	Vector3 center = world->player->m * Vector3(0.f, 5.f, -1.f);
-	Vector3 up = world->player->m.rotateVector(Vector3(0.f, 1.f, 0.f));
-	camera->lookAt(eye, center, up);
+	tienda->initCamera(camera);
+
 }
 
+
+//STAGES SETTINGS 
 void Game::setIntroStage(){
 	currentStage = intro;
 	mouse_locked = false;
@@ -248,3 +214,4 @@ void Game::setEndStage(){
 	mouse_locked = false;
 	SDL_ShowCursor(!mouse_locked);
 }
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::

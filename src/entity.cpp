@@ -1,6 +1,11 @@
 #include "entity.h"
 
 
+void Zombie::DeleteZombie()
+{
+	Entity::DeleteEntity();
+}
+
 void Zombie::AStarPath()
 {
 
@@ -8,12 +13,6 @@ void Zombie::AStarPath()
 
 void Zombie::setVel(float v){
 	this->vel = v;
-}
-
-Zombie::~Zombie()
-{
-	mesh->clear();
-	texture->clear();
 }
 
 void Player::setVel(float v) {
@@ -32,7 +31,7 @@ void Player::CamPlayer(Camera* camera)
 	Vector3 forward = pitchM.rotateVector(Vector3(0.0f, 0.0f, -1.0f));
 	forward = m.rotateVector(forward);
 
-	Vector3 eye = m * Vector3(0.0f, 2.0f, -0.5f);
+	Vector3 eye = m * Vector3(0.0f, 1.0f, -0.5f);
 	Vector3 center = eye + forward;
 
 	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
@@ -40,11 +39,9 @@ void Player::CamPlayer(Camera* camera)
 	
 }
 
-Entity::~Entity()
+void Entity::DeleteEntity()
 {
-	mesh->clear();
-	texture->clear();
-	this->bounding = false;
+	this->m.setTranslation(0, 10000000, 0);
 }
 
 void Entity::render(Shader* shader, float tiling) {

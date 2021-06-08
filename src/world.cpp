@@ -39,6 +39,7 @@ void World::addEditorEntity(Entity* entity) {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		if (editorEntities[i] == NULL) {
 			editorEntities[i] = entity;
+			
 			break;
 		}
 	}

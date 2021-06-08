@@ -146,21 +146,32 @@ void Game::initWorldTienda(){
 	m.setTranslation(0, 0, 0);
 
 	//libros se ve to mal
-	Entity* bbook =  new Entity(0,0,0 , m);
-	bbook->loadMesh("data/classic/Books/book_black.obj");
-	bbook->loadTexture("data/classic/Books/Materials/book_black.png");
-	tienda->addEditorEntity(bbook);
+	Entity* barba =  new Entity(0,0,0 , m);
+	barba->loadMesh("data/classic/2.Structure/Doors/marco_grande.obj");
+	barba->loadTexture("data/classic/2.Structure/Doors/Materials/cabinet.png");
+	tienda->addEditorEntity(barba);
+
+	/*world->loadEntity(Entity, patata);*/
 	
-	Entity* box = new Entity(0, 20, 0, m);
-	box->loadMesh("data/classic/Boxes/caja.obj");
-	box->loadTexture("data/classic/Boxes/Materials/box1.png");
+	maxEditorEntities += 1;
+	Entity* box = new Entity(0, 0, 0, m);
+	box->loadMesh("data/classic/1.Decoration/Boxes/caja.obj");
+	box->loadTexture("data/classic/1.Decoration/Boxes/Materials/box4.png");
 	tienda->addEditorEntity(box);
+	
+	
+	maxEditorEntities += 1;
+	Entity* player = new Entity(0, 0, 0, m);
+	player->loadMesh("data/players/export_man.obj");
+	player->loadTexture("data/players/man.png");
+	tienda->addEditorEntity(player);
+
 	
 	Entity* ciudad = new Entity(0, 0, 0, m);
 	ciudad->mesh = new Mesh();
 	ciudad->mesh->createPlane(2000);
-	
-	ciudad->loadTexture("data/image.png");
+	//hacerlo tiled
+	ciudad->loadTexture("data/classic/2.Structure/Ground/Materials/Rocks_05.png");
 	tienda->addEntity(ciudad);
 
 	Vector3 playerInitPos = Vector3(0, 0.5, 0);

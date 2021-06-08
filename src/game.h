@@ -47,7 +47,7 @@ public:
 	World* currentWorld;
 	Gui* gui;
 	float mouse_speed = 10.0f;
-	
+	int maxEditorEntities = 0;
 
 
 	Game( int window_width, int window_height, SDL_Window* window );
@@ -65,9 +65,6 @@ public:
 	void onGamepadButtonDown(SDL_JoyButtonEvent event);
 	void onGamepadButtonUp(SDL_JoyButtonEvent event);
 	void onResize(int width, int height);
-
-	void addEditorEntity(Entity* entity);
-
 	void initWorldTienda();
 	void initPlayer(Vector3 initPos, World* world);
 	void initSky(World* world);

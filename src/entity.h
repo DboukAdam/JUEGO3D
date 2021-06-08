@@ -33,7 +33,7 @@ public:
 		this->yaw = yaw;
 		this->pitch = pitch;
 	};
-	~Entity();
+	
 
 	void setPos(Vector3 pos) {
 		this->pos = pos;
@@ -55,6 +55,8 @@ public:
 		texture = Texture::Get(filename);
 	};
 
+	void DeleteEntity();
+
 	void render(Shader* shader, float tiling = 1.0f);
 	void copy(Entity* entity);
 };
@@ -65,7 +67,7 @@ public:
 	float vel;
 	bool triggered;
 
-	~Zombie();
+	void DeleteZombie();
 	void AStarPath(); //Cambiar lo que devuelve
 	void setVel(float v);
 };

@@ -303,11 +303,22 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_X)) {
-			world->numEntity += 1;
+			int tmp = world->numEntity + 1;
+			if (tmp > game->maxEditorEntities) {
+				world->numEntity = 0;
+			}
+			else {
+				world->numEntity += 1;
+			}
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_Z)) {
-			if(world->numEntity > 0) world->numEntity -= 1;
+			int tmp = world->numEntity - 1;
+			if (tmp < 0){
+				world->numEntity = game->maxEditorEntities;
+			}else{
+				world->numEntity -= 1;
+			}
 		}
 
 
@@ -322,40 +333,19 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				world->selectedEntity->m.rotate(-10.0f * DEG2RAD, Vector3(0, 1, 0));
 			}
 		}
-		/*if (Input::wasKeyPressed(SDL_SCANCODE_A)) {
-			if (!world->selectedEntity == NULL) {
-				world->selectedEntity->m.translate(-1, 0, 0);
-			}
-		}
-		if (Input::wasKeyPressed(SDL_SCANCODE_D)) {
-			if (!world->selectedEntity == NULL) {
-				world->selectedEntity->m.translate(1, 0, 0);
-			}
-		}
-		if (Input::wasKeyPressed(SDL_SCANCODE_S)) {
-			if (!world->selectedEntity == NULL) {
-				world->selectedEntity->m.translate(0, 0, 1);
-			}
-		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_W)) {
-			if (!world->selectedEntity == NULL) {
-				world->selectedEntity->m.translate(0, 0, -1);
-			}
-		}*/
-		if (Input::wasKeyPressed(SDL_SCANCODE_1)) {
 			if (!world->selectedEntity == NULL) {
 				world->selectedEntity->m.translate(0, 1, 0);
 			}
 		}
-		if (Input::wasKeyPressed(SDL_SCANCODE_2)) {
+		if (Input::wasKeyPressed(SDL_SCANCODE_S)) {
 			if (!world->selectedEntity == NULL) {
 				world->selectedEntity->m.translate(0, -1, 0);
 			}
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_P)) {
-			if (!world->selectedEntity == NULL) {
-				//no funciona bien
-				world->selectedEntity->~Entity();
+			if (world->selectedEntity != NULL) {
+				world->selectedEntity->DeleteEntity();
 			}
 		}
 

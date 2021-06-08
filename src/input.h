@@ -80,6 +80,8 @@ public:
 	static float mouse_wheel;
 	static float mouse_wheel_delta;
 
+	static int prev_button;
+
 	//keyboard
 	static bool isKeyPressed(int key_code) { return keystate[key_code] != 0; }
 	static bool wasKeyPressed(int key_code) { return keystate[key_code] != 0 && prev_keystate[key_code] == 0; }

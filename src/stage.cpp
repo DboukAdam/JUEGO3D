@@ -41,12 +41,6 @@ void IntroStage::render(World* world) {
 
 void IntroStage::update(double seconds_elapsed, World* world) {
 	Game* game = Game::instance;
-	if (Input::mouse_state & SDL_BUTTON_LEFT) {
-		if (Input::mouse_position.y >= game->window_height / 5) {
-			game->setPlayStage();
-		}
-	}
-
 	
 }
 
@@ -115,7 +109,12 @@ void PlayStage::render(World* world) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	game->gui->RenderCrosshair();
+	if (game->mouse_locked) {
+		game->gui->RenderCrosshair();
+	}
+	else {
+		game->gui->RenderPauseMenu();
+	}
 
 	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
@@ -162,9 +161,12 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 		player->pos = targetPos;
 	}
 	else {
-		//menu de pause
 	}
-
+	
+	if (Input::wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
+		game->mouse_locked = !game->mouse_locked;
+		SDL_ShowCursor(!game->mouse_locked);
+	}
 	
 	//dejar solo mientras desarrollamos
 	if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) {
@@ -264,7 +266,12 @@ void EditorStage::render(World* world)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	game->gui->RenderCrosshair();
+	if (game->mouse_locked) {
+		game->gui->RenderCrosshair();
+	}
+	else {
+		game->gui->RenderPauseMenu();
+	}
 	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 
@@ -365,7 +372,9 @@ void EditorStage::update(double seconds_elapsed, World* world)
 	}
 	else { //menu de pause
 
-
 	}
-
+	if (Input::wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
+		game->mouse_locked = !game->mouse_locked;
+		SDL_ShowCursor(!game->mouse_locked);
+	}
 }

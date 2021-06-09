@@ -8,8 +8,7 @@
 #include "animation.h"
 
 #include <cmath>
-//#include "audio.h"
-#include "extra/bass.h"
+#include "audio.h"
 
 //some globals
 Animation* anim = NULL;
@@ -51,12 +50,8 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 
 	//Audio
-	/*Audio* audio = new Audio();
-	audio->play(1);*/
-	HSAMPLE sample = BASS_SampleLoad(false, "data/Audio/zombie-growling.wav", 0, 0, 3, 0);
-	if (sample == 0) {
-		std::cout << "AUDIO ERROR: sample not found" << std::endl;
-	}
+	Audio* audio = Audio::Get("data/Audio/musicbox-silent-night.wav");
+	audio->play(1);
 }
 
 //what to do when the image has to be draw

@@ -66,6 +66,7 @@
     <ClCompile Include="..\..\src\entity.cpp" />
     <ClCompile Include="..\..\src\pathfinders.cpp" />
     <ClCompile Include="..\..\src\gui.cpp" />
+    <ClCompile Include="..\..\src\audio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\camera.h" />
@@ -129,6 +130,10 @@
     <ClInclude Include="..\..\src\world.h" />
     <ClInclude Include="..\..\src\pathfinders.h" />
     <ClInclude Include="..\..\src\gui.h" />
+    <ClInclude Include="..\..\src\extra\bass.h">
+      <Filter>extra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\audio.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extra">

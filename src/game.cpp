@@ -8,7 +8,8 @@
 #include "animation.h"
 
 #include <cmath>
-
+//#include "audio.h"
+#include "extra/bass.h"
 
 //some globals
 Animation* anim = NULL;
@@ -33,15 +34,14 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
 	glEnable( GL_DEPTH_TEST ); //check the occlusions using the Z buffer
 	
+	//Worlds
 	initWorldTienda();
-
 	currentWorld = tienda;
 	currentStage = intro;
 
+	//GUI
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
 	Texture* atlas = Texture::Get("data/atlas.png");
-	//Texture* atlas = Texture::Get("data/gui/Crosshair.png");
-
 	gui = new Gui(shader, atlas);
 	gui->initAtlas();
 	gui->initIntroButtons();
@@ -49,6 +49,14 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
+
+	//Audio
+	/*Audio* audio = new Audio();
+	audio->play(1);*/
+	HSAMPLE sample = BASS_SampleLoad(false, "data/Audio/zombie-growling.wav", 0, 0, 3, 0);
+	if (sample == 0) {
+		std::cout << "AUDIO ERROR: sample not found" << std::endl;
+	}
 }
 
 //what to do when the image has to be draw

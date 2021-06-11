@@ -175,15 +175,17 @@ void Game::initWorldTienda(){
 	tienda->addStructure(marco);
 	
 
-	Vector3 playerInitPos = Vector3(0, 0.5, 0);
+	/*Vector3 playerInitPos = Vector3(0, 0.5, 0);
 	Mesh* mesh = Mesh::Get("data/LowPolyCharacterPack/mujeh1.obj");
 	Texture* text = Texture::Get("data/LowPolyCharacterPack/mujeh1.png");
-	tienda->initPlayer(playerInitPos, mesh , text);
+	tienda->initPlayer(playerInitPos, mesh , text);*/
 
 	//tienda->createZombies();
 
-	mesh = Mesh::Get("data/Ambiente/cielo.ASE");
-	text = Texture::Get("data/Ambiente/cielo.tga");
+	Mesh* mesh = Mesh::Get("data/Ambiente/cielo.ASE");
+	mesh->name = "cielo";
+	std::cout << "mesh name" + mesh->name << std::endl;
+	Texture* text = Texture::Get("data/Ambiente/cielo.tga");
 	tienda->initSky(mesh, text);
 	text = Texture::Get("data/classic/2.Structure/Ground/Materials/Rocks_05.png");
 	tienda->initGround(text);

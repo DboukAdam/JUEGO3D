@@ -321,11 +321,16 @@ void EditorStage::render(World* world)
 
 	//draw text para ver la mesh que voy a pintar
 	string asset;
-	if (world->numEntity == 0) {
-		asset = "armario";
-		drawText(20,20, asset, Vector3(1, 1, 1), 2);
-	}
 	
+	if (world->isStaticObject) {
+		drawText(20, 20, world->structures[world->numEntity]->mesh->name, Vector3(1, 1, 1), 2);
+	}
+	else {
+		drawText(20, 20, world->decoration[world->numEntity]->mesh->name, Vector3(1, 1, 1), 2);
+	}
+		
+
+
 }
 
 void EditorStage::update(double seconds_elapsed, World* world)

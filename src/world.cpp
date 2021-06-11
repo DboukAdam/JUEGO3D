@@ -438,9 +438,14 @@ void World::saveWorldInfo() {
 	for (size_t i = 0; i < MAX_ENTITIES; i++)
 	{
 		if (staticEntities[i] != NULL) {
-			/*outdata << staticEntities[i]->pos.x << endl;
-			outdata << staticEntities[i]->pos.y << endl;
-			outdata << staticEntities[i]->pos.y << endl;*/
+			Matrix44 mat = staticEntities[i]->m;
+			for (int j = 0; j < 16; j++) {
+				outdata << mat.m[j] << " ";
+			}
+			outdata << endl;
+			outdata << staticEntities[i]->mesh->name << endl;
+			outdata << staticEntities[i]->texture->filename << endl;
+			outdata << "static" << endl;
 		}
 		else {
 			break;
@@ -456,6 +461,7 @@ void World::saveWorldInfo() {
 			outdata << endl;
 			outdata << dynamicEntities[i]->mesh->name << endl;
 			outdata << dynamicEntities[i]->texture->filename << endl;
+			outdata << "dynamic" << endl;
 		}
 		else {
 			break;
@@ -478,6 +484,7 @@ bool World::loadWorldInfo() {
 	std::string strMatrix;
 	std::string meshName;
 	std::string textureName;
+	std::string entityType;
 
 	indata.open("mundo.dat");
 	if (!indata) {
@@ -486,7 +493,8 @@ bool World::loadWorldInfo() {
 	}
 	cerr << "Loading world" << endl;
 	
-	int j = 0;
+	int staticIndex = 0;
+	int dynamicIndex = 0;
 	while (indata.good()) {
 		Matrix44 m = Matrix44();
 		for (int i = 0; i < 16; i++) {
@@ -499,9 +507,16 @@ bool World::loadWorldInfo() {
 		newEntity->loadMesh(meshName.c_str());
 		indata >> textureName;
 		newEntity->loadTexture(textureName.c_str());
-
-		staticEntities[j] = newEntity;
-		j++;
+		
+		indata >> entityType;
+		if (entityType == "static") {
+			staticEntities[staticIndex] = newEntity;
+			staticIndex++;
+		}
+		else if (entityType == "dynamic") {
+			dynamicEntities[dynamicIndex] = newEntity;
+			dynamicIndex++;
+		}
 	}
 	cerr << "World loaded!" << endl;
 	return true;

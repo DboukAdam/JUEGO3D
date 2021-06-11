@@ -47,14 +47,14 @@ public:
 
 	void disparar();
 	void selectEntityEditor(Vector3 dir);
-
+	//Renders
 	void RenderStatic(Camera* camera);
 	void RenderDynamic(Camera* camera);
 	void RenderZombies(Camera* camera);
-
 	void RenderBoundingStatic(Camera* camera);
 	void RenderBoundingDynamic(Camera* camera);
 	void RenderBoundingZombies(Camera* camera);
+	//WorldInfos
 	void saveWorldInfo();
 	bool loadWorldInfo();
 };

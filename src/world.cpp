@@ -434,10 +434,13 @@ void World::saveWorldInfo() {
 		cerr << "Error: file could not be opened" << endl;
 		exit(1);
 	}
+	cerr << "Saving world" << endl;
 	for (size_t i = 0; i < MAX_ENTITIES; i++)
 	{
 		if (staticEntities[i] != NULL) {
-			outdata << staticEntities[i] << endl;
+			/*outdata << staticEntities[i]->pos.x << endl;
+			outdata << staticEntities[i]->pos.y << endl;
+			outdata << staticEntities[i]->pos.y << endl;*/
 		}
 		else {
 			break;
@@ -446,7 +449,13 @@ void World::saveWorldInfo() {
 	for (size_t i = 0; i < MAX_ENTITIES; i++)
 	{
 		if (dynamicEntities[i] != NULL) {
-			outdata << dynamicEntities[i] << endl;
+			Matrix44 mat = dynamicEntities[i]->m;
+			for (int j = 0; j < 16; j++) {
+				outdata << mat.m[j] << " ";
+			}
+			outdata << endl;
+			outdata << dynamicEntities[i]->mesh->name << endl;
+			outdata << dynamicEntities[i]->texture->filename;
 		}
 		else {
 			break;
@@ -461,21 +470,39 @@ void World::saveWorldInfo() {
 			break;
 		}
 	}*/
-	
+	cerr << "World saved!" << endl;
 	outdata.close();
 }
 bool World::loadWorldInfo() {
 	ifstream indata;
-	std::string name;
-	
-	
+	std::string strMatrix;
+	std::string meshName;
+	std::string textureName;
+
 	indata.open("mundo.dat");
 	if (!indata) {
 		cerr << "Error tu prima" << endl;
-
+		return false;
 	}
-	indata >> name;
+	cerr << "Loading world" << endl;
+	
+	int j = 0;
 	while (!indata.eof()) {
-		for i i< 6
+		Matrix44 m = Matrix44();
+		for (int i = 0; i < 16; i++) {
+			indata >> strMatrix;
+			m.m[i] = ::atof(strMatrix.c_str());
+		}
+		Vector3 pos = m.getTranslation();
+		Entity* newEntity = new Entity(pos, m);
+		indata >> meshName;
+		newEntity->loadMesh(meshName.c_str());
+		indata >> textureName;
+		newEntity->loadTexture(textureName.c_str());
+
+		staticEntities[j] = newEntity;
+		j++;
 	}
+	cerr << "World loaded!" << endl;
+	return true;
 }

@@ -452,12 +452,12 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		if (game->mouse_locked)
 			Input::centerMouse();
 
-		/*if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
+		if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
 			world->saveWorldInfo();
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_L)) {
 			world->loadWorldInfo();
-		}*/
+		}
 	}
 	else { //menu de pause
 

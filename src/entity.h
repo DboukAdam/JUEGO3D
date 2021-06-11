@@ -84,3 +84,15 @@ public:
 	void setVel(float v);
 	void CamPlayer(Camera* camera);
 };
+
+class Weapon : public Entity {
+public:
+	float cadencia;
+	bool isEmpty;
+	int tamañoCargador;
+	bool recargar;
+	float retroceso;
+	//bool apuntar;
+
+
+};

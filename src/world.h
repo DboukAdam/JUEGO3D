@@ -7,6 +7,7 @@
 
 #define MAX_ENTITIES 155
 #define MAX_ZOMBIES 100
+#define MAX_WEAPONS 10
 
 #pragma once
 class World {
@@ -21,6 +22,7 @@ public:
 	int numDecoration = 0;
 	Zombie* zombies[MAX_ZOMBIES];
 	Player* player;
+	Weapon* weapons[MAX_WEAPONS];
 	Shader* shader;
 	Entity* sky;
 	Entity* selectedEntity = NULL;
@@ -36,10 +38,13 @@ public:
 	void addStructure(Entity* entity);
 	void addDecoration(Entity* entity);
 	void addObjectEditor(Entity* entity, Vector3 dir);
+	//Inits
 	void initCamera(Camera* camera);
 	void initPlayer(Vector3 pos, Mesh* mesh, Texture* text);
 	void initSky(Mesh* mesh, Texture* texture);
 	void initGround(Texture* texture);
+	void initWeapon(Weapon* weapon);
+
 	void disparar();
 	void selectEntityEditor(Vector3 dir);
 

@@ -455,7 +455,7 @@ void World::saveWorldInfo() {
 			}
 			outdata << endl;
 			outdata << dynamicEntities[i]->mesh->name << endl;
-			outdata << dynamicEntities[i]->texture->filename;
+			outdata << dynamicEntities[i]->texture->filename << endl;
 		}
 		else {
 			break;
@@ -487,7 +487,7 @@ bool World::loadWorldInfo() {
 	cerr << "Loading world" << endl;
 	
 	int j = 0;
-	while (!indata.eof()) {
+	while (indata.good()) {
 		Matrix44 m = Matrix44();
 		for (int i = 0; i < 16; i++) {
 			indata >> strMatrix;

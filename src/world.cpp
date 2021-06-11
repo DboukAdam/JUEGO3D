@@ -90,7 +90,6 @@ void World::addObjectEditor(Entity* entity, Vector3 dir) {
 
 //INIT BASIC THINGS OF THE WORLD
 void World::initCamera(Camera* camera) {
-	
 	Camera::current = camera;
 	int window_width = 800;
 	int window_height = 600;
@@ -100,6 +99,7 @@ void World::initCamera(Camera* camera) {
 	Vector3 up = player->m.rotateVector(Vector3(0.f, 1.f, 0.f));
 	camera->lookAt(eye, center, up);
 }
+
 void World::initPlayer(Vector3 pos, Mesh* mesh, Texture* texture) {
 	Matrix44 m;
 	m.setTranslation(pos.x, pos.y, pos.z);
@@ -128,6 +128,10 @@ void World::initGround(Texture* texture) {
 	ground->texture = texture;
 
 }
+
+void World::initWeapon(Weapon* weapon) {
+
+}
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 //BASIC FUNCTIONALITIES OF EACH WORLD, FOR PLAYSTAGE AND ALSO EDITOR STAGE
@@ -151,7 +155,7 @@ void World::disparar() {
 void World::selectEntityEditor(Vector3 dir){
 	Camera* camera = Camera::current;
 	Vector3 origin = camera->eye;
-	for (int i = 1; i < MAX_ENTITIES; i++)
+	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
 		Vector3 col;
 		Vector3 normal;

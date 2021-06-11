@@ -50,7 +50,12 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 
 	//Audio
-	Audio* audio = Audio::Get("data/Audio/musicbox-silent-night.wav");
+	//Audio* audio = Audio::Get("data/Audio/musicbox-silent-night.wav");
+	if (BASS_Init == false) {
+		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
+	}
+	Audio* audio = new Audio();
+	audio->load("data/Audio/musicbox-silent-night.wav");
 	audio->play(1);
 }
 
@@ -189,6 +194,11 @@ void Game::initWorldTienda(){
 	tienda->initGround(text);
 	camera = new Camera();
 	tienda->initCamera(camera);
+
+	/*Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
+	zombie->mesh = Mesh::Get("data/Zombies/untitled.obj");
+	zombie->texture = Texture::Get("data/Zombies/warzombie_f_pedroso/textures/world_war_zombie_diffuse.png");
+	tienda->addZombie(zombie);*/
 
 }
 

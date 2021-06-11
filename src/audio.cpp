@@ -4,10 +4,8 @@
 std::map<std::string, Audio*> Audio::sLoadedAudios;
 
 Audio::Audio() {
-	if (BASS_Init == false) {
-		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
-	}
-	sample = NULL;
+	
+	sample = 0;
 }
 
 Audio::~Audio() {
@@ -26,9 +24,12 @@ HCHANNEL Audio::play(float volume) {
 }
 
 bool Audio::load(const char* filename) {
+	if (BASS_Init == false) {
+		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
+	}
 	sample = BASS_SampleLoad(false, filename, 0, 0, 3, 0);
 	if (sample == 0) {
-		std::cout << "AUDIO ERROR: file not found" << std::endl;
+		std::cout << "AUDIO ERROR: file not found" << BASS_ErrorGetCode() << std::endl;
 		return false;
 	}
 	sLoadedAudios[filename] = this;

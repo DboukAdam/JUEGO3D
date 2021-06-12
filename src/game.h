@@ -37,6 +37,7 @@ public:
 	//stages
 	Stage* currentStage;
 	IntroStage* intro = new IntroStage();
+	SelectWorldStage* selectWorld = new SelectWorldStage();
 	PlayStage* play = new PlayStage();
 	EndStage* end = new EndStage();
 	EditorStage* editor = new EditorStage();
@@ -68,6 +69,7 @@ public:
 	void initWorldTienda();
 
 	void setIntroStage();
+	void setSelectWorldStage();
 	void setPlayStage();
 	void setEditorStage();
 	void setEndStage();

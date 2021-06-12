@@ -107,6 +107,9 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 		if (currentStage == intro) {
 			gui->introButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
 		}
+		if (currentStage == selectWorld) {
+			gui->worldButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+		}
 		if (currentStage == play) {
 			if (mouse_locked) currentWorld->disparar();
 			else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
@@ -206,6 +209,12 @@ void Game::initWorldTienda(){
 //STAGES SETTINGS 
 void Game::setIntroStage(){
 	currentStage = intro;
+	mouse_locked = false;
+	SDL_ShowCursor(!mouse_locked);
+}
+
+void Game::setSelectWorldStage() {
+	currentStage = selectWorld;
 	mouse_locked = false;
 	SDL_ShowCursor(!mouse_locked);
 }

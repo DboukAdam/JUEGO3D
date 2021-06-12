@@ -427,9 +427,9 @@ using std::endl;
 using std::cout;
 using std::ofstream;
 using std::ifstream;
-void World::saveWorldInfo() {
+void World::saveWorldInfo(std::string filename) {
 	ofstream outdata;
-	outdata.open("mundo.dat");
+	outdata.open("save/" + filename + ".dat");
 	if (!outdata) {
 		cerr << "Error: file could not be opened" << endl;
 		exit(1);
@@ -479,14 +479,14 @@ void World::saveWorldInfo() {
 	cerr << "World saved!" << endl;
 	outdata.close();
 }
-bool World::loadWorldInfo() {
+bool World::loadWorldInfo(std::string filename) {
 	ifstream indata;
 	std::string strMatrix;
 	std::string meshName;
 	std::string textureName;
 	std::string entityType;
 
-	indata.open("mundo.dat");
+	indata.open("save/" + filename + ".dat");
 	if (!indata) {
 		cerr << "Error tu prima" << endl;
 		return false;

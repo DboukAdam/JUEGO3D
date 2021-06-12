@@ -55,6 +55,6 @@ public:
 	void RenderBoundingDynamic(Camera* camera);
 	void RenderBoundingZombies(Camera* camera);
 	//WorldInfos
-	void saveWorldInfo();
-	bool loadWorldInfo();
+	void saveWorldInfo(std::string filename);
+	bool loadWorldInfo(std::string filename);
 };

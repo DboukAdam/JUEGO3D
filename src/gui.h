@@ -42,8 +42,10 @@ public:
 	void initIntroButtons();
 	void initPauseButtons();
 	void RenderIntroGui();
+	void RenderWorldsGui();
 	void RenderCrosshair();
 	void RenderPauseMenu();
 	void introButtonPressed(Vector2 pos);
+	void worldButtonPressed(Vector2 pos);
 	void pauseButtonPressed(Vector2 pos);
 };

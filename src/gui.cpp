@@ -1,6 +1,8 @@
 #include "gui.h"
 #include "camera.h"
 #include "game.h"
+#include <iostream>
+#include <filesystem>
 
 Gui::Gui(Shader* shader, Texture* atlas) {
 	this->shader = shader;
@@ -72,6 +74,16 @@ void Gui::RenderIntroGui()
 	for (int i = 0; i < numIntroButtons; i++) {
 		float yPos = introButtons[i]->pos.y;
 		drawText(xOffset, yPos - yOffset - textSize/2, text[i], Vector3(1, 1, 1), scale);
+	}
+}
+
+void Gui::RenderWorldsGui() {
+	namespace fs = std::filesystem;
+	std::string path = "save/";
+	int i = 1;
+	for (const auto& entry : fs::directory_iterator(path)) {
+		drawText(100, 100 * i, entry.path().u8string(), Vector3(1, 1, 1), 5);
+		i++;
 	}
 }
 
@@ -149,10 +161,14 @@ void Gui::introButtonPressed(Vector2 pos) {
 		if (pos.x > min_x && pos.y > min_y && pos.x < max_x && pos.y < max_y) break;
 		if (i == numIntroButtons - 1) i++;
 	}
-	if (i == 0) game->setPlayStage();
+	if (i == 0) game->setSelectWorldStage();
 	if (i == 1) game->setEditorStage();
 	if (i == 2) std::cout << "Hola, soy las settings, encantado." << std::endl;
 	if (i == 3) game->must_exit = true;
+}
+
+void Gui::worldButtonPressed(Vector2 pos)
+{
 }
 
 void Gui::pauseButtonPressed(Vector2 pos) {

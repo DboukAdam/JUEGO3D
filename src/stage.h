@@ -13,6 +13,12 @@ public:
 	virtual void update(double seconds_elapsed, World* world);
 };
 
+class SelectWorldStage : public Stage {
+public:
+	virtual void render(World* world);
+	virtual void update(double seconds_elapsed, World* world);
+};
+
 class PlayStage : public Stage {
 public:
 	virtual void render(World* world);

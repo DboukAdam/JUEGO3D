@@ -44,6 +44,34 @@ void IntroStage::update(double seconds_elapsed, World* world) {
 	
 }
 
+void SelectWorldStage::render(World* world) {
+	Game* game = Game::instance;
+
+	//set the clear color (the background color)
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+
+	// Clear the window and the depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	game->gui->RenderWorldsGui();
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
+
+	//render the FPS, Draw Calls, etc
+	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+}
+
+void SelectWorldStage::update(double seconds_elapsed, World* world) {
+
+}
+
 void PlayStage::render(World* world) {
 	Game* game = Game::instance;
 	//set the clear color (the background color) and Clear the window and the depth buffer
@@ -453,11 +481,15 @@ void EditorStage::update(double seconds_elapsed, World* world)
 			Input::centerMouse();
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
-			world->saveWorldInfo();
+			cout << "Que nombre quieres ponerle?" << endl;
+			string filename;
+			getline(cin, filename);
+			world->saveWorldInfo(filename);
 		}
-		if (Input::wasKeyPressed(SDL_SCANCODE_L)) {
-			world->loadWorldInfo();
-		}
+		/*if (Input::wasKeyPressed(SDL_SCANCODE_L)) {
+
+			world->loadWorldInfo("mundo");
+		}*/
 	}
 	else { //menu de pause
 
@@ -467,3 +499,4 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		SDL_ShowCursor(!game->mouse_locked);
 	}
 }
+

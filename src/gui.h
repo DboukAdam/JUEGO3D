@@ -2,9 +2,10 @@
 #include "texture.h"
 #include "mesh.h"
 
-#define numImagesAtlas 5
+#define numImagesAtlas 8
 #define numIntroButtons 4
 #define numPauseButtons 3
+#define numSaves 5
 
 enum atlasGuide {
 	greenButton,
@@ -12,6 +13,9 @@ enum atlasGuide {
 	crosshair,
 	fleshButton,
 	fleshButtonPressed,
+	turnPageRight,
+	turnPageLeft,
+	brownButton
 };
 class Button {
 public:
@@ -36,16 +40,28 @@ public:
 	Vector4 atlasRanges[numImagesAtlas];
 	Button* introButtons[numIntroButtons];
 	Button* pauseButtons[numPauseButtons];
+	Button* worldSavesButtons[numSaves];
+	Button* turnPageRightButton;
+	Button* turnPageLeftButton;
+
+	int worldPage;
+	std::vector<std::string> entries;
 
 	Gui(Shader* shader, Texture* atlas);
+	//Inits
 	void initAtlas();
 	void initIntroButtons();
 	void initPauseButtons();
+	void initWorldButtons();
+	void initTurnPageButtons();
+	//Renders
 	void RenderIntroGui();
 	void RenderWorldsGui();
 	void RenderCrosshair();
 	void RenderPauseMenu();
+	//ButtonPressed
 	void introButtonPressed(Vector2 pos);
-	void worldButtonPressed(Vector2 pos);
+	int worldButtonPressed(Vector2 pos);
+	void changePageButtonPressed(Vector2 pos);
 	void pauseButtonPressed(Vector2 pos);
 };

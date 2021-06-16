@@ -42,9 +42,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
 	Texture* atlas = Texture::Get("data/atlas.png");
 	gui = new Gui(shader, atlas);
-	gui->initAtlas();
-	gui->initIntroButtons();
-	gui->initPauseButtons();
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -108,7 +105,15 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 			gui->introButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
 		}
 		if (currentStage == selectWorld) {
-			gui->worldButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+			gui->changePageButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+			int worldPos = gui->worldButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+			if (worldPos >= 0) {
+				World* world = new World(Shader::current);
+				std::string filename = gui->entries[worldPos * gui->worldPage];
+				world->loadWorldInfo(filename);
+				currentWorld = world;
+				setPlayStage();
+			}
 		}
 		if (currentStage == play) {
 			if (mouse_locked) currentWorld->disparar();

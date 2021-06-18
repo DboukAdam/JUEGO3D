@@ -44,8 +44,9 @@ public:
 
 
 	//Our stuff
-	World* tienda;
+	World* editorWorld;
 	World* currentWorld;
+	Entity* sky;
 	Gui* gui;
 	float mouse_speed = 10.0f;
 	int maxStructures = 0;
@@ -66,7 +67,7 @@ public:
 	void onGamepadButtonDown(SDL_JoyButtonEvent event);
 	void onGamepadButtonUp(SDL_JoyButtonEvent event);
 	void onResize(int width, int height);
-	void initWorldTienda();
+	void initWorld(std::string filename = "");
 
 	void setIntroStage();
 	void setSelectWorldStage();

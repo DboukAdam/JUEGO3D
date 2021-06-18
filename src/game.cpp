@@ -34,8 +34,8 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	glEnable( GL_DEPTH_TEST ); //check the occlusions using the Z buffer
 	
 	//Worlds
-	initWorldTienda();
-	currentWorld = tienda;
+	initWorld();
+	currentWorld = editorWorld;
 	currentStage = intro;
 
 	//GUI
@@ -108,10 +108,8 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 			gui->changePageButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
 			int worldPos = gui->worldButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
 			if (worldPos >= 0) {
-				World* world = new World(Shader::current);
-				std::string filename = gui->entries[worldPos * gui->worldPage];
-				world->loadWorldInfo(filename);
-				currentWorld = world;
+				std::string filename = gui->entries[worldPos + (gui->worldPage * 5)];
+				initWorld(filename);
 				setPlayStage();
 			}
 		}
@@ -161,53 +159,51 @@ void Game::onResize(int width, int height)
 	window_height = height;
 }
 
-
-
-void Game::initWorldTienda(){
-
-	// example of shader loading using the shaders manager
+void Game::initWorld(std::string filename){
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-
-	tienda = new World(shader);
 	Matrix44 m;
 	m.setTranslation(0, 0, 0);
-
-	
-
-	/*world->loadEntity(Entity, patata);*/
-	
+	//Decorations
 	Entity* caja = new Entity(0, 0, 0, m);
 	caja->loadMesh("data/classic/1.Decoration/Boxes/caja.obj");
 	caja->loadTexture("data/classic/1.Decoration/Boxes/Materials/box1.png");
-	tienda->addDecoration(caja);
-	//structure o decoration
-
+	//Structures
 	Entity* marco = new Entity(0, 0, 0, m);
 	marco->loadMesh("data/classic/2.Structure/Doors/marco_grande.obj");
 	marco->loadTexture("data/classic/2.Structure/Doors/Materials/cabinet.png");
-	tienda->addStructure(marco);
-	
-
+	//Player
 	Vector3 playerInitPos = Vector3(0, 0.5, 0);
 	Mesh* mesh = Mesh::Get("data/players/man.obj");
 	Texture* text = Texture::Get("data/players/man.png");
-	tienda->initPlayer(playerInitPos, mesh , text);
-
-	//tienda->createZombies();
-
+	//Sky
 	Mesh* meshCielo = Mesh::Get("data/Ambiente/cielo.ASE");
 	Texture* textCielo = Texture::Get("data/Ambiente/cielo.tga");
-	tienda->initSky(mesh, text);
+	//Ground
 	text = Texture::Get("data/classic/2.Structure/Ground/Materials/Rocks_05.png");
-	tienda->initGround(text);
+	//Camera
 	camera = new Camera();
-	tienda->initCamera(camera);
+	
 
-	/*Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
-	zombie->mesh = Mesh::Get("data/Zombies/untitled.obj");
-	zombie->texture = Texture::Get("data/Zombies/warzombie_f_pedroso/textures/world_war_zombie_diffuse.png");
-	tienda->addZombie(zombie);*/
-
+	if (filename == "") {
+		editorWorld = new World(shader);
+		editorWorld->addDecoration(caja);
+		editorWorld->addStructure(marco);
+		editorWorld->initPlayer(playerInitPos, mesh, text);
+		editorWorld->initSky(meshCielo, textCielo);
+		editorWorld->initGround(text);
+		editorWorld->initCamera(camera);
+	}
+	else {
+		World* world = new World(shader);
+		world->loadWorldInfo(filename);
+		world->addDecoration(caja);
+		world->addStructure(marco);
+		world->initPlayer(playerInitPos, mesh, text);
+		world->initSky(meshCielo, textCielo);
+		world->initGround(text);
+		world->initCamera(camera);
+		currentWorld = world;
+	}
 }
 
 

@@ -1,5 +1,15 @@
 #include "world.h"
 
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <filesystem>
+using std::cerr;
+using std::endl;
+using std::cout;
+using std::ofstream;
+using std::ifstream;
+
 World::World(Shader* shader) {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		staticEntities[i] = NULL;
@@ -17,7 +27,7 @@ World::World(Shader* shader) {
 		decoration[i] = NULL;
 	}
 	this->shader = shader;
-	this->player = NULL;
+	this->player = (Player*) new Entity(0, 0, 0, Matrix44());
 	this->ground = NULL;
 	this->sky = NULL;
 	this->map = NULL;
@@ -133,7 +143,36 @@ void World::initWeapon(Weapon* weapon) {
 
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+void World::loadDecoration() {
+	//Load filenames from save
+	std::string path = "data/classic/1.Decoration/";
+	std::vector<std::string> decoration;
+	int numElements = 0;
+	for (const auto& object : std::filesystem::directory_iterator(path)) {
+		std::string name = object.path().u8string();
+		decoration.push_back(name);
+		numElements++;
+		std::cerr << name << std::endl;;
+	}
 
+	Matrix44 m;
+	for (int i = 0; i < numElements - 1; i += 2) {
+		Entity* entity = new Entity(0, 0, 0, m);
+		const char* meshObject = decoration[i].c_str();
+		entity->loadMesh(meshObject);
+
+		const char* textureObject = decoration[i + 1].c_str();
+		entity->loadTexture(textureObject);
+
+		std::string tipo = decoration[i].substr(26, decoration[i].size() - 30);
+		entity->type = tipo;
+		std::cerr << tipo << std::endl;;
+		addDecoration(entity);
+	}
+
+}
+
+//
 //BASIC FUNCTIONALITIES OF EACH WORLD, FOR PLAYSTAGE AND ALSO EDITOR STAGE
 void World::disparar() {
 	Camera* camera = Camera::current;
@@ -257,176 +296,8 @@ void World::RenderBoundingZombies(Camera* camera)
 		if (zombie->bounding) zombie->mesh->renderBounding(zombie->m);
 	}
 }
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-/*
-//FUNCTIONS IN ORDER TO SAVE AND LOAD WORLDS
-void World::saveWorldInfo()
-{
-	World world_info = World(shader);
-	//fill here game_info with all game data
-	for (int i = 0; i < MAX_ENTITIES; i++)
-	{
-		if (staticEntities[i] != NULL) {
-
-		//copia de la existent
-		Entity* copia = new Entity(0, 0, 0, Matrix44());
-		copia->copy(this->staticEntities[i]);
-
-		//nova entity per la info
-		Entity* info = new Entity(0, 0, 0, Matrix44());
-
-		//asignem la copia
-		world_info.staticEntities[i] = info;
-		world_info.staticEntities[i]->m = copia->m;
-		world_info.staticEntities[i]->mesh = copia->mesh;
-		world_info.staticEntities[i]->texture = copia->texture;
-		world_info.staticEntities[i]->pos = copia->getPos();
-		}
-		if (staticEntities[i] == NULL) break;
-		
-	}
-	for (int i = 0; i < MAX_ENTITIES; i++)
-	{
-		if (dynamicEntities[i] != NULL) {
-
-			//copia de la existent
-			Entity* copia = new Entity(0, 0, 0, Matrix44());
-			copia->copy(this->dynamicEntities[i]);
-
-			//nova entity per la info
-			Entity* info = new Entity(0, 0, 0, Matrix44());
-
-			//asignem la copia
-			world_info.dynamicEntities[i] = info;
-			world_info.dynamicEntities[i]->m = copia->m;
-			world_info.dynamicEntities[i]->mesh = copia->mesh;
-			world_info.dynamicEntities[i]->texture = copia->texture;
-			world_info.dynamicEntities[i]->pos = copia->getPos();
-		}
-		if (dynamicEntities[i] == NULL) break;
-
-	}
-	for (int j = 0; j < MAX_ZOMBIES; j++)
-	{
-		if (zombies[j] != NULL) {
-
-			//copia de la existent
-			Zombie* copia = (Zombie*) new Entity(0, 0, 0, Matrix44());
-			copia->copy(this->zombies[j]);
-
-			//nova entity per la info
-			Zombie* info = (Zombie*) new Entity(0, 0, 0, Matrix44());
-
-			//asignem la copia
-			world_info.zombies[j] = info;
-			world_info.zombies[j]->m = copia->m;
-			world_info.zombies[j]->mesh = copia->mesh;
-			world_info.zombies[j]->texture = copia->texture;
-			world_info.zombies[j]->pos = copia->getPos();
-		}
-		if (zombies[j] == NULL) break;
-
-	}
-	
-	//world_info.map = this->map;
-	//save to file
-	FILE* fp = fopen("savegame.bin", "wb");
-	fwrite(&world_info, sizeof(World), 1, fp);
-	fclose(fp);
-}
-
-bool World::loadWorldInfo()
-{
-	World world_info =  World(shader);
-
-	//load file
-	FILE* fp = fopen("savegame.bin", "rb");
-	if (fp == NULL) //no savegame found
-		return false;
-
-	fread(&world_info, sizeof(World), 1, fp);
-	fclose(fp);
-
-	//transfer data from game_info to Game
-	for (int i = 0; i < MAX_ENTITIES; i++)
-	{
-		if (world_info.staticEntities[i] != NULL) {
-
-			//copia de la existent
-			Entity* copia = new Entity(0, 0, 0, Matrix44());
-			copia->copy(world_info.staticEntities[i]);
-
-			//nova entity per la info
-			Entity* info = new Entity(0, 0, 0, Matrix44());
-
-			//asignem la copia
-			this->staticEntities[i] = info;
-			this->staticEntities[i]->m = copia->m;
-			this->staticEntities[i]->mesh = copia->mesh;
-			this->staticEntities[i]->texture = copia->texture;
-			this->staticEntities[i]->pos = copia->getPos();
-		}
-		if (world_info.staticEntities[i] == NULL) break;
-
-	}
-	for (int i = 0; i < MAX_ENTITIES; i++)
-	{
-		if (world_info.dynamicEntities[i] != NULL) {
-
-			//copia de la existent
-			Entity* copia = new Entity(0, 0, 0, Matrix44());
-			copia->copy(world_info.dynamicEntities[i]);
-
-			//nova entity per la info
-			Entity* info = new Entity(0, 0, 0, Matrix44());
-
-			//asignem la copia
-			this->dynamicEntities[i] = info;
-			this->dynamicEntities[i]->m = copia->m;
-			this->dynamicEntities[i]->mesh = copia->mesh;
-			this->dynamicEntities[i]->texture = copia->texture;
-			this->dynamicEntities[i]->pos = copia->getPos();
-		}
-		if (world_info.dynamicEntities[i] == NULL) break;
-
-	}
-	for (int j = 0; j < MAX_ZOMBIES; j++)
-	{
-		if (world_info.zombies[j] != NULL) {
-
-			//copia de la existent
-			Zombie* copia = (Zombie*) new Entity(0, 0, 0, Matrix44());
-			copia->copy(world_info.zombies[j]);
-
-			//nova entity per la info
-			Zombie* info = (Zombie*) new Entity(0, 0, 0, Matrix44());
-
-			//asignem la copia
-			this->zombies[j] = info;
-			this->zombies[j]->m = copia->m;
-			this->zombies[j]->mesh = copia->mesh;
-			this->zombies[j]->texture = copia->texture;
-			this->zombies[j]->pos = copia->getPos();
-		}
-		if (world_info.zombies[j] == NULL) break;
-
-	}
-	//this->map = world_info.map;
-
-	return true;
-}
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-*/
-
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-using std::cerr;
-using std::endl;
-using std::cout;
-using std::ofstream;
-using std::ifstream;
 void World::saveWorldInfo(std::string filename) {
 	ofstream outdata;
 	outdata.open("save/" + filename + ".dat");

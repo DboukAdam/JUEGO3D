@@ -44,7 +44,9 @@ public:
 	void initSky(Mesh* mesh, Texture* texture);
 	void initGround(Texture* texture);
 	void initWeapon(Weapon* weapon);
-
+	//Loads
+	void loadDecoration();
+	//Otro
 	void disparar();
 	void selectEntityEditor(Vector3 dir);
 	//Renders

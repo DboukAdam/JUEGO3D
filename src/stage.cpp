@@ -298,9 +298,9 @@ void EditorStage::render(World* world)
 
 	if (world->selectedEntity == NULL) {
 
-	Vector3 origin = camera->eye;//unproject center coord of the screen
-	Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, 800, 600);
-	Vector3 pos = RayPlaneCollision(Vector3(0, 0, 0), Vector3(0, 1, 0), origin, dir);
+		Vector3 origin = camera->eye;//unproject center coord of the screen
+		Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, 800, 600);
+		Vector3 pos = RayPlaneCollision(Vector3(0, 0, 0), Vector3(0, 1, 0), origin, dir);
 		if (world->isStaticObject) {
 			Entity* entidad = world->structures[world->numEntity];
 			entidad->m.setTranslation(pos.x, pos.y, pos.z);
@@ -486,10 +486,12 @@ void EditorStage::update(double seconds_elapsed, World* world)
 			getline(cin, filename);
 			world->saveWorldInfo(filename);
 		}
-		/*if (Input::wasKeyPressed(SDL_SCANCODE_L)) {
-
-			world->loadWorldInfo("mundo");
-		}*/
+		if (Input::wasKeyPressed(SDL_SCANCODE_L)) {
+			cout << "Que archivo quieres cargar?" << endl;
+			string filename;
+			getline(cin, filename);
+			world->loadWorldInfo(filename);
+		}
 	}
 	else { //menu de pause
 

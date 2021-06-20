@@ -165,8 +165,8 @@ void Game::initWorld(std::string filename){
 	m.setTranslation(0, 0, 0);
 	//Decorations
 	Entity* caja = new Entity(0, 0, 0, m);
-	caja->loadMesh("data/classic/1.Decoration/Boxes/caja.obj");
-	caja->loadTexture("data/classic/1.Decoration/Boxes/Materials/box1.png");
+	caja->loadMesh("data/classic/1.Decoration/caja.obj");
+	caja->loadTexture("data/classic/1.Decoration/caja.png");
 	//Structures
 	Entity* marco = new Entity(0, 0, 0, m);
 	marco->loadMesh("data/classic/2.Structure/Doors/marco_grande.obj");
@@ -182,26 +182,34 @@ void Game::initWorld(std::string filename){
 	text = Texture::Get("data/classic/2.Structure/Ground/Materials/Rocks_05.png");
 	//Camera
 	camera = new Camera();
+	//QUITAR
+	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
+	zombie->loadMesh("data/Zombies/ZombieOBJ.obj");
+	zombie->loadTexture("data/Zombies/WorldWar_zombie.png");
 	
 
 	if (filename == "") {
 		editorWorld = new World(shader);
 		editorWorld->addDecoration(caja);
+		//editorWorld->loadDecoration();
 		editorWorld->addStructure(marco);
 		editorWorld->initPlayer(playerInitPos, mesh, text);
 		editorWorld->initSky(meshCielo, textCielo);
 		editorWorld->initGround(text);
 		editorWorld->initCamera(camera);
+		editorWorld->addZombie(zombie);
 	}
 	else {
 		World* world = new World(shader);
 		world->loadWorldInfo(filename);
 		world->addDecoration(caja);
+		//world->loadDecoration();
 		world->addStructure(marco);
 		world->initPlayer(playerInitPos, mesh, text);
 		world->initSky(meshCielo, textCielo);
 		world->initGround(text);
 		world->initCamera(camera);
+		world->addZombie(zombie);
 		currentWorld = world;
 	}
 }

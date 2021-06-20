@@ -165,7 +165,7 @@ void World::loadDecoration() {
 		entity->loadTexture(textureObject);
 
 		std::string tipo = decoration[i].substr(26, decoration[i].size() - 30);
-		entity->type = tipo;
+		//entity->type = tipo;
 		std::cerr << tipo << std::endl;;
 		addDecoration(entity);
 	}

@@ -124,6 +124,7 @@ void PlayStage::render(World* world) {
 	//	}
 	//}
 	//.........................................................................................
+	world->RenderPlayer(camera);
 	world->RenderStatic(camera);
 	world->RenderDynamic(camera);
 	world->RenderZombies(camera, game->time);
@@ -191,15 +192,15 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 			
 			if (!world->staticEntities[i] == NULL) {
 
-			Entity* current = world->staticEntities[i];
+				Entity* current = world->staticEntities[i];
 			
-			Vector3 coll;
-			Vector3 collNormal;
-			if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.5, coll, collNormal)) continue;
+				Vector3 coll;
+				Vector3 collNormal;
+				if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.5, coll, collNormal)) continue;
 			
-			Vector3 push_away = normalize(coll - playerTargetCenter) * seconds_elapsed;
-			targetPos = player->pos - push_away;
-			targetPos.y = player->pos.y;
+				Vector3 push_away = normalize(coll - playerTargetCenter) * seconds_elapsed;
+				targetPos = player->pos - push_away;
+				targetPos.y = player->pos.y;
 			}
 
 			if (!world->dynamicEntities[i] == NULL) {

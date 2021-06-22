@@ -78,3 +78,14 @@ void Entity::copy(Entity* entity) {
 	this->texture = entity->texture;
 	this->m = entity->m;
 }
+
+void Weapon::renderWeapon(Player* player, Shader* shader, float tiling) { //AAAAAAH
+	Camera* camera = Camera::current;
+	this->pos = player->pos;
+	this->pitch = player->pitch;
+	this->yaw = player->yaw - 90;
+	Matrix44 ViewInverse = camera->view_matrix;
+	ViewInverse.inverse();
+	m = camera->projection_matrix * camera->view_matrix * (ViewInverse * Matrix44());
+	render(shader, tiling);
+}

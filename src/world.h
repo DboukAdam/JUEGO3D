@@ -38,6 +38,7 @@ public:
 	void addDynamicEntity(Entity* entity);
 	void addZombie(Zombie* zombie);
 	void addPlayer(Player* player);
+	void addWeapon(Weapon* weapon);
 	void addStructure(Entity* entity);
 	void addDecoration(Entity* entity);
 	void addObjectEditor(Entity* entity, Vector3 dir);
@@ -46,7 +47,7 @@ public:
 	void initPlayer(Vector3 pos, Mesh* mesh, Texture* text);
 	void initSky(Mesh* mesh, Texture* texture);
 	void initGround(Texture* texture);
-	void initWeapon(Weapon* weapon);
+	void initWeapon(Weapon* weapon); //NO HACE NADA
 	//Loads
 	void loadDecoration();
 	void loadStructure();
@@ -57,6 +58,7 @@ public:
 	void RenderStatic(Camera* camera);
 	void RenderDynamic(Camera* camera);
 	void RenderZombies(Camera* camera, float time);
+	void RenderPlayer(Camera* camera);
 	void RenderBoundingStatic(Camera* camera);
 	void RenderBoundingDynamic(Camera* camera);
 	void RenderBoundingZombies(Camera* camera);

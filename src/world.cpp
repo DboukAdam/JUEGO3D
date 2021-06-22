@@ -26,6 +26,9 @@ World::World(Shader* shader) {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		decoration[i] = NULL;
 	}
+	for (int i = 0; i < MAX_WEAPONS; i++) {
+		weapons[i] = NULL;
+	}
 	this->shader = shader;
 	this->player = (Player*) new Entity(0, 0, 0, Matrix44());
 	this->ground = NULL;
@@ -61,6 +64,15 @@ void World::addZombie(Zombie* zombie) {
 
 void World::addPlayer(Player* player) {
 	this->player = player;
+}
+
+void World::addWeapon(Weapon* weapon) {
+	for (int i = 0; i < MAX_WEAPONS; i++) {
+		if (weapons[i] == NULL) {
+			weapons[i] = weapon;
+			break;
+		}
+	}
 }
 
 void World::addStructure(Entity* entity) {
@@ -147,19 +159,18 @@ void World::loadDecoration() {
 	//Load filenames from save
 	std::string path = "data/Assets/Decoration/";
 	std::vector<std::string> deco;
+	std::string mbin = ".mbin";
 	int numElements = 0;
 	for (const auto& object : std::filesystem::directory_iterator(path)) {
 		std::string name = object.path().u8string();
 
 		std::string ext = name.substr((name.size() - 5), 5);
-		std::cerr << ext << std::endl;;
-		std::string mbin = ".mbin";
+		//std::cerr << ext << std::endl;;
 		if (ext == mbin) continue;
 		deco.push_back(name);
 		numElements++;
-		std::cerr << name << std::endl;;
+		//std::cerr << name << std::endl;;
 	}
-
 	Matrix44 m;
 	for (int i = 0; i < numElements - 1; i += 2) {
 		Entity* entity = new Entity(0, 0, 0, m);
@@ -171,7 +182,7 @@ void World::loadDecoration() {
 
 		std::string tipo = deco[i].substr(23, deco[i].size() - 27);
 		entity->type = tipo;
-		std::cerr << tipo << std::endl;;
+		//std::cerr << tipo << std::endl;;
 		addDecoration(entity);
 	}
 
@@ -181,20 +192,18 @@ void World::loadDecoration() {
 void World::loadStructure() {
 	//Load filenames from save
 	std::string path = "data/Assets/Structure/";
-
+	std::string mbin = ".mbin";
 	std::vector<std::string> stru;
 	int numElements = 0;
 	for (const auto& object : std::filesystem::directory_iterator(path)) {
 		std::string name = object.path().u8string();
 		std::string ext = name.substr((name.size() - 5), 5);
-		std::cerr << ext << std::endl;;
-		std::string mbin = ".mbin";
+		//std::cerr << ext << std::endl;;
 		if (ext == mbin) continue;
 		stru.push_back(name);
 		numElements++;
-		std::cerr << name << std::endl;;
+		//std::cerr << name << std::endl;;
 	}
-
 	Matrix44 m;
 	for (int i = 0; i < numElements - 1; i += 2) {
 		Entity* entity = new Entity(0, 0, 0, m);
@@ -206,7 +215,7 @@ void World::loadStructure() {
 
 		std::string tipo = stru[i].substr(26, stru[i].size() - 30);
 		entity->type = tipo;
-		std::cerr << tipo << std::endl;;
+		//std::cerr << tipo << std::endl;;
 		addStructure(entity);
 	}
 	maxStructure = (stru.size() / 2) - 1;
@@ -290,8 +299,7 @@ void World::RenderDynamic(Camera* camera)
 	}
 }
 
-void World::RenderZombies(Camera* camera, float time)
-{
+void World::RenderZombies(Camera* camera, float time) {
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = zombies[i];
 		if (zombie == NULL) {
@@ -302,6 +310,11 @@ void World::RenderZombies(Camera* camera, float time)
 		//zombie->render(shader);
 		zombie->renderAnimation(shader, time);
 	}
+}
+
+void World::RenderPlayer(Camera* camera) {
+	player->render(shader);
+	weapons[0]->renderWeapon(player, shader); //CAMBIAR EL [0] AL ARMA QUE TENGA SELECCIONADA
 }
 
 void World::RenderBoundingStatic(Camera* camera)

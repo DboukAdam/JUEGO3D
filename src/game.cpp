@@ -165,8 +165,12 @@ void Game::initWorld(std::string filename){
 	//Player
 	m.setTranslation(100, 100, 100);
 	Vector3 playerInitPos = Vector3(0, 0.5, 0);
-	Mesh* playerMesh = Mesh::Get("data/players/man.obj");
-	Texture* playerText = Texture::Get("data/players/man.png");
+	Mesh* playerMesh = Mesh::Get("data/Assets/Players/man.obj");
+	Texture* playerText = Texture::Get("data/Assets/Players/man.png");
+	//Weapon
+	Weapon* AK47 = (Weapon*) new Entity(0, 0.5, 0, m);
+	AK47->loadMesh("data/Assets/Weapons/AK47.obj");
+	AK47->loadTexture("data/Assets/Weapons/AK47.png");
 	//Sky
 	Mesh* meshCielo = Mesh::Get("data/Assets/Ambiente/cielo.ASE");
 	Texture* textCielo = Texture::Get("data/Assets/Ambiente/cielo.tga");
@@ -198,6 +202,7 @@ void Game::initWorld(std::string filename){
 		world->initSky(meshCielo, textCielo);
 		world->initGround(groundText);
 		world->initCamera(camera);
+		world->addWeapon(AK47);
 		currentWorld = world;
 	}
 	

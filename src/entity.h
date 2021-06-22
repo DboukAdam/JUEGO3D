@@ -96,6 +96,6 @@ public:
 	bool recargar;
 	float retroceso;
 	//bool apuntar;
-
+	void renderWeapon(Player* player, Shader* shader, float tiling = 1.0f);
 
 };

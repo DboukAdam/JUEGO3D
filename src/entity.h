@@ -17,7 +17,7 @@ public:
 	float yaw;
 	float pitch;
 	bool bounding = false;
-	char type[20];
+	std::string type;
 	
 	Entity(Vector3 pos, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) {
 		this->pos = pos;

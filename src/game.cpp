@@ -163,21 +163,13 @@ void Game::initWorld(std::string filename){
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 	Matrix44 m;
 	m.setTranslation(0, 0, 0);
-	//Decorations
-	Entity* caja = new Entity(0, 0, 0, m);
-	caja->loadMesh("data/classic/1.Decoration/caja.obj");
-	caja->loadTexture("data/classic/1.Decoration/caja.png");
-	//Structures
-	Entity* marco = new Entity(0, 0, 0, m);
-	marco->loadMesh("data/classic/2.Structure/Doors/marco_grande.obj");
-	marco->loadTexture("data/classic/2.Structure/Doors/Materials/cabinet.png");
 	//Player
 	Vector3 playerInitPos = Vector3(0, 0.5, 0);
-	Mesh* mesh = Mesh::Get("data/players/man.obj");
-	Texture* text = Texture::Get("data/players/man.png");
+	Mesh* mesh = Mesh::Get("data/Assets/players/man.obj");
+	Texture* text = Texture::Get("data/Assets/players/man.png");
 	//Sky
-	Mesh* meshCielo = Mesh::Get("data/Ambiente/cielo.ASE");
-	Texture* textCielo = Texture::Get("data/Ambiente/cielo.tga");
+	Mesh* meshCielo = Mesh::Get("data/Assets/Ambiente/cielo.ASE");
+	Texture* textCielo = Texture::Get("data/Assets/Ambiente/cielo.tga");
 	//Ground
 	text = Texture::Get("data/classic/2.Structure/Ground/Materials/Rocks_05.png");
 	//Camera
@@ -190,9 +182,9 @@ void Game::initWorld(std::string filename){
 
 	if (filename == "") {
 		editorWorld = new World(shader);
-		editorWorld->addDecoration(caja);
-		//editorWorld->loadDecoration();
-		editorWorld->addStructure(marco);
+		//editorWorld->addDecoration(caja);
+		editorWorld->loadDecoration();
+		//editorWorld->addStructure(marco);
 		editorWorld->initPlayer(playerInitPos, mesh, text);
 		editorWorld->initSky(meshCielo, textCielo);
 		editorWorld->initGround(text);
@@ -202,9 +194,9 @@ void Game::initWorld(std::string filename){
 	else {
 		World* world = new World(shader);
 		world->loadWorldInfo(filename);
-		world->addDecoration(caja);
-		//world->loadDecoration();
-		world->addStructure(marco);
+		//world->addDecoration(caja);
+		world->loadDecoration();
+		//world->addStructure(marco);
 		world->initPlayer(playerInitPos, mesh, text);
 		world->initSky(meshCielo, textCielo);
 		world->initGround(text);

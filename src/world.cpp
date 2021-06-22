@@ -145,11 +145,16 @@ void World::initWeapon(Weapon* weapon) {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 void World::loadDecoration() {
 	//Load filenames from save
-	std::string path = "data/classic/1.Decoration/";
+	std::string path = "data/Assets/Decoration/";
 	std::vector<std::string> decoration;
 	int numElements = 0;
 	for (const auto& object : std::filesystem::directory_iterator(path)) {
 		std::string name = object.path().u8string();
+
+		std::string ext = name.substr((name.size() - 5), 5);
+		std::cerr << ext << std::endl;;
+		std::string mbin = ".mbin";
+		if (ext == mbin) continue;
 		decoration.push_back(name);
 		numElements++;
 		std::cerr << name << std::endl;;
@@ -171,6 +176,35 @@ void World::loadDecoration() {
 	}
 
 }
+void World::loadStructure() {
+	//Load filenames from save
+	std::string path = "data/classic/2.Structure/";
+	std::vector<std::string> structure;
+	int numElements = 0;
+	for (const auto& object : std::filesystem::directory_iterator(path)) {
+		std::string name = object.path().u8string();
+		structure.push_back(name);
+		numElements++;
+		std::cerr << name << std::endl;;
+	}
+
+	Matrix44 m;
+	for (int i = 0; i < numElements - 1; i += 2) {
+		Entity* entity = new Entity(0, 0, 0, m);
+		const char* meshObject = structure[i].c_str();
+		entity->loadMesh(meshObject);
+
+		const char* textureObject = structure[i + 1].c_str();
+		entity->loadTexture(textureObject);
+
+		std::string tipo = structure[i].substr(26, structure[i].size() - 30);
+		entity->type = tipo;
+		std::cerr << tipo << std::endl;;
+		addDecoration(entity);
+	}
+
+}
+
 
 //
 //BASIC FUNCTIONALITIES OF EACH WORLD, FOR PLAYSTAGE AND ALSO EDITOR STAGE

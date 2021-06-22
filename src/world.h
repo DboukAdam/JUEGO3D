@@ -46,6 +46,7 @@ public:
 	void initWeapon(Weapon* weapon);
 	//Loads
 	void loadDecoration();
+	void loadStructure();
 	//Otro
 	void disparar();
 	void selectEntityEditor(Vector3 dir);

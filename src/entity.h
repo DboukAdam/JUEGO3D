@@ -3,6 +3,7 @@
 #include "texture.h"
 #include "shader.h"
 #include "camera.h"
+#include "animation.h"
 #include <string>
 
 
@@ -71,9 +72,11 @@ public:
 	float vel;
 	bool triggered;
 
+
 	void DeleteZombie();
 	void AStarPath(); //Cambiar lo que devuelve
 	void setVel(float v);
+	void renderAnimation(Shader* shader, float time, float tiling = 1.0f);
 };
 
 class Player : public Entity {

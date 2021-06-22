@@ -1,6 +1,5 @@
 #include "entity.h"
 
-
 void Zombie::DeleteZombie()
 {
 	Entity::DeleteEntity();
@@ -13,6 +12,21 @@ void Zombie::AStarPath()
 
 void Zombie::setVel(float v){
 	this->vel = v;
+}
+
+void Zombie::renderAnimation(Shader* shader, float time, float tiling) {
+	Camera* camera = Camera::current;
+	Animation* walk = Animation::Get("data/Zombies/Animation/animations_walking.skanim");
+	walk->assignTime(time);
+	if (shader) {
+		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+		shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
+		shader->setUniform("u_texture", Texture::Get("data/Zombies/WorldWar_zombie.png"));
+		shader->setUniform("u_time", time);
+		shader->setUniform("u_model", Matrix44());
+		shader->setUniform("u_texture_tiling", tiling);
+		mesh->renderAnimated(GL_TRIANGLES, &walk->skeleton);
+	}
 }
 
 void Player::setVel(float v) {
@@ -52,7 +66,7 @@ void Entity::render(Shader* shader, float tiling) {
 		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
 		shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
 		shader->setUniform("u_time", time);
-		shader->setUniform("u_texture", texture, 0);
+		if (texture != NULL) shader->setUniform("u_texture", texture, 0);
 		shader->setUniform("u_model", m);
 		shader->setUniform("u_texture_tiling", tiling);
 		mesh->render(GL_TRIANGLES);

@@ -126,7 +126,7 @@ void PlayStage::render(World* world) {
 	//.........................................................................................
 	world->RenderStatic(camera);
 	world->RenderDynamic(camera);
-	world->RenderZombies(camera);
+	world->RenderZombies(camera, game->time);
 
 	//disable shader
 	shader->disable();
@@ -294,10 +294,9 @@ void EditorStage::render(World* world)
 	world->ground->render(shader);
 	world->RenderStatic(camera);
 	world->RenderDynamic(camera);
-	world->RenderZombies(camera);
+	world->RenderZombies(camera, game->time);
 
 	if (world->selectedEntity == NULL) {
-
 		Vector3 origin = camera->eye;//unproject center coord of the screen
 		Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, 800, 600);
 		Vector3 pos = RayPlaneCollision(Vector3(0, 0, 0), Vector3(0, 1, 0), origin, dir);
@@ -313,10 +312,8 @@ void EditorStage::render(World* world)
 		}
 	}
 
-
 	//disable shader
 	shader->disable();
-
 
 	if (world->isStaticObject) {
 		world->numEntity = world->numStructure;
@@ -333,11 +330,11 @@ void EditorStage::render(World* world)
 	//Draw the floor grid
 	drawGrid();
 
+	//Render GUI
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	if (game->mouse_locked) {
 		game->gui->RenderCrosshair();
 	}
@@ -356,9 +353,6 @@ void EditorStage::render(World* world)
 	else {
 		drawText(20, 20, world->decoration[world->numEntity]->type, Vector3(1, 1, 1), 2);
 	}
-		
-
-
 }
 
 void EditorStage::update(double seconds_elapsed, World* world)

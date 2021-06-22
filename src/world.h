@@ -56,7 +56,7 @@ public:
 	//Renders
 	void RenderStatic(Camera* camera);
 	void RenderDynamic(Camera* camera);
-	void RenderZombies(Camera* camera);
+	void RenderZombies(Camera* camera, float time);
 	void RenderBoundingStatic(Camera* camera);
 	void RenderBoundingDynamic(Camera* camera);
 	void RenderBoundingZombies(Camera* camera);

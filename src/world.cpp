@@ -290,9 +290,8 @@ void World::RenderDynamic(Camera* camera)
 	}
 }
 
-void World::RenderZombies(Camera* camera)
+void World::RenderZombies(Camera* camera, float time)
 {
-
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = zombies[i];
 		if (zombie == NULL) {
@@ -300,8 +299,8 @@ void World::RenderZombies(Camera* camera)
 		}
 		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
 		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
-		zombie->render(shader);
-
+		//zombie->render(shader);
+		zombie->renderAnimation(shader, time);
 	}
 }
 

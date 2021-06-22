@@ -5,7 +5,6 @@
 #include "fbo.h"
 #include "shader.h"
 #include "input.h"
-#include "animation.h"
 
 #include <cmath>
 #include "audio.h"
@@ -166,30 +165,27 @@ void Game::initWorld(std::string filename){
 	//Player
 	m.setTranslation(100, 100, 100);
 	Vector3 playerInitPos = Vector3(0, 0.5, 0);
-	Mesh* mesh = Mesh::Get("data/Assets/players/man.obj");
-	Texture* text = Texture::Get("data/Assets/players/man.png");
-
-	m.setTranslation(0, 0, 0);
+	Mesh* playerMesh = Mesh::Get("data/players/man.obj");
+	Texture* playerText = Texture::Get("data/players/man.png");
 	//Sky
 	Mesh* meshCielo = Mesh::Get("data/Assets/Ambiente/cielo.ASE");
 	Texture* textCielo = Texture::Get("data/Assets/Ambiente/cielo.tga");
-	//ground
-	text = Texture::Get("data/Assets/Skeleton/huesitos.png");
+	//Ground
+	Texture* groundText = Texture::Get("data/classic/2.Structure/Ground/Materials/Rocks_05.png");
 	//Camera
 	camera = new Camera();
 	//QUITAR
 	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
-	zombie->loadMesh("data/Zombies/ZombieOBJ.obj");
+	zombie->loadMesh("data/Zombies/Animation/character.mesh");
 	zombie->loadTexture("data/Zombies/WorldWar_zombie.png");
 	
-
 	if (filename == "") {
 		editorWorld = new World(shader);
 		editorWorld->loadDecoration();
 		editorWorld->loadStructure();
-		editorWorld->initPlayer(playerInitPos, mesh, text);
+		editorWorld->initPlayer(playerInitPos, playerMesh, playerText);
 		editorWorld->initSky(meshCielo, textCielo);
-		//editorWorld->initGround(text);
+		editorWorld->initGround(groundText);
 		editorWorld->initCamera(camera);
 		editorWorld->addZombie(zombie);
 	}
@@ -198,13 +194,13 @@ void Game::initWorld(std::string filename){
 		world->loadWorldInfo(filename);
 		world->loadDecoration();
 		world->loadStructure();
-		world->initPlayer(playerInitPos, mesh, text);
+		world->initPlayer(playerInitPos, playerMesh, playerText);
 		world->initSky(meshCielo, textCielo);
-		//world->initGround(text);
+		world->initGround(groundText);
 		world->initCamera(camera);
-		world->addZombie(zombie);
 		currentWorld = world;
 	}
+	
 }
 
 

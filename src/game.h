@@ -49,8 +49,7 @@ public:
 	Entity* sky;
 	Gui* gui;
 	float mouse_speed = 10.0f;
-	int maxStructures = 0;
-	int maxDecorations = 0;
+
 
 	Game( int window_width, int window_height, SDL_Window* window );
 

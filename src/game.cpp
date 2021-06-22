@@ -162,16 +162,19 @@ void Game::onResize(int width, int height)
 void Game::initWorld(std::string filename){
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 	Matrix44 m;
-	m.setTranslation(0, 0, 0);
+	
 	//Player
+	m.setTranslation(100, 100, 100);
 	Vector3 playerInitPos = Vector3(0, 0.5, 0);
 	Mesh* mesh = Mesh::Get("data/Assets/players/man.obj");
 	Texture* text = Texture::Get("data/Assets/players/man.png");
+
+	m.setTranslation(0, 0, 0);
 	//Sky
 	Mesh* meshCielo = Mesh::Get("data/Assets/Ambiente/cielo.ASE");
 	Texture* textCielo = Texture::Get("data/Assets/Ambiente/cielo.tga");
-	//Ground
-	text = Texture::Get("data/classic/2.Structure/Ground/Materials/Rocks_05.png");
+	//ground
+	text = Texture::Get("data/Assets/Skeleton/huesitos.png");
 	//Camera
 	camera = new Camera();
 	//QUITAR
@@ -182,24 +185,22 @@ void Game::initWorld(std::string filename){
 
 	if (filename == "") {
 		editorWorld = new World(shader);
-		//editorWorld->addDecoration(caja);
 		editorWorld->loadDecoration();
-		//editorWorld->addStructure(marco);
+		editorWorld->loadStructure();
 		editorWorld->initPlayer(playerInitPos, mesh, text);
 		editorWorld->initSky(meshCielo, textCielo);
-		editorWorld->initGround(text);
+		//editorWorld->initGround(text);
 		editorWorld->initCamera(camera);
 		editorWorld->addZombie(zombie);
 	}
 	else {
 		World* world = new World(shader);
 		world->loadWorldInfo(filename);
-		//world->addDecoration(caja);
 		world->loadDecoration();
-		//world->addStructure(marco);
+		world->loadStructure();
 		world->initPlayer(playerInitPos, mesh, text);
 		world->initSky(meshCielo, textCielo);
-		world->initGround(text);
+		//world->initGround(text);
 		world->initCamera(camera);
 		world->addZombie(zombie);
 		currentWorld = world;

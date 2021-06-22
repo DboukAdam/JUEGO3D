@@ -5,7 +5,7 @@
 #include "input.h"
 
 
-#define MAX_ENTITIES 155
+#define MAX_ENTITIES 1000
 #define MAX_ZOMBIES 100
 #define MAX_WEAPONS 10
 
@@ -18,7 +18,10 @@ public:
 	Entity* structures[MAX_ENTITIES];
 	Entity* decoration[MAX_ENTITIES];
 	int numEntity = 0;
+	int maxStructure = 0;
 	int numStructure = 0;
+
+	int maxDecoration = 0;
 	int numDecoration = 0;
 	Zombie* zombies[MAX_ZOMBIES];
 	Player* player;

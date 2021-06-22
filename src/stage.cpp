@@ -351,10 +351,10 @@ void EditorStage::render(World* world)
 	string asset;
 	
 	if (world->isStaticObject) {
-		drawText(20, 20, world->structures[world->numEntity]->mesh->name, Vector3(1, 1, 1), 2);
+		drawText(20, 20, world->structures[world->numEntity]->type, Vector3(1, 1, 1), 2);
 	}
 	else {
-		drawText(20, 20, world->decoration[world->numEntity]->mesh->name, Vector3(1, 1, 1), 2);
+		drawText(20, 20, world->decoration[world->numEntity]->type, Vector3(1, 1, 1), 2);
 	}
 		
 
@@ -405,7 +405,7 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		if (Input::wasKeyPressed(SDL_SCANCODE_X)) {
 			if (world->isStaticObject) {
 				int tmp = world->numStructure + 1;
-				if (tmp > game->maxStructures) {
+				if (tmp > world->maxStructure) {
 					world->numStructure = 0;
 				}
 				else {
@@ -414,7 +414,7 @@ void EditorStage::update(double seconds_elapsed, World* world)
 			}
 			else {
 				int tmp = world->numDecoration + 1;
-				if (tmp > game->maxDecorations) {
+				if (tmp > world->maxDecoration) {
 					world->numDecoration = 0;
 				}
 				else {
@@ -428,7 +428,7 @@ void EditorStage::update(double seconds_elapsed, World* world)
 			if (world->isStaticObject) {
 				int tmp = world->numStructure - 1;
 				if (tmp < 0) {
-					world->numStructure = game->maxStructures;
+					world->numStructure = world->maxStructure;
 				}
 				else {
 					world->numStructure -= 1;
@@ -437,7 +437,7 @@ void EditorStage::update(double seconds_elapsed, World* world)
 			else {
 				int tmp = world->numDecoration - 1;
 				if (tmp < 0) {
-					world->numDecoration = game->maxDecorations;
+					world->numDecoration = world->maxDecoration;
 				}
 				else {
 					world->numDecoration -= 1;

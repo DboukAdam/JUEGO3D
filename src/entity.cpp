@@ -84,8 +84,7 @@ void Weapon::renderWeapon(Player* player, Shader* shader, float tiling) { //AAAA
 	this->pos = player->pos;
 	this->pitch = player->pitch;
 	this->yaw = player->yaw - 90;
-	Matrix44 ViewInverse = camera->view_matrix;
-	ViewInverse.inverse();
-	m = camera->projection_matrix * camera->view_matrix * (ViewInverse * Matrix44());
+	m.setTranslation(camera->eye.x, camera->eye.y - 0.5, camera->eye.z);
+	m.rotate(yaw * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
 	render(shader, tiling);
 }

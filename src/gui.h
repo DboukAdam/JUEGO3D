@@ -54,6 +54,7 @@ public:
 	void initPauseButtons();
 	void initWorldButtons();
 	void initTurnPageButtons();
+	void initEntries();
 	//Renders
 	void RenderIntroGui();
 	void RenderWorldsGui();

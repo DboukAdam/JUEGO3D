@@ -77,6 +77,17 @@ void Gui::initTurnPageButtons() {
 	turnPageLeftButton = new Button(Vector2(xPosLeft, yPosLeft), atlasRanges[turnPageLeft], button_width, button_height, false);
 }
 
+void Gui::initEntries() {
+	std::string path = "save/";
+	std::vector<std::string> entriesTemp;
+	for (const auto& entry : std::filesystem::directory_iterator(path)) {
+		std::string name = entry.path().u8string();
+		name = name.substr(5, name.size() - 9); //9 = 5 de save/ y 4 de .dat
+		entriesTemp.push_back(name);
+	}
+	entries = entriesTemp;
+}
+
 
 
 void Gui::RenderIntroGui()
@@ -117,14 +128,7 @@ void Gui::RenderIntroGui()
 
 void Gui::RenderWorldsGui() {
 	//Load filenames from save
-	std::string path = "save/";
-	std::vector<std::string> entriesTemp;
-	for (const auto& entry : std::filesystem::directory_iterator(path)) {
-		std::string name = entry.path().u8string();
-		name = name.substr(5, name.size() - 9); //9 = 5 de save/ y 4 de .dat
-		entriesTemp.push_back(name);
-	}
-	entries = entriesTemp;
+	initEntries();
 	//Render buttons
 	Game* game = Game::instance;
 	Camera cam2D;
@@ -242,7 +246,10 @@ void Gui::introButtonPressed(Vector2 pos) {
 		if (pos.x > min_x && pos.y > min_y && pos.x < max_x && pos.y < max_y) break;
 		if (i == numIntroButtons - 1) i++;
 	}
-	if (i == 0) game->setSelectWorldStage();
+	if (i == 0) {
+		initEntries();
+		game->setSelectWorldStage();
+	}
 	if (i == 1) game->setEditorStage();
 	if (i == 2) std::cout << "Hola, soy las settings, encantado." << std::endl;
 	if (i == 3) game->must_exit = true;

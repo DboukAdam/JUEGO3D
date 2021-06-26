@@ -27,6 +27,7 @@ public:
 	Player* player;
 	Weapon* weapons[MAX_WEAPONS];
 	Shader* shader;
+	Shader* shaderAnim;
 	Entity* sky;
 	Entity* selectedEntity = NULL;
 	uint8* map;

@@ -24,7 +24,7 @@ HCHANNEL Audio::play(float volume) {
 }
 
 bool Audio::load(const char* filename) {
-	if (BASS_Init == false) {
+	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
 		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
 	}
 	sample = BASS_SampleLoad(false, filename, 0, 0, 3, 0);
@@ -65,6 +65,6 @@ HCHANNEL* Audio::Play(const char* filename) {
 	if (audio == NULL) {
 		return NULL;
 	}
-	HCHANNEL channel = audio->play(1);
+	HCHANNEL channel = audio->play(0.1);
 	return &channel;
 }

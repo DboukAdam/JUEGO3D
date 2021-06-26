@@ -5,8 +5,7 @@ void Zombie::DeleteZombie()
 	Entity::DeleteEntity();
 }
 
-void Zombie::AStarPath()
-{
+void Zombie::AStarPath() {
 
 }
 
@@ -15,6 +14,8 @@ void Zombie::setVel(float v){
 }
 
 void Zombie::renderAnimation(Shader* shader, float time, float tiling) {
+	//Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
+	//shaderAnim->enable();
 	Camera* camera = Camera::current;
 	Animation* walk = Animation::Get("data/Zombies/Animation/animations_walking.skanim");
 	walk->assignTime(time);
@@ -26,7 +27,9 @@ void Zombie::renderAnimation(Shader* shader, float time, float tiling) {
 		shader->setUniform("u_model", Matrix44());
 		shader->setUniform("u_texture_tiling", tiling);
 		mesh->renderAnimated(GL_TRIANGLES, &walk->skeleton);
+		//walk->skeleton.renderSkeleton(camera, Matrix44());
 	}
+	//shaderAnim->disable();
 }
 
 void Player::setVel(float v) {
@@ -85,6 +88,7 @@ void Weapon::renderWeapon(Player* player, Shader* shader, float tiling) { //AAAA
 	this->pitch = player->pitch;
 	this->yaw = player->yaw - 90;
 	m.setTranslation(camera->eye.x, camera->eye.y - 0.5, camera->eye.z);
-	m.rotate(yaw * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
+	m.rotateGlobal(yaw * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
+	m.rotateGlobal(pitch * DEG2RAD, Vector3(0.0f, 0.0f, 1.0f));
 	render(shader, tiling);
 }

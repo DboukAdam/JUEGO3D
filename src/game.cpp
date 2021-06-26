@@ -47,12 +47,12 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//Audio
 	//Audio* audio = Audio::Get("data/Audio/musicbox-silent-night.wav");
-	if (BASS_Init == false) {
+	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
 		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
 	}
 	Audio* audio = new Audio();
-	audio->load("data/Audio/musicbox-silent-night.wav");
-	audio->play(1);
+	//audio->Get("data/Audio/musicbox-silent-night.wav");
+	audio->Play("data/Audio/musicbox-silent-night.wav");
 }
 
 //what to do when the image has to be draw
@@ -160,6 +160,7 @@ void Game::onResize(int width, int height)
 
 void Game::initWorld(std::string filename){
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
 	Matrix44 m;
 	
 	//Player

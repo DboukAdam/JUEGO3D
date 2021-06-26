@@ -94,6 +94,7 @@ void PlayStage::render(World* world) {
 
 	//enable shader
 	Shader* shader = world->shader;
+	Shader* shaderAnim = world->shaderAnim;
 	shader->enable();
 	world->sky->render(shader);
 	//world->ground->render(shader);
@@ -126,11 +127,14 @@ void PlayStage::render(World* world) {
 	world->RenderPlayer(camera);
 	world->RenderStatic(camera);
 	world->RenderDynamic(camera);
-	world->RenderZombies(camera, game->time);
 
 	//disable shader
 	shader->disable();
 
+	//animation
+	shaderAnim->enable();
+	world->RenderZombies(camera, game->time);
+	shaderAnim->disable();
 	//GUI STUFF
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);

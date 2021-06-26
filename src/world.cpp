@@ -30,6 +30,8 @@ World::World(Shader* shader) {
 		weapons[i] = NULL;
 	}
 	this->shader = shader;
+	Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
+	this->shaderAnim = shaderAnim;
 	this->player = (Player*) new Entity(0, 0, 0, Matrix44());
 	this->ground = NULL;
 	this->sky = NULL;
@@ -308,7 +310,7 @@ void World::RenderZombies(Camera* camera, float time) {
 		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
 		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
 		//zombie->render(shader);
-		zombie->renderAnimation(shader, time);
+		zombie->renderAnimation(shaderAnim, time);
 	}
 }
 

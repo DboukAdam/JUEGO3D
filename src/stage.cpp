@@ -84,7 +84,6 @@ void PlayStage::render(World* world) {
 
 	world->player->CamPlayer(camera);
 	
-
 	//skymap
 	world->sky->m.setTranslation(camera->eye.x, camera->eye.y, camera->eye.z);
 
@@ -97,7 +96,7 @@ void PlayStage::render(World* world) {
 	Shader* shader = world->shader;
 	shader->enable();
 	world->sky->render(shader);
-	world->ground->render(shader);
+	//world->ground->render(shader);
 
 	//.........................................................................................
 	//IA CAMBIAR
@@ -292,14 +291,14 @@ void EditorStage::render(World* world)
 	Shader* shader = world->shader;
 	shader->enable();
 	world->sky->render(shader);
-	world->ground->render(shader);
+	//world->ground->render(shader);
 	world->RenderStatic(camera);
 	world->RenderDynamic(camera);
 	world->RenderZombies(camera, game->time);
 
 	if (world->selectedEntity == NULL) {
 		Vector3 origin = camera->eye;//unproject center coord of the screen
-		Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, 800, 600);
+		Vector3 dir = camera->getRayDirection(400, 300, 800, 600);
 		Vector3 pos = RayPlaneCollision(Vector3(0, 0, 0), Vector3(0, 1, 0), origin, dir);
 		if (world->isStaticObject) {
 			Entity* entidad = world->structures[world->numEntity];
@@ -443,13 +442,13 @@ void EditorStage::update(double seconds_elapsed, World* world)
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_Q)) {
 			if (!world->selectedEntity == NULL) {
-				world->selectedEntity->m.rotate(10.0f * DEG2RAD, Vector3(0, 1, 0));
+				world->selectedEntity->m.rotate(45.0f * DEG2RAD, Vector3(0, 1, 0));
 			}
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_E)) {
 			if (!world->selectedEntity == NULL) {
-				world->selectedEntity->m.rotate(-10.0f * DEG2RAD, Vector3(0, 1, 0));
+				world->selectedEntity->m.rotate(-45.0f * DEG2RAD, Vector3(0, 1, 0));
 			}
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_W)) {

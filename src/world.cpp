@@ -281,9 +281,12 @@ void World::RenderStatic(Camera* camera)
 		if (entity == NULL) {
 			break;
 		}
+		if (entity->mesh != NULL) {
+
 		BoundingBox currentBox = transformBoundingBox(entity->m, entity->mesh->box);
 		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
 		entity->render(shader);
+		}
 
 	}
 }
@@ -323,7 +326,7 @@ void World::RenderBoundingStatic(Camera* camera)
 {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		Entity* entity = staticEntities[i];
-		if (entity == NULL) break;
+		if (entity == NULL || entity->mesh == NULL) break;
 		BoundingBox currentBox = transformBoundingBox(entity->m, entity->mesh->box);
 		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
 		if (entity->bounding)entity->mesh->renderBounding(entity->m);
@@ -334,7 +337,7 @@ void World::RenderBoundingDynamic(Camera* camera)
 {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		Entity* entity = dynamicEntities[i];
-		if (entity == NULL) break;
+		if (entity == NULL || entity->mesh == NULL) break;
 		BoundingBox currentBox = transformBoundingBox(entity->m, entity->mesh->box);
 		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
 		if (entity->bounding)entity->mesh->renderBounding(entity->m);

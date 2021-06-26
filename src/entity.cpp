@@ -14,22 +14,22 @@ void Zombie::setVel(float v){
 }
 
 void Zombie::renderAnimation(Shader* shader, float time, float tiling) {
-	//Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
-	//shaderAnim->enable();
+	Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
+	shaderAnim->enable();
 	Camera* camera = Camera::current;
 	Animation* walk = Animation::Get("data/Zombies/Animation/animations_walking.skanim");
 	walk->assignTime(time);
-	if (shader) {
-		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
-		shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-		shader->setUniform("u_texture", Texture::Get("data/Zombies/WorldWar_zombie.png"));
-		shader->setUniform("u_time", time);
-		shader->setUniform("u_model", Matrix44());
-		shader->setUniform("u_texture_tiling", tiling);
+	if (shaderAnim) {
+		shaderAnim->setUniform("u_color", Vector4(1, 1, 1, 1));
+		shaderAnim->setUniform("u_viewprojection", camera->viewprojection_matrix);
+		shaderAnim->setUniform("u_texture", Texture::Get("data/Zombies/WorldWar_zombie.png"));
+		shaderAnim->setUniform("u_time", time);
+		shaderAnim->setUniform("u_model", Matrix44());
+		shaderAnim->setUniform("u_texture_tiling", tiling);
 		mesh->renderAnimated(GL_TRIANGLES, &walk->skeleton);
 		//walk->skeleton.renderSkeleton(camera, Matrix44());
 	}
-	//shaderAnim->disable();
+	shaderAnim->disable();
 }
 
 void Player::setVel(float v) {
@@ -63,6 +63,7 @@ void Entity::DeleteEntity()
 
 void Entity::render(Shader* shader, float tiling) {
 	Camera* camera = Camera::current;
+	shader->enable();
 	if (shader)
 	{
 		//upload uniforms
@@ -74,6 +75,7 @@ void Entity::render(Shader* shader, float tiling) {
 		shader->setUniform("u_texture_tiling", tiling);
 		mesh->render(GL_TRIANGLES);
 	}
+	shader->disable();
 }
 
 void Entity::copy(Entity* entity) {

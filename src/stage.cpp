@@ -199,11 +199,14 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 			
 				Vector3 coll;
 				Vector3 collNormal;
+				if (current->mesh != NULL) {
+
 				if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.5, coll, collNormal)) continue;
 			
 				Vector3 push_away = normalize(coll - playerTargetCenter) * seconds_elapsed;
 				targetPos = player->pos - push_away;
 				targetPos.y = player->pos.y;
+				}
 			}
 
 			if (!world->dynamicEntities[i] == NULL) {
@@ -291,9 +294,9 @@ void EditorStage::render(World* world)
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	//enable shader
+	
 	Shader* shader = world->shader;
-	shader->enable();
+	
 	world->sky->render(shader);
 	//world->ground->render(shader);
 	world->RenderStatic(camera);
@@ -316,8 +319,8 @@ void EditorStage::render(World* world)
 		}
 	}
 
-	//disable shader
-	shader->disable();
+	
+	
 
 	if (world->isStaticObject) {
 		world->numEntity = world->numStructure;
@@ -370,8 +373,14 @@ void EditorStage::update(double seconds_elapsed, World* world)
 
 	if (game->mouse_locked)
 	{
-		camera->rotate(Input::mouse_delta.x * 0.0005f, Vector3(0.0f, -1.0f, 0.0f));
-		camera->rotate(Input::mouse_delta.y * 0.0005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
+		float angleY = Input::mouse_delta.y * 0.0005f;
+		
+		if (angleY > -80 && angleY < 80) {
+
+			camera->rotate(Input::mouse_delta.x * 0.0005f, Vector3(0.0f, -1.0f, 0.0f));
+			camera->rotate(angleY, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
+		}
+		
 		if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 30;
 		if (Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
 		if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);

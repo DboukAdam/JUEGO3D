@@ -2,7 +2,7 @@
 #include "input.h"
 #include "game.h"
 #include "pathfinders.h"
-#define MAX_ENTITIES 155
+#define MAX_ENTITIES 1000
 
 bool free_camera = false;
 
@@ -302,11 +302,13 @@ void EditorStage::render(World* world)
 		if (world->isStaticObject) {
 			Entity* entidad = world->structures[world->numEntity];
 			entidad->m.setTranslation(pos.x, pos.y, pos.z);
+			entidad->m.rotate(entidad->yaw * DEG2RAD, Vector3(0,1,0));
 			entidad->render(shader);
 		}
 		else {
 			Entity* entidad = world->decoration[world->numEntity];
 			entidad->m.setTranslation(pos.x, pos.y, pos.z);
+			entidad->m.rotate(entidad->yaw * DEG2RAD, Vector3(0, 1, 0));
 			entidad->render(shader);
 		}
 	}
@@ -443,26 +445,54 @@ void EditorStage::update(double seconds_elapsed, World* world)
 
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_Q)) {
-			if (!world->selectedEntity == NULL) {
+			if (world->selectedEntity != NULL) {
 				world->selectedEntity->m.rotate(45.0f * DEG2RAD, Vector3(0, 1, 0));
+			}
+			else {
+				if (world->isStaticObject) {
+					world->structures[world->numEntity]->yaw += 45.0f;
+				}
+				else {
+					world->decoration[world->numEntity]->yaw += 45.0f;
+				}
 			}
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_E)) {
-			if (!world->selectedEntity == NULL) {
+			if (world->selectedEntity != NULL) {
 				world->selectedEntity->m.rotate(-45.0f * DEG2RAD, Vector3(0, 1, 0));
+			}
+			else {
+				if (world->isStaticObject) {
+					world->structures[world->numEntity]->yaw -= 45.0f;
+				}
+				else {
+					world->decoration[world->numEntity]->yaw -= 45.0f;
+				}
 			}
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_UP)) {
 			if (!world->selectedEntity == NULL) {
-				world->selectedEntity->m.translate(0, 1, 0);
+				world->selectedEntity->m.translate(0, 0.5, 0);
 			}
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_DOWN)) {
 			if (!world->selectedEntity == NULL) {
-				world->selectedEntity->m.translate(0, -1, 0);
+				world->selectedEntity->m.translate(0, -0.5, 0);
 			}
 		}
+
+		if (Input::wasKeyPressed(SDL_SCANCODE_LEFT)) {
+			if (!world->selectedEntity == NULL) {
+				world->selectedEntity->m.translate(-0.5, 0, 0);
+			}
+		}
+		if (Input::wasKeyPressed(SDL_SCANCODE_RIGHT)) {
+			if (!world->selectedEntity == NULL) {
+				world->selectedEntity->m.translate(0.5, 0, 0);
+			}
+		}
+
 		if (Input::wasKeyPressed(SDL_SCANCODE_P)) {
 			if (world->selectedEntity != NULL) {
 				world->deleteEntity(world->selectedEntity);

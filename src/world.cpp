@@ -103,6 +103,7 @@ void World::addObjectEditor(Entity* entity, Vector3 dir) {
 	Entity* copia = new Entity(0, 0, 0, Matrix44());
 	copia->copy(entity);
 	copia->m.setTranslation(pos.x, pos.y, pos.z);
+	copia->m.rotate(entity->yaw * DEG2RAD, Vector3(0,1,0));
 	if (isStaticObject) {
 		addStaticEntity(copia);
 	}

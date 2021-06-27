@@ -271,6 +271,21 @@ void World::selectEntityEditor(Vector3 dir){
 		}
 	}
 }
+void World::deleteEntity(Entity* entity) {
+	for (int i = 0; i < MAX_ENTITIES; i++) {
+		if (staticEntities[i] == entity) staticEntities[i] = NULL; break;
+		if (dynamicEntities[i] == entity) dynamicEntities[i] = NULL; break;
+	}
+}
+void World::moveZombies() {
+	for (int i = 0; i < MAX_ZOMBIES; i++) {
+		Zombie* zombie = zombies[i];
+		if (zombie != NULL) continue;
+		int *output;
+		output = zombie->AStarPath(player->pos, map);
+
+	}
+}
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::...
 
 //RENDERS OF EVERYTHING NECESSARY
@@ -311,7 +326,7 @@ void World::RenderZombies(Camera* camera, float time) {
 			break;
 		}
 		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
-		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
+		//if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
 		//zombie->render(shader);
 		zombie->renderAnimation(shaderAnim, time);
 	}
@@ -466,7 +481,7 @@ void World::StartRound(float time){  //ni caso a los parametros pilla la idea na
 	for (int s = 0; s < numSpawns; s++) {
 		for (int i = 0; i < numZombies; i++) {
 
-			Zombie* zombie = (Zombie*) new Entity();//pos del spawn, m
+			Zombie* zombie = (Zombie*) new Entity(0, 0, 0, Matrix44());//pos del spawn, m
 			spawn1->spawnAZombie(zombie, round);
 		}
 

@@ -4,15 +4,6 @@
 #include "pathfinders.h"
 #define MAX_ENTITIES 155
 
-int startx; //ULTRA SUCIO
-int starty;
-int output[100];
-int path_steps = -1;
-float tileSizeX = 10.f; //MEGA SUCIO
-float tileSizeY = 10.f;
-int width = 300;
-int height = 300; //SUPER SUCIO
-
 bool free_camera = false;
 
 void IntroStage::render(World* world) {
@@ -127,14 +118,15 @@ void PlayStage::render(World* world) {
 	world->RenderPlayer(camera);
 	world->RenderStatic(camera);
 	world->RenderDynamic(camera);
-
+	world->RenderZombies(camera, game->time);
 	//disable shader
 	shader->disable();
 
 	//animation
 	shaderAnim->enable();
-	world->RenderZombies(camera, game->time);
+	//world->RenderZombies(camera, game->time);
 	shaderAnim->disable();
+
 	//GUI STUFF
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
@@ -319,9 +311,6 @@ void EditorStage::render(World* world)
 		}
 	}
 
-	
-	
-
 	if (world->isStaticObject) {
 		world->numEntity = world->numStructure;
 	}
@@ -382,10 +371,10 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		}
 		
 		if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 30;
-		if (Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
-		if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
-		if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
-		if (Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
+		if (Input::isKeyPressed(SDL_SCANCODE_W)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
+		if (Input::isKeyPressed(SDL_SCANCODE_S)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
+		if (Input::isKeyPressed(SDL_SCANCODE_A)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
+		if (Input::isKeyPressed(SDL_SCANCODE_D)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_C)) {
 			world->isStaticObject = !world->isStaticObject;
@@ -464,26 +453,28 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				world->selectedEntity->m.rotate(-45.0f * DEG2RAD, Vector3(0, 1, 0));
 			}
 		}
-		if (Input::wasKeyPressed(SDL_SCANCODE_W)) {
+		if (Input::wasKeyPressed(SDL_SCANCODE_UP)) {
 			if (!world->selectedEntity == NULL) {
 				world->selectedEntity->m.translate(0, 1, 0);
 			}
 		}
-		if (Input::wasKeyPressed(SDL_SCANCODE_S)) {
+		if (Input::wasKeyPressed(SDL_SCANCODE_DOWN)) {
 			if (!world->selectedEntity == NULL) {
 				world->selectedEntity->m.translate(0, -1, 0);
 			}
 		}
 		if (Input::wasKeyPressed(SDL_SCANCODE_P)) {
 			if (world->selectedEntity != NULL) {
+				world->deleteEntity(world->selectedEntity);
 				world->selectedEntity->DeleteEntity();
+				world->selectedEntity = NULL;
 			}
 		}
-
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) {
 			game->setPlayStage();
 		}
+
 		if (game->mouse_locked)
 			Input::centerMouse();
 

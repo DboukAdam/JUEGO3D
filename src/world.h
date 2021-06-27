@@ -60,6 +60,8 @@ public:
 	//Otro
 	void disparar();
 	void selectEntityEditor(Vector3 dir);
+	void deleteEntity(Entity* entity);
+	void moveZombies();
 	//Renders
 	void RenderStatic(Camera* camera);
 	void RenderDynamic(Camera* camera);

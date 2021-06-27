@@ -47,7 +47,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//Audio
 	//Audio* audio = Audio::Get("data/Audio/musicbox-silent-night.wav");
-	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
+	if (BASS_Init(1, 44100, 0, 0, NULL) == false) {
 		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
 	}
 	Audio* audio = new Audio();
@@ -118,7 +118,7 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 		}
 		if (currentStage == editor) {
 			if (mouse_locked) {
-				Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, this->window_width, this->window_height);
+				Vector3 dir = camera->getRayDirection(this->window_width / 2, this->window_height / 2, this->window_width, this->window_height);
 				currentWorld->selectEntityEditor(dir);
 			}
 			else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
@@ -182,7 +182,7 @@ void Game::initWorld(std::string filename){
 	//QUITAR
 	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
 	zombie->loadMesh("data/Zombies/Animation/character.mesh");
-	zombie->loadTexture("data/Zombies/WorldWar_zombie.png");
+	zombie->loadTexture("data/Zombies/image.png");
 	
 	if (filename == "") {
 		editorWorld = new World(shader);
@@ -205,6 +205,7 @@ void Game::initWorld(std::string filename){
 		//world->initGround(groundText);
 		world->initCamera(camera);
 		world->addWeapon(AK47);
+		world->addZombie(zombie);
 		currentWorld = world;
 	}
 	
@@ -232,6 +233,7 @@ void Game::setPlayStage(){
 
 void Game::setEditorStage(){
 	currentStage = editor;
+	currentWorld = editorWorld;
 	mouse_locked = true;
 	SDL_ShowCursor(!mouse_locked);
 }

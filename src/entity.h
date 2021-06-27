@@ -70,15 +70,18 @@ class Zombie : public Entity {
 public:
 	Vector3 dir;
 	float vel;
-	bool triggered;
+	int vida;
 
-
-	void DeleteZombie();
-	void AStarPath(); //Cambiar lo que devuelve
+	int * AStarPath(Vector3 target, uint8* map);
+	void move(Vector3 target);
 	void setVel(float v);
 	void renderAnimation(Shader* shader, float time, float tiling = 1.0f);
 };
 
+class ZombieSpawner : public Entity {
+	float ultimoSpawn;
+	void spawnZombie(Zombie* zombie, int vida);
+};
 class Player : public Entity {
 public:
 	Vector3 dir;

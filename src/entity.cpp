@@ -94,3 +94,24 @@ void Weapon::renderWeapon(Player* player, Shader* shader, float tiling) { //AAAA
 	m.rotateGlobal(pitch * DEG2RAD, Vector3(0.0f, 0.0f, 1.0f));
 	render(shader, tiling);
 }
+
+void Spawn::spawnAZombie(Zombie* zombie, int round)
+{
+	zombie->setPos(this->pos);
+	float prob = random();
+	if (round < 5) {
+		
+		if (prob < 0.5) zombie->loadTexture("COLOR VERDE");
+		zombie->loadTexture("COLOR AMARILLO");									//AÑADIR LA VIDA DISTINTA Y DEMAS
+	}
+	else if (round < 10) {
+		if(prob < 0.3) zombie->loadTexture("COLOR VERDE");
+		if(prob > 0.3 && prob < 0.7) zombie->loadTexture("COLOR AMARILLO");
+		zombie->loadTexture("COLOR ROJO");
+
+	}
+	else {
+		if(prob < 0.4) zombie->loadTexture("COLOR AMARILLO");
+		zombie->loadTexture("COLOR ROJO");
+	}
+}

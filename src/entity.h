@@ -99,3 +99,9 @@ public:
 	void renderWeapon(Player* player, Shader* shader, float tiling = 1.0f);
 
 };
+
+class Spawn : public Entity {
+public:
+	void spawnAZombie(Zombie* zombie, int round);
+
+};

@@ -33,6 +33,11 @@ public:
 	uint8* map;
 	Entity* ground;
 	bool isStaticObject = false;
+	Spawn* spawn1;
+	Spawn* spawn2;
+	Spawn* spawn3;
+	int round;
+	int numSpawns = 3;
 
 	World(Shader* shader);
 	void addStaticEntity(Entity* entity);
@@ -66,4 +71,6 @@ public:
 	//WorldInfos
 	void saveWorldInfo(std::string filename);
 	bool loadWorldInfo(std::string filename);
+	void initSpawn();
+	void StartRound(float time);
 };

@@ -450,3 +450,25 @@ bool World::loadWorldInfo(std::string filename) {
 	cerr << "World loaded!" << endl;
 	return true;
 }
+
+void World::initSpawn() {
+	Matrix44 m;
+	spawn1 = (Spawn*) new Entity(0,0,0,m);
+	spawn2 = (Spawn*) new Entity(0, 0, 0, m); //definirlos en las posiciones que queramos y añadirles de alguna manera los zombies que tendran
+	spawn3 = (Spawn*) new Entity(0, 0, 0, m);
+	
+}
+
+
+void World::StartRound(float time){  //ni caso a los parametros pilla la idea namas, si te gusta
+	int r = this->round;
+	int numZombies = 3 * (r + 5); //divisible entre 3 para poder distribuirlos por igual por los spawns
+	for (int s = 0; s < numSpawns; s++) {
+		for (int i = 0; i < numZombies; i++) {
+
+			Zombie* zombie = (Zombie*) new Entity();//pos del spawn, m
+			spawn1->spawnAZombie(zombie, round);
+		}
+
+	}
+}

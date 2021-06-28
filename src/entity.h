@@ -72,7 +72,7 @@ public:
 	float vel;
 	int vida;
 
-	Vector3 AStarPath(Vector3 target, uint8* map);
+	Vector3 AStarPath(Vector3 target, uint8** maps);
 	void move(Vector3 target);
 	void setVel(float v);
 	void renderAnimation(float time, float tiling = 1.0f);

@@ -1,22 +1,28 @@
 #include "entity.h"
 #include "pathfinders.h"
 
-Vector3 Zombie::AStarPath(Vector3 target, uint8* map) {
+Vector3 Zombie::AStarPath(Vector3 target, uint8** maps) {
 	int output[100];
 	int path_steps = -1;
 	float tileSizeX = 1.f; //MEGA SUCIO
 	float tileSizeZ = 1.f;
-	int Mapwidth = 300;
-	int Mapheight = 300; //SUPER SUCIO
+	int Mapwidth = 100;
+	int Mapheight = 100; //SUPER SUCIO
 
-	int startx = clamp(abs(pos.x) / tileSizeX, 0, Mapwidth);
-	int startz = clamp(abs(pos.z) / tileSizeZ, 0, Mapheight);
+	int startx = clamp(abs(pos.x) / tileSizeX, 0, Mapwidth - 1);
+	int startz = clamp(abs(pos.z) / tileSizeZ, 0, Mapheight - 1);
 
-	float targetx = clamp(abs(target.x) / tileSizeX, 0, Mapwidth);
-	float targetz = clamp(abs(target.z) / tileSizeZ, 0, Mapheight);
+	float targetx = clamp(abs(target.x) / tileSizeX, 0, Mapwidth - 1);
+	float targetz = clamp(abs(target.z) / tileSizeZ, 0, Mapheight - 1);
 	//std::cerr << "Target: " << targetx << " " << targetz << std::endl;
 
 	if (startx == floor(targetx) && startz == floor(targetz)) return Vector3(startx, pos.y, startz);
+
+	uint8* map;
+	if (target.x >= 0 && target.z >= 0) map = maps[0];
+	else if (target.x >= 0 && target.z <= 0) map = maps[1];
+	else if (target.x <= 0 && target.z >= 0) map = maps[2];
+	else if (target.x <= 0 && target.z <= 0) map = maps[3];
 
 	path_steps = AStarFindPathNoTieDiag(
 		startx, startz, //origin (tienen que ser enteros)

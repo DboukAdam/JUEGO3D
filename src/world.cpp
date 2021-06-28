@@ -33,8 +33,7 @@ World::World(Shader* shader) {
 	this->player = (Player*) new Entity(0, 0, 0, Matrix44());
 	this->ground = NULL;
 	this->sky = NULL;
-	this->map = new uint8[300 * 300]; //Mapwidth * Mapheight
-	initMap();
+	for (int i = 0; i < CUADRANTS; i++) this->maps[i] = new uint8[100 * 100]; //Mapwidth * Mapheight
 }
 
 //ADDITION OF ENTITIES IN THEIR CORRESPONDING LIST
@@ -157,11 +156,53 @@ void World::initWeapon(Weapon* weapon) {
 
 }
 void World::initMap() {
-	int Mapwidth = 300;
-	int Mapheight = 300;
+	int Mapwidth = 100;
+	int Mapheight = 100;
 
-	for (int i = 0; i < Mapwidth * Mapheight; i++) {
-		map[i] = 1;
+	//for (int i = 0; i < CUADRANTS; i++) {
+	//	uint8* currentMap = maps[i];
+	//	for (int j = 0; j < Mapwidth * Mapheight; j++) {//Recorrer mapa
+	//		for (int k = 0; k < MAX_ENTITIES; k++) {	//Recorrer entidades
+	//			if (staticEntities[k] != NULL) {
+	//				Entity* current = staticEntities[k];
+	//				Vector3 coll;
+	//				Vector3 collNormal;
+	//				Vector3 pos;
+	//				if (i == 0) Vector3 pos = Vector3(j % Mapwidth, 0.1, j / Mapwidth);		//AllPositive
+	//				else if (i == 1) Vector3 pos = Vector3(j % Mapwidth, 0.1, -(j / Mapwidth));	//xPositive
+	//				else if (i == 2) Vector3 pos = Vector3(-(j % Mapwidth), 0.1, j / Mapwidth);	//zPositive
+	//				else if (i == 3) Vector3 pos = Vector3(-(j % Mapwidth), 0.1, -(j / Mapwidth));//AllNegative
+
+	//				if (current->mesh != NULL) {
+	//					if (current->pos.x <= pos.x && current->pos.x >= pos.x - 1 && current->pos.z <= pos.z && current->pos.z >= pos.z - 1) 
+	//						currentMap[j] = 0;
+	//					//if (current->mesh->testSphereCollision(current->m, pos, 0.5, coll, collNormal)) currentMap[j] = 0;
+	//					else currentMap[j] = 1;
+	//				}
+	//			}
+	//			else break;
+	//		}
+	//	}
+	//	maps[i] = currentMap;
+	//}
+	for (int j = 0; j < Mapwidth * Mapheight; j++) {
+		maps[0][j] = 1;
+		maps[1][j] = 1;
+		maps[2][j] = 1;
+		maps[3][j] = 1;
+	}
+	for (int i = 0; i < MAX_ENTITIES; i++) {
+		Entity* current = staticEntities[i];
+		if (current == NULL) break;
+		int index = (floor(abs(current->pos.z)) * Mapwidth) + floor(abs(current->pos.x));
+		if (current->pos.x >= 0 && current->pos.z >= 0) 
+			maps[0][index] = 0;
+		else if (current->pos.x >= 0 && current->pos.z <= 0) 
+			maps[1][index] = 0;
+		else if (current->pos.x <= 0 && current->pos.z >= 0) 
+			maps[2][index] = 0;
+		else if (current->pos.x <= 0 && current->pos.z <= 0) 
+			maps[3][index] = 0;
 	}
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -290,7 +331,7 @@ void World::moveZombies() {
 		Zombie* zombie = zombies[i];
 		if (zombie == NULL) continue;
 		Vector3 target;
-		target = zombie->AStarPath(player->pos, map);
+		target = zombie->AStarPath(player->pos, maps);
 		zombie->move(target);
 	}
 }
@@ -453,13 +494,15 @@ bool World::loadWorldInfo(std::string filename) {
 			m.m[i] = ::atof(strMatrix.c_str());
 		}
 		Vector3 pos = m.getTranslation();
-		Entity* newEntity = new Entity(pos, m);
 		indata >> meshName;
-		newEntity->loadMesh(meshName.c_str());
 		indata >> textureName;
-		newEntity->loadTexture(textureName.c_str());
-		
 		indata >> entityType;
+		if (pos.y == 10000000.0) {
+			continue;
+		}
+		Entity* newEntity = new Entity(pos, m);
+		newEntity->loadMesh(meshName.c_str());
+		newEntity->loadTexture(textureName.c_str());
 		if (entityType == "static") {
 			staticEntities[staticIndex] = newEntity;
 			staticIndex++;

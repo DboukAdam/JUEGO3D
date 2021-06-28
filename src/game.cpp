@@ -205,6 +205,7 @@ void Game::initWorld(std::string filename){
 		world->initCamera(camera);
 		world->addWeapon(AK47);
 		world->addZombie(zombie);
+		world->initMap();
 		currentWorld = world;
 	}
 	

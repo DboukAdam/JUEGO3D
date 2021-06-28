@@ -8,6 +8,7 @@
 #define MAX_ENTITIES 1000
 #define MAX_ZOMBIES 100
 #define MAX_WEAPONS 10
+#define CUADRANTS 4
 
 #pragma once
 class World {
@@ -29,7 +30,7 @@ public:
 	Shader* shader;
 	Entity* sky;
 	Entity* selectedEntity = NULL;
-	uint8* map;
+	uint8* maps[CUADRANTS];
 	Entity* ground;
 	bool isStaticObject = false;
 	Spawn* spawn1;

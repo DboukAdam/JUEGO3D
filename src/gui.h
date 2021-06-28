@@ -2,7 +2,7 @@
 #include "texture.h"
 #include "mesh.h"
 
-#define numImagesAtlas 8
+#define numImagesAtlas 9
 #define numIntroButtons 4
 #define numPauseButtons 3
 #define numSaves 5
@@ -15,7 +15,8 @@ enum atlasGuide {
 	fleshButtonPressed,
 	turnPageRight,
 	turnPageLeft,
-	brownButton
+	brownButton,
+	trunLeftRed
 };
 class Button {
 public:
@@ -43,6 +44,7 @@ public:
 	Button* worldSavesButtons[numSaves];
 	Button* turnPageRightButton;
 	Button* turnPageLeftButton;
+	Button* turnBackLeftRedButton;
 
 	int worldPage;
 	std::vector<std::string> entries;

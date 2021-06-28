@@ -27,7 +27,6 @@ public:
 	Player* player;
 	Weapon* weapons[MAX_WEAPONS];
 	Shader* shader;
-	Shader* shaderAnim;
 	Entity* sky;
 	Entity* selectedEntity = NULL;
 	uint8* map;
@@ -54,6 +53,7 @@ public:
 	void initSky(Mesh* mesh, Texture* texture);
 	void initGround(Texture* texture);
 	void initWeapon(Weapon* weapon); //NO HACE NADA
+	void initMap();
 	//Loads
 	void loadDecoration();
 	void loadStructure();

@@ -85,7 +85,6 @@ void PlayStage::render(World* world) {
 
 	//enable shader
 	Shader* shader = world->shader;
-	Shader* shaderAnim = world->shaderAnim;
 	shader->enable();
 	world->sky->render(shader);
 	//world->ground->render(shader);
@@ -122,11 +121,6 @@ void PlayStage::render(World* world) {
 	//disable shader
 	shader->disable();
 
-	//animation
-	shaderAnim->enable();
-	//world->RenderZombies(camera, game->time);
-	shaderAnim->disable();
-
 	//GUI STUFF
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
@@ -140,6 +134,7 @@ void PlayStage::render(World* world) {
 		game->gui->RenderPauseMenu();
 	}
 
+	world->moveZombies();
 	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 }
@@ -193,11 +188,11 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 				Vector3 collNormal;
 				if (current->mesh != NULL) {
 
-				if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.5, coll, collNormal)) continue;
+					if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.5, coll, collNormal)) continue;
 			
-				Vector3 push_away = normalize(coll - playerTargetCenter) * seconds_elapsed;
-				targetPos = player->pos - push_away;
-				targetPos.y = player->pos.y;
+					Vector3 push_away = normalize(coll - playerTargetCenter) * seconds_elapsed;
+					targetPos = player->pos - push_away;
+					targetPos.y = player->pos.y;
 				}
 			}
 
@@ -228,40 +223,6 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 	if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) {
 		game->setEditorStage();
 	}
-	
-
-	
-	//.................................................................................................................................................
-	//IA CAMBIAR
-	//if (Input::wasKeyPressed(SDL_SCANCODE_J)) {
-	//	Vector3 origion = camera->eye;
-	//	Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
-	//	Vector3 pos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), origion, dir);
-
-	//	//startx = clamp(pos.x / tileSizeX, 0, width);
-	//	//starty = clamp(pos.y / tileSizeY, 0, height);
-	//	startx = pos.x / tileSizeX;
-	//	starty = pos.y / tileSizeY;
-	//}
-	//if (Input::wasKeyPressed(SDL_SCANCODE_K)) {
-	//	Vector3 origion = camera->eye;
-	//	Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, game->window_width, game->window_height);
-	//	Vector3 pos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), origion, dir);
-
-	//	float targetx = clamp(pos.x / tileSizeX, 0, width);
-	//	float targetz = clamp(pos.z / tileSizeY, 0, height);
-
-	//	path_steps = AStarFindPathNoTieDiag(
-	//		startx, starty, //origin (tienen que ser enteros)
-	//		targetx, targetz, //target (tienen que ser enteros)
-	//		world->map, //pointer to map data
-	//		width, height, //map width and height
-	//		output, //pointer where the final path will be stored
-	//		100); //max supported steps of the final path
-
-	//	std::cerr << "Number of steps: " << path_steps << std::endl;
-	//}
-	//.................................................................................................................................................
 
 	//to navigate with the mouse fixed in the middle
 	if (game->mouse_locked)

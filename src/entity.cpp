@@ -1,42 +1,68 @@
 #include "entity.h"
 #include "pathfinders.h"
 
-int * Zombie::AStarPath(Vector3 target, uint8* map) {
+Vector3 Zombie::AStarPath(Vector3 target, uint8* map) {
 	int output[100];
 	int path_steps = -1;
-	float tileSizeX = 10.f; //MEGA SUCIO
-	float tileSizeY = 10.f;
-	int width = 10;
-	int height = 10; //SUPER SUCIO
+	float tileSizeX = 1.f; //MEGA SUCIO
+	float tileSizeZ = 1.f;
+	int Mapwidth = 300;
+	int Mapheight = 300; //SUPER SUCIO
 
-	int startx = pos.x / tileSizeX;
-	int starty = pos.y / tileSizeY;
+	int startx = clamp(abs(pos.x) / tileSizeX, 0, Mapwidth);
+	int startz = clamp(abs(pos.z) / tileSizeZ, 0, Mapheight);
 
-	float targetx = clamp(pos.x / tileSizeX, 0, width);
-	float targetz = clamp(pos.z / tileSizeY, 0, height);
+	float targetx = clamp(abs(target.x) / tileSizeX, 0, Mapwidth);
+	float targetz = clamp(abs(target.z) / tileSizeZ, 0, Mapheight);
+	//std::cerr << "Target: " << targetx << " " << targetz << std::endl;
+
+	if (startx == floor(targetx) && startz == floor(targetz)) return Vector3(startx, pos.y, startz);
 
 	path_steps = AStarFindPathNoTieDiag(
-		startx, starty, //origin (tienen que ser enteros)
+		startx, startz, //origin (tienen que ser enteros)
 		targetx, targetz, //target (tienen que ser enteros)
 		map, //pointer to map data
-		width, height, //map width and height
+		Mapwidth, Mapheight, //map width and height
 		output, //pointer where the final path will be stored
 		100); //max supported steps of the final path
 
 	std::cerr << "Number of steps: " << path_steps << std::endl;
 
-	return output;
+	int gridIndex = output[0];
+	int posxgrid = gridIndex % Mapwidth;
+	int posygrid = gridIndex / Mapwidth;
+
+	Vector3 nextPos = Vector3(posxgrid * tileSizeX, 0.0f, posygrid * tileSizeZ);
+	if (target.x < 0) nextPos.x *= -1;
+	if (target.z < 0) nextPos.z *= -1;
+
+	return nextPos;
 }
 
 void Zombie::move(Vector3 target) {
+	pos.x += (target.x - (trunc(pos.x * 10) / 10)) * 0.05;
+	pos.z += (target.z - (trunc(pos.z * 10) / 10)) * 0.05;
+	m.setTranslation(pos.x, pos.y, pos.z);
 
+	float catetoX = pos.x - target.x;
+	float catetoZ = pos.z - target.z;
+	float hipotenusa = sqrt(pow(catetoX, 2) + pow(catetoZ, 2));
+	float div = abs(catetoZ / hipotenusa);
+	yaw = asin(div);
+	if (catetoX < 0) {
+		if (catetoZ < 0) yaw += 180;
+		else yaw += 90;
+	}
+	else if (catetoZ < 0) yaw += 270;
+
+	m.rotate((yaw + 135)* DEG2RAD, Vector3(0, 1, 0));
 }
 
 void Zombie::setVel(float v){
 	this->vel = v;
 }
 
-void Zombie::renderAnimation(Shader* shader, float time, float tiling) {
+void Zombie::renderAnimation(float time, float tiling) {
 	Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
 	shaderAnim->enable();
 	Camera* camera = Camera::current;
@@ -47,10 +73,9 @@ void Zombie::renderAnimation(Shader* shader, float time, float tiling) {
 		shaderAnim->setUniform("u_viewprojection", camera->viewprojection_matrix);
 		shaderAnim->setUniform("u_texture", texture);
 		shaderAnim->setUniform("u_time", time);
-		shaderAnim->setUniform("u_model", Matrix44());
+		shaderAnim->setUniform("u_model", m);
 		shaderAnim->setUniform("u_texture_tiling", tiling);
 		mesh->renderAnimated(GL_TRIANGLES, &walk->skeleton);
-		//walk->skeleton.renderSkeleton(camera, Matrix44());
 	}
 	shaderAnim->disable();
 }
@@ -112,8 +137,6 @@ void Weapon::renderWeapon(Player* player, Shader* shader, float tiling) { //AAAA
 	this->pos = player->pos;
 	this->pitch = player->pitch;
 	this->yaw = player->yaw - 90;
-	//Vector3 dir = camera->getRayDirection(400, 300, 800, 600);
-	//Vector3 noSe = dir * Vector3(0.1, 0, 0);
 	m.setTranslation(camera->eye.x + 0.1, camera->eye.y - 0.3, camera->eye.z);
 	m.rotate(yaw * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
 	m.rotate(pitch * DEG2RAD, Vector3(0.0f, 0.0f, 1.0f));

@@ -72,10 +72,10 @@ public:
 	float vel;
 	int vida;
 
-	int * AStarPath(Vector3 target, uint8* map);
+	Vector3 AStarPath(Vector3 target, uint8* map);
 	void move(Vector3 target);
 	void setVel(float v);
-	void renderAnimation(Shader* shader, float time, float tiling = 1.0f);
+	void renderAnimation(float time, float tiling = 1.0f);
 };
 
 class ZombieSpawner : public Entity {

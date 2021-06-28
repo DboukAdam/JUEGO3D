@@ -103,7 +103,7 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 		if (currentStage == intro) {
 			gui->introButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
 		}
-		if (currentStage == selectWorld) {
+		else if (currentStage == selectWorld) {
 			gui->changePageButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
 			int worldPos = gui->worldButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
 			if (worldPos >= 0) {
@@ -112,11 +112,11 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 				setPlayStage();
 			}
 		}
-		if (currentStage == play) {
+		else if (currentStage == play) {
 			if (mouse_locked) currentWorld->disparar();
 			else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
 		}
-		if (currentStage == editor) {
+		else if (currentStage == editor) {
 			if (mouse_locked) {
 				Vector3 dir = camera->getRayDirection(this->window_width / 2, this->window_height / 2, this->window_width, this->window_height);
 				currentWorld->selectEntityEditor(dir);
@@ -160,7 +160,6 @@ void Game::onResize(int width, int height)
 
 void Game::initWorld(std::string filename){
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-	Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
 	Matrix44 m;
 	
 	//Player

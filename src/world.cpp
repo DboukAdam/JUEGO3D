@@ -30,12 +30,11 @@ World::World(Shader* shader) {
 		weapons[i] = NULL;
 	}
 	this->shader = shader;
-	Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
-	this->shaderAnim = shaderAnim;
 	this->player = (Player*) new Entity(0, 0, 0, Matrix44());
 	this->ground = NULL;
 	this->sky = NULL;
-	this->map = NULL;
+	this->map = new uint8[300 * 300]; //Mapwidth * Mapheight
+	initMap();
 }
 
 //ADDITION OF ENTITIES IN THEIR CORRESPONDING LIST
@@ -156,6 +155,14 @@ void World::initGround(Texture* texture) {
 
 void World::initWeapon(Weapon* weapon) {
 
+}
+void World::initMap() {
+	int Mapwidth = 300;
+	int Mapheight = 300;
+
+	for (int i = 0; i < Mapwidth * Mapheight; i++) {
+		map[i] = 1;
+	}
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 void World::loadDecoration() {
@@ -281,10 +288,10 @@ void World::deleteEntity(Entity* entity) {
 void World::moveZombies() {
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = zombies[i];
-		if (zombie != NULL) continue;
-		int *output;
-		output = zombie->AStarPath(player->pos, map);
-
+		if (zombie == NULL) continue;
+		Vector3 target;
+		target = zombie->AStarPath(player->pos, map);
+		zombie->move(target);
 	}
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::...
@@ -328,8 +335,7 @@ void World::RenderZombies(Camera* camera, float time) {
 		}
 		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
 		//if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
-		//zombie->render(shader);
-		zombie->renderAnimation(shaderAnim, time);
+		zombie->renderAnimation(time);
 	}
 }
 

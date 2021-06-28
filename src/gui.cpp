@@ -26,6 +26,7 @@ void Gui::initAtlas() {
 	atlasRanges[5] = Vector4((640 + 16) / aWidth, 0, 144 / aWidth, 112 / aHeight); //turnPageRight
 	atlasRanges[6] = Vector4((640 + 16) / aWidth, (112 + 16) / aHeight, 144 / aWidth, 112 / aHeight); //turnPageLeft
 	atlasRanges[7] = Vector4(0, (160 + 16 + 208 + 16 + 160 + 16 + 208 + 16) / aHeight, 640 / aWidth, 64 / aHeight); //brownButton
+	atlasRanges[8] = Vector4((640 + 16) / aWidth, (112 + 16 + 112 + 16) / aHeight, 144 / aWidth, 112 / aHeight); //turnLeftRed
 }
 
 void Gui::initIntroButtons() {
@@ -75,6 +76,9 @@ void Gui::initTurnPageButtons() {
 	float yPosLeft = game->window_height - buttonOffset - button_height / 2;;
 	turnPageRightButton = new Button(Vector2(xPosRight, yPosRight), atlasRanges[turnPageRight], button_width, button_height, false);
 	turnPageLeftButton = new Button(Vector2(xPosLeft, yPosLeft), atlasRanges[turnPageLeft], button_width, button_height, false);
+	float xPosBack = game->window_width / 2 - buttonOffset - button_width / 2;
+	float yPosBack = game->window_height - buttonOffset - button_width / 2;
+	turnBackLeftRedButton = new Button(Vector2(xPosBack, yPosBack), atlasRanges[trunLeftRed], button_width, button_height, false);
 }
 
 void Gui::initEntries() {
@@ -142,6 +146,10 @@ void Gui::RenderWorldsGui() {
 		shader->setUniform("u_texture", atlas, 0);
 		shader->setUniform("u_model", Matrix44());
 		shader->setUniform("u_texture_tiling", 1.0f);
+
+		shader->setUniform("u_tex_range", turnBackLeftRedButton->range);
+		turnBackLeftRedButton->mesh.render(GL_LINE_STRIP);
+		turnBackLeftRedButton->mesh.render(GL_TRIANGLES);
 
 		for (int i = 0; i < numSaves; i++) {
 			if ((worldPage) * numSaves + i < entries.size()) {
@@ -258,7 +266,7 @@ void Gui::introButtonPressed(Vector2 pos) {
 int Gui::worldButtonPressed(Vector2 pos) {
 	Game* game = Game::instance;
 	int i = 0;
-	for (i; i < numSaves; i++) {
+	for (i; i < entries.size(); i++) {
 		Button* button = worldSavesButtons[i];
 		int min_x = button->pos.x - (button->width / 2);
 		int min_y = button->pos.y - (button->height / 2);
@@ -284,6 +292,12 @@ void Gui::changePageButtonPressed(Vector2 pos) {
 		int maxLeft_y = turnPageLeftButton->pos.y + (turnPageLeftButton->height / 2);
 		if (pos.x > minLeft_x && pos.y > minLeft_y && pos.x < maxLeft_x && pos.y < maxLeft_y) worldPage--;
 	}
+	//Turn Back
+	int minLeft_x = turnBackLeftRedButton->pos.x - (turnBackLeftRedButton->width / 2);
+	int minLeft_y = turnBackLeftRedButton->pos.y - (turnBackLeftRedButton->height / 2);
+	int maxLeft_x = turnBackLeftRedButton->pos.x + (turnBackLeftRedButton->width / 2);
+	int maxLeft_y = turnBackLeftRedButton->pos.y + (turnBackLeftRedButton->height / 2);
+	if (pos.x > minLeft_x && pos.y > minLeft_y && pos.x < maxLeft_x && pos.y < maxLeft_y) Game::instance->setIntroStage();
 }
 
 void Gui::pauseButtonPressed(Vector2 pos) {

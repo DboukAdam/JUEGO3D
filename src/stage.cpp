@@ -218,11 +218,6 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 		game->mouse_locked = !game->mouse_locked;
 		SDL_ShowCursor(!game->mouse_locked);
 	}
-	
-	//dejar solo mientras desarrollamos
-	if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) {
-		game->setEditorStage();
-	}
 
 	//to navigate with the mouse fixed in the middle
 	if (game->mouse_locked)

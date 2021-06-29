@@ -6,6 +6,7 @@ std::map<std::string, Audio*> Audio::sLoadedAudios;
 Audio::Audio() {
 	
 	sample = 0;
+	channelSample = 0;
 }
 
 Audio::~Audio() {
@@ -16,17 +17,15 @@ HCHANNEL Audio::play(float volume) {
 		std::cout << "AUDIO ERROR: could not play, audio is NULL" << std::endl;
 		return NULL;
 	}
-	HCHANNEL channel;
-	channel = BASS_SetVolume(volume);
-	channel = BASS_ChannelPlay(sample, true);
-	return channel;
+	
+	channelSample = BASS_SampleGetChannel(sample, false);
+	channelSample = BASS_SetVolume(volume);
+	channelSample = BASS_ChannelPlay(sample, true);
+	return channelSample;
 	
 }
 
 bool Audio::load(const char* filename) {
-	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
-		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
-	}
 	sample = BASS_SampleLoad(false, filename, 0, 0, 3, 0);
 	if (sample == 0) {
 		std::cout << "AUDIO ERROR: file not found" << BASS_ErrorGetCode() << std::endl;
@@ -65,6 +64,6 @@ HCHANNEL* Audio::Play(const char* filename) {
 	if (audio == NULL) {
 		return NULL;
 	}
-	HCHANNEL channel = audio->play(0.1);
+	HCHANNEL channel = audio->play(0.5);
 	return &channel;
 }

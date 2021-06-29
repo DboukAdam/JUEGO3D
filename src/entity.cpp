@@ -32,7 +32,6 @@ Vector3 Zombie::AStarPath(Vector3 target, uint8** maps) {
 		output, //pointer where the final path will be stored
 		100); //max supported steps of the final path
 
-	std::cerr << "Number of steps: " << path_steps << std::endl;
 
 	int gridIndex = output[0];
 	int posxgrid = gridIndex % Mapwidth;
@@ -42,12 +41,13 @@ Vector3 Zombie::AStarPath(Vector3 target, uint8** maps) {
 	if (target.x < 0) nextPos.x *= -1;
 	if (target.z < 0) nextPos.z *= -1;
 
+	std::cerr << "Target: " << "x: " << nextPos.x << " z: " << nextPos.z << std::endl;
 	return nextPos;
 }
 
 void Zombie::move(Vector3 target) {
-	pos.x += (target.x - (trunc(pos.x * 10) / 10)) * 0.05;
-	pos.z += (target.z - (trunc(pos.z * 10) / 10)) * 0.05;
+	pos.x += (target.x - (trunc(pos.x * 10) / 10)) * vel;
+	pos.z += (target.z - (trunc(pos.z * 10) / 10)) * vel;
 	m.setTranslation(pos.x, pos.y, pos.z);
 
 	float catetoX = pos.x - target.x;
@@ -69,21 +69,23 @@ void Zombie::setVel(float v){
 }
 
 void Zombie::renderAnimation(float time, float tiling) {
-	Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
-	shaderAnim->enable();
-	Camera* camera = Camera::current;
-	Animation* walk = Animation::Get("data/Zombies/Animation/animations_walking.skanim");
-	walk->assignTime(time);
-	if (shaderAnim) {
-		shaderAnim->setUniform("u_color", Vector4(1, 1, 1, 1));
-		shaderAnim->setUniform("u_viewprojection", camera->viewprojection_matrix);
-		shaderAnim->setUniform("u_texture", texture);
-		shaderAnim->setUniform("u_time", time);
-		shaderAnim->setUniform("u_model", m);
-		shaderAnim->setUniform("u_texture_tiling", tiling);
-		mesh->renderAnimated(GL_TRIANGLES, &walk->skeleton);
+	if (vida > 0) {
+		Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
+		shaderAnim->enable();
+		Camera* camera = Camera::current;
+		Animation* walk = Animation::Get("data/Zombies/Animation/animations_walking.skanim");
+		walk->assignTime(time);
+		if (shaderAnim) {
+			shaderAnim->setUniform("u_color", Vector4(1, 1, 1, 1));
+			shaderAnim->setUniform("u_viewprojection", camera->viewprojection_matrix);
+			shaderAnim->setUniform("u_texture", texture);
+			shaderAnim->setUniform("u_time", time);
+			shaderAnim->setUniform("u_model", m);
+			shaderAnim->setUniform("u_texture_tiling", tiling);
+			mesh->renderAnimated(GL_TRIANGLES, &walk->skeleton);
+		}
+		shaderAnim->disable();
 	}
-	shaderAnim->disable();
 }
 
 void Player::setVel(float v) {
@@ -138,6 +140,14 @@ void Entity::copy(Entity* entity) {
 	this->m = entity->m;
 }
 
+void Weapon::init(float cad, int cargador, int d) {
+	isEmpty = false;
+	recargar = false;
+	cadencia = cad;
+	cargador = cargador;
+	damage = d;
+}
+
 void Weapon::renderWeapon(Player* player, Shader* shader, float tiling) { //AAAAAAH
 	Camera* camera = Camera::current;
 	this->pos = player->pos;
@@ -149,23 +159,11 @@ void Weapon::renderWeapon(Player* player, Shader* shader, float tiling) { //AAAA
 	render(shader, tiling);
 }
 
-void Spawn::spawnAZombie(Zombie* zombie, int round)
-{
-	zombie->setPos(this->pos);
-	float prob = random();
-	if (round < 5) {
-		
-		if (prob < 0.5) zombie->loadTexture("COLOR VERDE");
-		zombie->loadTexture("COLOR AMARILLO");									//AÑADIR LA VIDA DISTINTA Y DEMAS
+bool ZombieSpawner::spawnZombie(Zombie* zombie, float time) {
+	if (ultimoSpawn + cooldown < time) {
+		ultimoSpawn = time;
+		zombie->m.setTranslation(pos.x, pos.y, pos.z);
+		return true;
 	}
-	else if (round < 10) {
-		if(prob < 0.3) zombie->loadTexture("COLOR VERDE");
-		if(prob > 0.3 && prob < 0.7) zombie->loadTexture("COLOR AMARILLO");
-		zombie->loadTexture("COLOR ROJO");
-
-	}
-	else {
-		if(prob < 0.4) zombie->loadTexture("COLOR AMARILLO");
-		zombie->loadTexture("COLOR ROJO");
-	}
+	else return false;
 }

@@ -10,6 +10,7 @@
 #include "world.h"
 #include "stage.h"
 #include "gui.h"
+#include "manager.h"
 #define MAX_EDITOR_ENTITIES 69
 
 
@@ -49,7 +50,7 @@ public:
 	Entity* sky;
 	Gui* gui;
 	float mouse_speed = 10.0f;
-
+	Manager* gameManager;
 
 	Game( int window_width, int window_height, SDL_Window* window );
 

@@ -152,9 +152,16 @@ void World::initGround(Texture* texture) {
 
 }
 
-void World::initWeapon(Weapon* weapon) {
-
+void World::initWeapons() {
+	Matrix44 m;
+	m.setTranslation(0, 0, 0);
+	Weapon* AK47 = (Weapon*) new Entity(0, 0.5, 0, m);
+	AK47->loadMesh("data/Assets/Weapons/AK47.obj");
+	AK47->loadTexture("data/Assets/Weapons/AK47.png");
+	AK47->init(10, 30, 1);
+	addWeapon(AK47);
 }
+
 void World::initMap() {
 	int Mapwidth = 100;
 	int Mapheight = 100;
@@ -191,7 +198,7 @@ void World::initMap() {
 		maps[2][j] = 1;
 		maps[3][j] = 1;
 	}
-	for (int i = 0; i < MAX_ENTITIES; i++) {
+	/*for (int i = 0; i < MAX_ENTITIES; i++) {
 		Entity* current = staticEntities[i];
 		if (current == NULL) break;
 		int index = (floor(abs(current->pos.z)) * Mapwidth) + floor(abs(current->pos.x));
@@ -203,8 +210,23 @@ void World::initMap() {
 			maps[2][index] = 0;
 		else if (current->pos.x <= 0 && current->pos.z <= 0) 
 			maps[3][index] = 0;
+	}*/
+}
+
+void World::initZombies() {
+	Matrix44 m;
+	m.setTranslation(0, 1000, 0);
+	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
+	zombie->loadMesh("data/Zombies/Animation/character.mesh");
+	zombie->loadTexture("data/Zombies/image.png");
+	zombie->vida = 0;
+	zombie->setVel(0);
+	for (int i = 0; i < MAX_ZOMBIES; i++) {
+		zombies[i] = zombie;
 	}
 }
+
+
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 void World::loadDecoration() {
 	//Load filenames from save
@@ -334,6 +356,29 @@ void World::moveZombies() {
 		target = zombie->AStarPath(player->pos, maps);
 		zombie->move(target);
 	}
+}
+
+void World::spawnZombies(int num, int vida, float time) {
+	for (int i = 0; i < num; i++) {
+		Zombie* zombie = zombies[i];
+		for (int j = 0; j < MAX_SPAWNERS; j++) {
+			ZombieSpawner* zombieSpawner = spawners[j];
+			//Calcular distancia?
+			if (zombieSpawner != NULL && zombieSpawner->spawnZombie(zombie, time)) {
+				zombie->vida = vida;
+				break;
+			}
+		}
+	}
+}
+
+int World::zombiesAlive()
+{
+	int numZombies = 0;
+	for (int i = 0; i < MAX_ZOMBIES; i++) {
+		if (zombies[i]->vida > 0) numZombies++;
+	}
+	return numZombies;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::...
 
@@ -514,26 +559,4 @@ bool World::loadWorldInfo(std::string filename) {
 	}
 	cerr << "World loaded!" << endl;
 	return true;
-}
-
-void World::initSpawn() {
-	Matrix44 m;
-	spawn1 = (Spawn*) new Entity(0,0,0,m);
-	spawn2 = (Spawn*) new Entity(0, 0, 0, m); //definirlos en las posiciones que queramos y añadirles de alguna manera los zombies que tendran
-	spawn3 = (Spawn*) new Entity(0, 0, 0, m);
-	
-}
-
-
-void World::StartRound(float time){  //ni caso a los parametros pilla la idea namas, si te gusta
-	int r = this->round;
-	int numZombies = 3 * (r + 5); //divisible entre 3 para poder distribuirlos por igual por los spawns
-	for (int s = 0; s < numSpawns; s++) {
-		for (int i = 0; i < numZombies; i++) {
-
-			Zombie* zombie = (Zombie*) new Entity(0, 0, 0, Matrix44());//pos del spawn, m
-			spawn1->spawnAZombie(zombie, round);
-		}
-
-	}
 }

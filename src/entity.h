@@ -1,3 +1,6 @@
+#ifndef Entity_H
+#define Entity_H
+
 #include "utils.h"
 #include "mesh.h"
 #include "texture.h"
@@ -7,7 +10,6 @@
 #include <string>
 
 
-#pragma once
 class Entity {
 public:
 	
@@ -65,12 +67,13 @@ public:
 	void render(Shader* shader, float tiling = 1.0f);
 	void copy(Entity* entity);
 };
+#endif
 
 class Zombie : public Entity {
 public:
 	Vector3 dir;
 	float vel;
-	int vida;
+	int vida = 0;
 
 	Vector3 AStarPath(Vector3 target, uint8** maps);
 	void move(Vector3 target);
@@ -79,8 +82,10 @@ public:
 };
 
 class ZombieSpawner : public Entity {
-	float ultimoSpawn;
-	void spawnZombie(Zombie* zombie, int vida);
+public:
+	float ultimoSpawn = 0;
+	int cooldown = 5;
+	bool spawnZombie(Zombie* zombie, float time);
 };
 class Player : public Entity {
 public:
@@ -95,16 +100,10 @@ class Weapon : public Entity {
 public:
 	float cadencia;
 	bool isEmpty;
-	int tamañoCargador;
+	int cargador;
 	bool recargar;
-	float retroceso;
-	//bool apuntar;
+	int damage;
+	void init(float cad, int cargador, int d);
 	void renderWeapon(Player* player, Shader* shader, float tiling = 1.0f);
-
-};
-
-class Spawn : public Entity {
-public:
-	void spawnAZombie(Zombie* zombie, int round);
 
 };

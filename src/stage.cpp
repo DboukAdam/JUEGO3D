@@ -88,32 +88,6 @@ void PlayStage::render(World* world) {
 	shader->enable();
 	world->sky->render(shader);
 	world->ground->render(shader);
-
-	//.........................................................................................
-	//IA CAMBIAR
-	//if (path_steps > 0) {
-	//	Mesh mesh;
-	//	for (size_t i = 0; i < path_steps; i++) {
-	//		int gridIndex = output[i];
-	//		int posxgrid = gridIndex % width;
-	//		int posygrid = gridIndex / width;
-
-	//		Vector3 pos = Vector3(posxgrid*tileSizeX, 1.0f, posygrid*tileSizeY);
-	//		mesh.vertices.push_back(pos);
-	//	}
-	//	if (shader)
-	//	{
-	//		//upload uniforms
-	//		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
-	//		shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-	//		shader->setUniform("u_time", time);
-	//		//shader->setUniform("u_texture", texture, 0);
-	//		shader->setUniform("u_model", Matrix44());
-	//		//shader->setUniform("u_texture_tiling", tiling);
-	//		mesh.render(GL_LINE_STRIP);
-	//	}
-	//}
-	//.........................................................................................
 	world->RenderPlayer(camera);
 	world->RenderStatic(camera);
 	world->RenderDynamic(camera);
@@ -134,7 +108,7 @@ void PlayStage::render(World* world) {
 		game->gui->RenderPauseMenu();
 	}
 
-	world->moveZombies();
+	//world->moveZombies();
 	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 }

@@ -32,6 +32,9 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
 	glEnable( GL_DEPTH_TEST ); //check the occlusions using the Z buffer
 	
+	//GameManager
+	gameManager = new Manager();
+
 	//Worlds
 	initWorld();
 	currentWorld = editorWorld;
@@ -46,13 +49,11 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 
 	//Audio
-	//Audio* audio = Audio::Get("data/Audio/musicbox-silent-night.wav");
-	if (BASS_Init(1, 44100, 0, 0, NULL) == false) {
+	/*if (BASS_Init(1, 44100, 0, 0, NULL) == false) {
 		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
-	}
-
-	Audio* audio = new Audio();
-	audio->channelSample = *audio->Play("data/Audio/musicbox-silent-night.mp3");
+	}*/
+	//Audio* audio = new Audio();
+	//audio->Play("data/Audio/musicbox-silent-night.wav");
 }
 
 //what to do when the image has to be draw
@@ -68,6 +69,7 @@ void Game::render(void)
 void Game::update(double seconds_elapsed)
 {
 	currentStage->update(seconds_elapsed, currentWorld);
+	if (currentStage == play) gameManager->update();
 }
 
 //Keyboard event handler (sync input)
@@ -171,6 +173,7 @@ void Game::initWorld(std::string filename){
 	Weapon* AK47 = (Weapon*) new Entity(0, 0.5, 0, m);
 	AK47->loadMesh("data/Assets/Weapons/AK47.obj");
 	AK47->loadTexture("data/Assets/Weapons/AK47.png");
+	AK47->init(10, 30, 1);
 	//Sky
 	Mesh* meshCielo = Mesh::Get("data/Assets/Ambiente/cielo.ASE");
 	Texture* textCielo = Texture::Get("data/Assets/Ambiente/cielo.tga");
@@ -192,7 +195,8 @@ void Game::initWorld(std::string filename){
 		editorWorld->initGround(groundText);
 		editorWorld->initCamera(camera);
 		editorWorld->addWeapon(AK47);
-		editorWorld->addZombie(zombie);
+		//editorWorld->initWeapons();
+		//editorWorld->addZombie(zombie);
 	}
 	else {
 		World* world = new World(shader);
@@ -204,8 +208,10 @@ void Game::initWorld(std::string filename){
 		world->initGround(groundText);
 		world->initCamera(camera);
 		world->addWeapon(AK47);
+		//world->initWeapons();
 		world->addZombie(zombie);
 		world->initMap();
+		world->initZombies();
 		currentWorld = world;
 	}
 	
@@ -228,6 +234,7 @@ void Game::setSelectWorldStage() {
 void Game::setPlayStage(){
 	currentStage = play;
 	mouse_locked = true;
+	gameManager->round = 0;
 	SDL_ShowCursor(!mouse_locked);
 }
 

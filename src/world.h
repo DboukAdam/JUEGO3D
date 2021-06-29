@@ -1,16 +1,18 @@
+#ifndef world_h
+#define world_h
+
 #include "utils.h"
 #include "shader.h"
 #include "entity.h"
 #include "camera.h"
 #include "input.h"
 
-
 #define MAX_ENTITIES 1000
 #define MAX_ZOMBIES 100
 #define MAX_WEAPONS 10
 #define CUADRANTS 4
+#define MAX_SPAWNERS 10
 
-#pragma once
 class World {
 public:
 
@@ -25,6 +27,7 @@ public:
 	int maxDecoration = 0;
 	int numDecoration = 0;
 	Zombie* zombies[MAX_ZOMBIES];
+	ZombieSpawner* spawners[MAX_SPAWNERS];
 	Player* player;
 	Weapon* weapons[MAX_WEAPONS];
 	Shader* shader;
@@ -33,9 +36,6 @@ public:
 	uint8* maps[CUADRANTS];
 	Entity* ground;
 	bool isStaticObject = false;
-	Spawn* spawn1;
-	Spawn* spawn2;
-	Spawn* spawn3;
 	int round;
 	int numSpawns = 3;
 
@@ -53,8 +53,9 @@ public:
 	void initPlayer(Vector3 pos, Mesh* mesh, Texture* text);
 	void initSky(Mesh* mesh, Texture* texture);
 	void initGround(Texture* texture);
-	void initWeapon(Weapon* weapon); //NO HACE NADA
 	void initMap();
+	void initWeapons(); //Utilizarla explota el juego
+	void initZombies();
 	//Loads
 	void loadDecoration();
 	void loadStructure();
@@ -62,6 +63,8 @@ public:
 	void disparar();
 	void selectEntityEditor(Vector3 dir);
 	void deleteEntity(Entity* entity);
+	int zombiesAlive();
+	void spawnZombies(int num, int vida, float time);
 	void moveZombies();
 	//Renders
 	void RenderStatic(Camera* camera);
@@ -74,6 +77,7 @@ public:
 	//WorldInfos
 	void saveWorldInfo(std::string filename);
 	bool loadWorldInfo(std::string filename);
-	void initSpawn();
-	void StartRound(float time);
+
 };
+
+#endif

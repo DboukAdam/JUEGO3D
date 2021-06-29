@@ -39,6 +39,7 @@ public:
 	Shader* shader;
 	Texture* atlas;
 	Vector4 atlasRanges[numImagesAtlas];
+	Button* background;
 	Button* introButtons[numIntroButtons];
 	Button* pauseButtons[numPauseButtons];
 	Button* worldSavesButtons[numSaves];

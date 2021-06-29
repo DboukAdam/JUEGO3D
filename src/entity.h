@@ -12,7 +12,6 @@
 
 class Entity {
 public:
-	
 	Vector3 pos; //Mirar si es util por culpa del setTranslation ese que dice el feo del Adam
 	Matrix44 m;
 	Mesh* mesh;
@@ -22,14 +21,6 @@ public:
 	bool bounding = false;
 	std::string type;
 	
-	Entity(Vector3 pos, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) {
-		this->pos = pos;
-		this->m = m;
-		this->mesh = mesh;
-		this->texture = texture;
-		this->yaw = yaw;
-		this->pitch = pitch;
-	};
 	Entity(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) {
 		this->pos.x = x;
 		this->pos.y = y;
@@ -71,10 +62,10 @@ public:
 
 class Zombie : public Entity {
 public:
-	Vector3 dir;
-	float vel;
+	float vel = 0;
 	int vida = 0;
 
+	Zombie(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {};
 	Vector3 AStarPath(Vector3 target, uint8** maps);
 	void move(Vector3 target);
 	void setVel(float v);
@@ -85,13 +76,15 @@ class ZombieSpawner : public Entity {
 public:
 	float ultimoSpawn = 0;
 	int cooldown = 5;
-	bool spawnZombie(Zombie* zombie, float time);
+
+	ZombieSpawner(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {};
+	void spawnZombie(Zombie* zombie, float time);
 };
 class Player : public Entity {
 public:
-	Vector3 dir;
 	float vel;
 	int vida;
+	Player(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {};
 	void setVel(float v);
 	void CamPlayer(Camera* camera);
 };
@@ -103,6 +96,7 @@ public:
 	int cargador;
 	bool recargar;
 	int damage;
+	Weapon(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {};
 	void init(float cad, int cargador, int d);
 	void renderWeapon(Player* player, Shader* shader, float tiling = 1.0f);
 

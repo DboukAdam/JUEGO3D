@@ -50,9 +50,9 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//Audio
 	Audio* audio = new Audio();
-	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
+	/*if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
 		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
-	}
+	}*/
 	audio->Play("data/Audio/menu.mp3");
 }
 
@@ -69,7 +69,6 @@ void Game::render(void)
 void Game::update(double seconds_elapsed)
 {
 	currentStage->update(seconds_elapsed, currentWorld);
-	if (currentStage == play) gameManager->update();
 }
 
 //Keyboard event handler (sync input)
@@ -170,21 +169,17 @@ void Game::initWorld(std::string filename){
 	Mesh* playerMesh = Mesh::Get("data/Assets/Players/man.obj");
 	Texture* playerText = Texture::Get("data/Assets/Players/man.png");
 	//Weapon
-	Weapon* AK47 = (Weapon*) new Entity(0, 0.5, 0, m);
+	Weapon* AK47 = new Weapon(0, 0.5, 0, m);
 	AK47->loadMesh("data/Assets/Weapons/AK47.obj");
 	AK47->loadTexture("data/Assets/Weapons/AK47.png");
-	AK47->init(10, 30, 1);
+	//AK47->init(10.0f, 30, 1);
 	//Sky
 	Mesh* meshCielo = Mesh::Get("data/Assets/Ambiente/cielo.ASE");
 	Texture* textCielo = Texture::Get("data/Assets/Ambiente/cielo.tga");
 	//Ground
-	Texture* groundText = Texture::Get("data/Assets/Structure/aigua.png");
+	Texture* groundText = Texture::Get("data/Assets/Structure/aigua.png"); 
 	//Camera
 	camera = new Camera();
-	//QUITAR
-	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
-	zombie->loadMesh("data/Zombies/Animation/character.mesh");
-	zombie->loadTexture("data/Zombies/image.png");
 	
 	if (filename == "") {
 		editorWorld = new World(shader);
@@ -195,6 +190,7 @@ void Game::initWorld(std::string filename){
 		editorWorld->initGround(groundText);
 		editorWorld->initCamera(camera);
 		editorWorld->addWeapon(AK47);
+		editorWorld->initZombies();
 		//editorWorld->initWeapons();
 		//editorWorld->addZombie(zombie);
 	}
@@ -209,9 +205,18 @@ void Game::initWorld(std::string filename){
 		world->initCamera(camera);
 		world->addWeapon(AK47);
 		//world->initWeapons();
-		world->addZombie(zombie);
+		//world->addZombie(zombie);
 		world->initMap();
 		world->initZombies();
+
+		//QUITAR
+		for (int i = 0; i < 4; i++) {
+			m.setTranslation(10 * i, 0, 10 * i);
+			world->spawners[i] = (ZombieSpawner*) new Entity(10 * i, 0, 10 * i, m);
+			world->spawners[i]->loadMesh("data/Assets/Structure/spawn.obj");
+			world->spawners[i]->loadTexture("data/Assets/Structure/spawn.png");
+		}
+
 		currentWorld = world;
 	}
 	

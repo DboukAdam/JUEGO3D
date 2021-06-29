@@ -92,6 +92,8 @@ void PlayStage::render(World* world) {
 	world->RenderStatic(camera);
 	world->RenderDynamic(camera);
 	world->RenderZombies(camera, game->time);
+
+	world->RenderBoundingZombies(camera);
 	//disable shader
 	shader->disable();
 
@@ -107,8 +109,7 @@ void PlayStage::render(World* world) {
 	else {
 		game->gui->RenderPauseMenu();
 	}
-
-	//world->moveZombies();
+	game->gameManager->update();
 	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 }

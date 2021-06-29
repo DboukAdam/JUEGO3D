@@ -29,6 +29,9 @@ World::World(Shader* shader) {
 	for (int i = 0; i < MAX_WEAPONS; i++) {
 		weapons[i] = NULL;
 	}
+	for (int i = 0; i < MAX_SPAWNERS; i++) {
+		spawners[i] = NULL;
+	}
 	this->shader = shader;
 	this->player = (Player*) new Entity(0, 0, 0, Matrix44());
 	this->ground = NULL;
@@ -126,7 +129,7 @@ void World::initCamera(Camera* camera) {
 void World::initPlayer(Vector3 pos, Mesh* mesh, Texture* texture) {
 	Matrix44 m;
 	m.setTranslation(pos.x, pos.y, pos.z);
-	Player* player = (Player*) new Entity(pos, m);
+	Player* player = new Player(pos.x, pos.y, pos.z, m);
 	player->mesh = mesh;
 	player->texture = texture;
 	player->setVel(2.0f);
@@ -137,7 +140,7 @@ void World::initSky(Mesh* mesh, Texture* texture) {
 	Matrix44 m;
 	Vector3 playerPos = player->getPos();
 	m.setTranslation(playerPos.x, playerPos.y, playerPos.z);
-	sky = new Entity(playerPos, m);
+	sky = new Entity(playerPos.x, playerPos.y, playerPos.z, m);
 	sky->mesh = mesh;
 	sky->texture = texture;
 }
@@ -216,13 +219,17 @@ void World::initMap() {
 void World::initZombies() {
 	Matrix44 m;
 	m.setTranslation(0, 1000, 0);
-	Zombie* zombie = (Zombie*) new Entity(0, 0, 0, m);
-	zombie->loadMesh("data/Zombies/Animation/character.mesh");
-	zombie->loadTexture("data/Zombies/image.png");
-	zombie->vida = 0;
-	zombie->setVel(0);
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
+		Zombie* zombie = new Zombie(0, 0, 0, m);
+		zombie->loadMesh("data/Zombies/Animation/character.mesh");
+		zombie->loadTexture("data/Zombies/image.png");
+		zombie->vida = 0;
+		zombie->vel = 0.0f;
 		zombies[i] = zombie;
+	}
+	for (int i = 0; i < MAX_ZOMBIES; i++) {
+		zombies[i]->vida = 0;
+		zombies[i]->vel = 0;
 	}
 }
 
@@ -351,7 +358,7 @@ void World::deleteEntity(Entity* entity) {
 void World::moveZombies() {
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = zombies[i];
-		if (zombie == NULL) continue;
+		if (zombie == NULL || zombie->vida <= 0) continue;
 		Vector3 target;
 		target = zombie->AStarPath(player->pos, maps);
 		zombie->move(target);
@@ -364,10 +371,14 @@ void World::spawnZombies(int num, int vida, float time) {
 		for (int j = 0; j < MAX_SPAWNERS; j++) {
 			ZombieSpawner* zombieSpawner = spawners[j];
 			//Calcular distancia?
-			if (zombieSpawner != NULL && zombieSpawner->spawnZombie(zombie, time)) {
+			if (zombieSpawner != NULL && zombieSpawner->ultimoSpawn + zombieSpawner->cooldown < time) {
+				zombieSpawner->spawnZombie(zombie, time);
+				/*zombieSpawner->ultimoSpawn = time;
+				zombie->m.setTranslation(zombieSpawner->pos.x, zombieSpawner->pos.y, zombieSpawner->pos.z);*/
 				zombie->vida = vida;
 				break;
 			}
+			
 		}
 	}
 }
@@ -420,7 +431,7 @@ void World::RenderZombies(Camera* camera, float time) {
 			break;
 		}
 		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
-		//if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
+		if (!camera->testSphereInFrustum(currentBox.center, zombie->mesh->radius)) continue;
 		zombie->renderAnimation(time);
 	}
 }
@@ -545,7 +556,7 @@ bool World::loadWorldInfo(std::string filename) {
 		if (pos.y == 10000000.0) {
 			continue;
 		}
-		Entity* newEntity = new Entity(pos, m);
+		Entity* newEntity = new Entity(pos.x, pos.y, pos.z, m);
 		newEntity->loadMesh(meshName.c_str());
 		newEntity->loadTexture(textureName.c_str());
 		if (entityType == "static") {

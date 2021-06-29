@@ -8,6 +8,9 @@ Gui::Gui(Shader* shader, Texture* atlas) {
 	this->shader = shader;
 	this->atlas = atlas;
 	this->worldPage = 0;
+	//init background
+	background = new Button(Vector2(400, 300), Vector4(0, 0, 1, 1), 800, 600, false);
+
 	initAtlas();
 	initIntroButtons();
 	initPauseButtons();
@@ -106,10 +109,15 @@ void Gui::RenderIntroGui()
 		//upload uniforms
 		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
 		shader->setUniform("u_viewprojection", cam2D.viewprojection_matrix);
-		shader->setUniform("u_texture", atlas, 0);
+		shader->setUniform("u_texture", Texture::Get("data/Gui/menu.png"), 0);
 		shader->setUniform("u_model", Matrix44());
 		shader->setUniform("u_texture_tiling", 1.0f);
 
+		shader->setUniform("u_tex_range", background->range);
+		background->mesh.render(GL_LINE_STRIP);
+		background->mesh.render(GL_TRIANGLES);
+
+		shader->setUniform("u_texture", atlas, 0);
 		for (int i = 0; i < numIntroButtons; i++) {
 			Button* button = introButtons[i];
 			shader->setUniform("u_tex_range", button->range);

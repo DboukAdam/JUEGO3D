@@ -41,7 +41,6 @@ Vector3 Zombie::AStarPath(Vector3 target, uint8** maps) {
 	if (target.x < 0) nextPos.x *= -1;
 	if (target.z < 0) nextPos.z *= -1;
 
-	std::cerr << "Target: " << "x: " << nextPos.x << " z: " << nextPos.z << std::endl;
 	return nextPos;
 }
 
@@ -159,11 +158,7 @@ void Weapon::renderWeapon(Player* player, Shader* shader, float tiling) { //AAAA
 	render(shader, tiling);
 }
 
-bool ZombieSpawner::spawnZombie(Zombie* zombie, float time) {
-	if (ultimoSpawn + cooldown < time) {
-		ultimoSpawn = time;
-		zombie->m.setTranslation(pos.x, pos.y, pos.z);
-		return true;
-	}
-	else return false;
+void ZombieSpawner::spawnZombie(Zombie* zombie, float time) {
+	ultimoSpawn = time;
+	zombie->m.setTranslation(pos.x, pos.y, pos.z);
 }

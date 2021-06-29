@@ -47,12 +47,15 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//Audio
 	//Audio* audio = Audio::Get("data/Audio/musicbox-silent-night.wav");
-	if (BASS_Init(1, 44100, 0, 0, NULL) == false) {
-		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
-	}
+	
 
 	Audio* audio = new Audio();
-	audio->channelSample = *audio->Play("data/Audio/musicbox-silent-night.mp3");
+	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
+		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
+	}
+	audio->Play("data/Audio/menu.mp3");
+	
+
 }
 
 //what to do when the image has to be draw

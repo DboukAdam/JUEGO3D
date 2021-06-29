@@ -6,34 +6,11 @@ std::map<std::string, Audio*> Audio::sLoadedAudios;
 Audio::Audio() {
 	
 	sample = 0;
-	channelSample = 0;
 }
 
 Audio::~Audio() {
 }
 
-HCHANNEL Audio::play(float volume) {
-	if (this == nullptr) {
-		std::cout << "AUDIO ERROR: could not play, audio is NULL" << std::endl;
-		return NULL;
-	}
-	
-	channelSample = BASS_SampleGetChannel(sample, false);
-	channelSample = BASS_SetVolume(volume);
-	channelSample = BASS_ChannelPlay(sample, true);
-	return channelSample;
-	
-}
-
-bool Audio::load(const char* filename) {
-	sample = BASS_SampleLoad(false, filename, 0, 0, 3, 0);
-	if (sample == 0) {
-		std::cout << "AUDIO ERROR: file not found" << BASS_ErrorGetCode() << std::endl;
-		return false;
-	}
-	sLoadedAudios[filename] = this;
-	return true;
-}
 
 void Audio::Stop(HCHANNEL channel) {
 	BASS_ChannelStop(channel);
@@ -49,7 +26,9 @@ Audio* Audio::Get(const char* filename) {
 
 	//load it
 	Audio* audio = new Audio();
-	if (!audio->load(filename))
+	audio->sample = BASS_SampleLoad(false, filename, 0, 0, 3, 0);
+	sLoadedAudios[filename] = audio;
+	if (audio->sample == 0)
 	{
 		delete audio;
 		return NULL;
@@ -64,6 +43,9 @@ HCHANNEL* Audio::Play(const char* filename) {
 	if (audio == NULL) {
 		return NULL;
 	}
-	HCHANNEL channel = audio->play(0.5);
-	return &channel;
+	HCHANNEL channelSample;
+	channelSample = BASS_SampleGetChannel(audio->sample, false);
+	
+	BASS_ChannelPlay(channelSample, true);
+	return &channelSample;
 }

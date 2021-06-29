@@ -56,6 +56,18 @@ void World::addDynamicEntity(Entity* entity) {
 		}
 	}
 }
+
+void World::addSpawnSpawner(ZombieSpawner* spawner)
+{
+	for (int i = 0; i < MAX_SPAWNERS; i++) {
+		if (spawners[i] == NULL) {
+			spawners[i] = spawner;
+			break;
+		}
+	}
+}
+
+
 void World::addZombie(Zombie* zombie) {
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		if (zombies[i] == NULL) {
@@ -97,6 +109,16 @@ void World::addDecoration(Entity* entity)
 	}
 }
 
+void World::addSpawns(ZombieSpawner* spawn)
+{
+	for (int i = 0; i < MAX_ENTITIES; i++) {
+		if (spawnsEditor[i] == NULL) {
+			spawnsEditor[i] = spawn;
+			break;
+		}
+	}
+}
+
 void World::addObjectEditor(Entity* entity, Vector3 dir) {
 	Camera* camera = Camera::current;
 	Vector3 origin = camera->eye;
@@ -105,11 +127,18 @@ void World::addObjectEditor(Entity* entity, Vector3 dir) {
 	copia->copy(entity);
 	copia->m.setTranslation(pos.x, pos.y, pos.z);
 	copia->m.rotate(entity->yaw * DEG2RAD, Vector3(0,1,0));
-	if (isStaticObject) {
+	if (typeObject == 0) {
 		addStaticEntity(copia);
 	}
-	else {
+	else if (typeObject == 1) {
 		addDynamicEntity(copia);
+	}
+	else {
+		ZombieSpawner* copia = new ZombieSpawner(0, 0, 0, Matrix44());
+		copia->copy(entity);
+		copia->m.setTranslation(pos.x, pos.y, pos.z);
+		copia->m.rotate(entity->yaw * DEG2RAD, Vector3(0, 1, 0));
+		addSpawnSpawner(copia);
 	}
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -293,12 +322,43 @@ void World::loadStructure() {
 		const char* textureObject = stru[i + 1].c_str();
 		entity->loadTexture(textureObject);
 
-		std::string tipo = stru[i].substr(26, stru[i].size() - 30);
+		std::string tipo = stru[i].substr(22, stru[i].size() - 26);
 		entity->type = tipo;
 		//std::cerr << tipo << std::endl;;
 		addStructure(entity);
 	}
 	maxStructure = (stru.size() / 2) - 1;
+}
+
+void World::loadSpawns()
+{
+	std::string path = "data/Assets/Spawn/";
+	std::string mbin = ".mbin";
+	std::vector<std::string> spawns;
+	int numElements = 0;
+	for (const auto& object : std::filesystem::directory_iterator(path)) {
+		std::string name = object.path().u8string();
+		std::string ext = name.substr((name.size() - 5), 5);
+		if (ext == mbin) continue;
+		spawns.push_back(name);
+		numElements++;
+		
+	}
+	Matrix44 m;
+	for (int i = 0; i < numElements - 1; i += 2) {
+		ZombieSpawner* spawn = new ZombieSpawner(0,0,0, m);
+		const char* meshObject = spawns[i].c_str();
+		spawn->loadMesh(meshObject);
+
+		const char* textureObject = spawns[i + 1].c_str();
+		spawn->loadTexture(textureObject);
+
+		std::string tipo = spawns[i].substr(22, spawns[i].size() - 26);
+		spawn->type = tipo;
+		//std::cerr << tipo << std::endl;;
+		addSpawns(spawn);
+	}
+	maxSpawns = (spawns.size() / 2) - 1;
 }
 
 
@@ -329,7 +389,7 @@ void World::selectEntityEditor(Vector3 dir){
 		Vector3 col;
 		Vector3 normal;
 
-		if (isStaticObject) {
+		if (typeObject == 0) {
 			Entity* current = staticEntities[i];
 			if (current == NULL) break;
 			if (!current->mesh->testRayCollision(current->m, origin, dir, col, normal, 10000)) continue;
@@ -338,7 +398,7 @@ void World::selectEntityEditor(Vector3 dir){
 			selectedEntity = current;
 			break;
 		}
-		else {
+		else if(typeObject == 1){
 			Entity* current = dynamicEntities[i];
 			if (current == NULL) break;
 			if (!current->mesh->testRayCollision(current->m, origin, dir, col, normal, 10000)) continue;
@@ -515,15 +575,22 @@ void World::saveWorldInfo(std::string filename) {
 			break;
 		}
 	}
-	/*for (size_t i = 0; i < MAX_ZOMBIES; i++)
+	for (size_t i = 0; i < MAX_SPAWNERS; i++)
 	{
-		if (zombies[i] != NULL) {
-			outdata << zombies[i] << endl;
+		if (spawners[i] != NULL) {
+			Matrix44 mat = spawners[i]->m;
+			for (int j = 0; j < 16; j++) {
+				outdata << mat.m[j] << " ";
+			}
+			outdata << endl;
+			outdata << spawners[i]->mesh->name << endl;
+			outdata << spawners[i]->texture->filename << endl;
+			outdata << "spawner" << endl;
 		}
 		else {
 			break;
 		}
-	}*/
+	}
 	cerr << "World saved!" << endl;
 	outdata.close();
 }
@@ -543,6 +610,7 @@ bool World::loadWorldInfo(std::string filename) {
 	
 	int staticIndex = 0;
 	int dynamicIndex = 0;
+	int spawnerIndex = 0;
 	while (indata.good()) {
 		Matrix44 m = Matrix44();
 		for (int i = 0; i < 16; i++) {
@@ -566,6 +634,13 @@ bool World::loadWorldInfo(std::string filename) {
 		else if (entityType == "dynamic") {
 			dynamicEntities[dynamicIndex] = newEntity;
 			dynamicIndex++;
+		}
+		else if (entityType == "spawner") {
+			ZombieSpawner* spawn = new ZombieSpawner(pos,m);//rellenarlo con lo que necesite
+			spawn->loadMesh(meshName.c_str());
+			spawn->loadTexture(textureName.c_str());
+			spawners[spawnerIndex] = spawn;
+			spawnerIndex++;
 		}
 	}
 	cerr << "World loaded!" << endl;

@@ -230,26 +230,37 @@ void EditorStage::render(World* world)
 		Vector3 origin = camera->eye;//unproject center coord of the screen
 		Vector3 dir = camera->getRayDirection(400, 300, 800, 600);
 		Vector3 pos = RayPlaneCollision(Vector3(0, 0, 0), Vector3(0, 1, 0), origin, dir);
-		if (world->isStaticObject) {
+		if (world->typeObject == 0) {
 			Entity* entidad = world->structures[world->numEntity];
 			entidad->m.setTranslation(pos.x, pos.y, pos.z);
 			entidad->m.rotate(entidad->yaw * DEG2RAD, Vector3(0,1,0));
 			entidad->render(shader);
 		}
-		else {
+		else if (world->typeObject == 1) {
 			Entity* entidad = world->decoration[world->numEntity];
 			entidad->m.setTranslation(pos.x, pos.y, pos.z);
 			entidad->m.rotate(entidad->yaw * DEG2RAD, Vector3(0, 1, 0));
 			entidad->render(shader);
 		}
+		else {
+			ZombieSpawner* spawn = world->spawnsEditor[world->numEntity];
+			spawn->m.setTranslation(pos.x, pos.y, pos.z);
+			spawn->m.rotate(spawn->yaw * DEG2RAD, Vector3(0, 1, 0));
+			spawn->render(shader);
+		}
 	}
 
-	if (world->isStaticObject) {
+	if (world->typeObject == 0) {
 		world->numEntity = world->numStructure;
 	}
-	else {
+	else if (world->typeObject == 1) {
 		world->numEntity = world->numDecoration;
 	}
+	else {
+		world->numEntity = world->numSpawns;
+	}
+
+	
 
 	//pintando bounding muy feo
 	world->RenderBoundingStatic(camera);
@@ -276,10 +287,10 @@ void EditorStage::render(World* world)
 	//draw text para ver la mesh que voy a pintar
 	string asset;
 	
-	if (world->isStaticObject) {
+	if (world->typeObject == 0) {
 		drawText(20, 20, world->structures[world->numEntity]->type, Vector3(1, 1, 1), 2);
 	}
-	else {
+	else if (world->typeObject == 1) {
 		drawText(20, 20, world->decoration[world->numEntity]->type, Vector3(1, 1, 1), 2);
 	}
 }
@@ -310,29 +321,38 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		if (Input::isKeyPressed(SDL_SCANCODE_D)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_C)) {
-			world->isStaticObject = !world->isStaticObject;
-			if (world->isStaticObject) {
+			world->typeObject++;
+			if (world->typeObject == 0) {
 				std::cout << "Cambio de objectos a Structure" << std::endl;
 			}
-			else {
+			else if(world->typeObject == 1){
 				std::cout << "Cambio de objectos a Decoration" << std::endl;
+			}
+			else if(world->typeObject == 2){
+				std::cout << "Cambio de objectos a Spawners" << std::endl;
+			}
+			else {
+				world->typeObject = 0;
 			}
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
 			
 			Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, 800, 600);
-			if (world->isStaticObject) {
+			if (world->typeObject == 0) {
 				world->addObjectEditor(world->structures[world->numEntity], dir);
 			}
-			else {
+			else if(world->typeObject == 1){
 				world->addObjectEditor(world->decoration[world->numEntity], dir);
+			}
+			else {
+				world->addObjectEditor(world->spawnsEditor[world->numSpawns], dir);
 			}
 			
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_X)) {
-			if (world->isStaticObject) {
+			if (world->typeObject == 0) {
 				int tmp = world->numStructure + 1;
 				if (tmp > world->maxStructure) {
 					world->numStructure = 0;
@@ -341,7 +361,7 @@ void EditorStage::update(double seconds_elapsed, World* world)
 					world->numStructure += 1;
 				}
 			}
-			else {
+			else if (world->typeObject == 1) {
 				int tmp = world->numDecoration + 1;
 				if (tmp > world->maxDecoration) {
 					world->numDecoration = 0;
@@ -350,26 +370,44 @@ void EditorStage::update(double seconds_elapsed, World* world)
 					world->numDecoration += 1;
 				}
 			}
+			else {
+				int tmp = world->numSpawns + 1;
+				if (tmp > world->maxSpawns) {
+					world->numSpawns = 0;
+				}
+				else {
+					world->numSpawns += 1;
+				}
+			}
 			
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_Z)) {
-			if (world->isStaticObject) {
+			if (world->typeObject == 0) {
 				int tmp = world->numStructure - 1;
-				if (tmp < 0) {
-					world->numStructure = world->maxStructure;
+				if (tmp > world->maxStructure) {
+					world->numStructure = 0;
 				}
 				else {
 					world->numStructure -= 1;
 				}
 			}
-			else {
+			else if (world->typeObject == 1) {
 				int tmp = world->numDecoration - 1;
-				if (tmp < 0) {
-					world->numDecoration = world->maxDecoration;
+				if (tmp > world->maxDecoration) {
+					world->numDecoration = 0;
 				}
 				else {
 					world->numDecoration -= 1;
+				}
+			}
+			else {
+				int tmp = world->numSpawns - 1;
+				if (tmp > world->maxSpawns) {
+					world->numSpawns = 0;
+				}
+				else {
+					world->numSpawns -= 1;
 				}
 			}
 		}
@@ -380,10 +418,10 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				world->selectedEntity->m.rotate(45.0f * DEG2RAD, Vector3(0, 1, 0));
 			}
 			else {
-				if (world->isStaticObject) {
+				if (world->typeObject == 0) {
 					world->structures[world->numEntity]->yaw += 45.0f;
 				}
-				else {
+				else if (world->typeObject == 1) {
 					world->decoration[world->numEntity]->yaw += 45.0f;
 				}
 			}
@@ -394,10 +432,10 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				world->selectedEntity->m.rotate(-45.0f * DEG2RAD, Vector3(0, 1, 0));
 			}
 			else {
-				if (world->isStaticObject) {
+				if (world->typeObject == 0) {
 					world->structures[world->numEntity]->yaw -= 45.0f;
 				}
-				else {
+				else if (world->typeObject == 1) {
 					world->decoration[world->numEntity]->yaw -= 45.0f;
 				}
 			}

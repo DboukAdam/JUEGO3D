@@ -185,6 +185,7 @@ void Game::initWorld(std::string filename){
 		editorWorld = new World(shader);
 		editorWorld->loadDecoration();
 		editorWorld->loadStructure();
+		editorWorld->loadSpawns();
 		editorWorld->initPlayer(playerInitPos, playerMesh, playerText);
 		editorWorld->initSky(meshCielo, textCielo);
 		editorWorld->initGround(groundText);
@@ -199,6 +200,7 @@ void Game::initWorld(std::string filename){
 		world->loadWorldInfo(filename);
 		world->loadDecoration();
 		world->loadStructure();
+		world->loadSpawns();
 		world->initPlayer(playerInitPos, playerMesh, playerText);
 		world->initSky(meshCielo, textCielo);
 		world->initGround(groundText);

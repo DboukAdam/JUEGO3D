@@ -87,7 +87,7 @@ void PlayStage::render(World* world) {
 	Shader* shader = world->shader;
 	shader->enable();
 	world->sky->render(shader);
-	//world->ground->render(shader);
+	world->ground->render(shader);
 
 	//.........................................................................................
 	//IA CAMBIAR
@@ -241,7 +241,7 @@ void EditorStage::render(World* world)
 
 	//skymap
 	world->sky->m.setTranslation(camera->eye.x, camera->eye.y, camera->eye.z);
-
+	
 	//set flags
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
@@ -251,7 +251,7 @@ void EditorStage::render(World* world)
 	Shader* shader = world->shader;
 	
 	world->sky->render(shader);
-	//world->ground->render(shader);
+	world->ground->render(shader);
 	world->RenderStatic(camera);
 	world->RenderDynamic(camera);
 	world->RenderZombies(camera, game->time);

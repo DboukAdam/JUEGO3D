@@ -175,7 +175,7 @@ void Game::initWorld(std::string filename){
 	Mesh* meshCielo = Mesh::Get("data/Assets/Ambiente/cielo.ASE");
 	Texture* textCielo = Texture::Get("data/Assets/Ambiente/cielo.tga");
 	//Ground
-	//Texture* groundText = Texture::Get("data/classic/2.Structure/Ground/Materials/Rocks_05.png");
+	Texture* groundText = Texture::Get("data/Assets/Structure/aigua.png");
 	//Camera
 	camera = new Camera();
 	//QUITAR
@@ -189,7 +189,7 @@ void Game::initWorld(std::string filename){
 		editorWorld->loadStructure();
 		editorWorld->initPlayer(playerInitPos, playerMesh, playerText);
 		editorWorld->initSky(meshCielo, textCielo);
-		//editorWorld->initGround(groundText);
+		editorWorld->initGround(groundText);
 		editorWorld->initCamera(camera);
 		editorWorld->addWeapon(AK47);
 		editorWorld->addZombie(zombie);
@@ -201,7 +201,7 @@ void Game::initWorld(std::string filename){
 		world->loadStructure();
 		world->initPlayer(playerInitPos, playerMesh, playerText);
 		world->initSky(meshCielo, textCielo);
-		//world->initGround(groundText);
+		world->initGround(groundText);
 		world->initCamera(camera);
 		world->addWeapon(AK47);
 		world->addZombie(zombie);

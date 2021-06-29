@@ -144,8 +144,8 @@ void World::initSky(Mesh* mesh, Texture* texture) {
 
 void World::initGround(Texture* texture) {
 	Matrix44 m;
-	m.setTranslation(0, 0, 0);
-	ground = new Entity(0, 0, 0, m);
+	m.setTranslation(0, -2, 0);
+	ground = new Entity(0, -2, 0, m);
 	ground->mesh = new Mesh();
 	ground->mesh->createPlane(2000);
 	ground->texture = texture;

@@ -244,15 +244,7 @@ void EditorStage::render(World* world)
 		}
 	}
 
-	if (world->typeObject == 0) {
-		world->numEntity = world->numStructure;
-	}
-	else if (world->typeObject == 1) {
-		world->numEntity = world->numDecoration;
-	}
-	else {
-		world->numEntity = world->numSpawns;
-	}
+	
 
 	
 
@@ -281,12 +273,12 @@ void EditorStage::render(World* world)
 	//draw text para ver la mesh que voy a pintar
 	string asset;
 	
-	if (world->typeObject == 0) {
+	/*if (world->typeObject == 0) {
 		drawText(20, 20, world->structures[world->numEntity]->type, Vector3(1, 1, 1), 2);
 	}
 	else if (world->typeObject == 1) {
 		drawText(20, 20, world->decoration[world->numEntity]->type, Vector3(1, 1, 1), 2);
-	}
+	}*/
 }
 
 void EditorStage::update(double seconds_elapsed, World* world)
@@ -315,19 +307,24 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		if (Input::isKeyPressed(SDL_SCANCODE_D)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_C)) {
+			
 			world->typeObject++;
+			if(world->typeObject > 2) world->typeObject = 0;
+
 			if (world->typeObject == 0) {
 				std::cout << "Cambio de objectos a Structure" << std::endl;
+				world->numEntity = world->numStructure;
 			}
 			else if(world->typeObject == 1){
 				std::cout << "Cambio de objectos a Decoration" << std::endl;
+				world->numEntity = world->numDecoration;
 			}
 			else if(world->typeObject == 2){
 				std::cout << "Cambio de objectos a Spawners" << std::endl;
+				world->numEntity = world->numSpawns;
 			}
-			else {
-				world->typeObject = 0;
-			}
+
+		
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
@@ -379,29 +376,20 @@ void EditorStage::update(double seconds_elapsed, World* world)
 		if (Input::wasKeyPressed(SDL_SCANCODE_Z)) {
 			if (world->typeObject == 0) {
 				int tmp = world->numStructure - 1;
-				if (tmp > world->maxStructure) {
-					world->numStructure = 0;
+				if (tmp < 0) {
+					world->numStructure = world->maxStructure;
 				}
 				else {
 					world->numStructure -= 1;
 				}
 			}
-			else if (world->typeObject == 1) {
+			else if (world->typeObject == 1){
 				int tmp = world->numDecoration - 1;
-				if (tmp > world->maxDecoration) {
-					world->numDecoration = 0;
+				if (tmp < 0) {
+					world->numDecoration = world->maxDecoration;
 				}
 				else {
 					world->numDecoration -= 1;
-				}
-			}
-			else {
-				int tmp = world->numSpawns - 1;
-				if (tmp > world->maxSpawns) {
-					world->numSpawns = 0;
-				}
-				else {
-					world->numSpawns -= 1;
 				}
 			}
 		}

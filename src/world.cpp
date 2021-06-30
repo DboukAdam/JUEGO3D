@@ -124,7 +124,8 @@ void World::addObjectEditor(Entity* entity, Vector3 dir) {
 	Camera* camera = Camera::current;
 	Vector3 origin = camera->eye;
 	Vector3 pos = RayPlaneCollision(Vector3(0, 0, 0), Vector3(0, 1, 0), origin, dir);
-	Entity* copia = new Entity(0, 0, 0, Matrix44());
+	Matrix44 m;
+	Entity* copia = new Entity(0, 0, 0, m);
 	copia->copy(entity);
 	copia->m.setTranslation(pos.x, pos.y, pos.z);
 	copia->m.rotate(entity->yaw * DEG2RAD, Vector3(0,1,0));
@@ -135,7 +136,7 @@ void World::addObjectEditor(Entity* entity, Vector3 dir) {
 		addDynamicEntity(copia);
 	}
 	else {
-		ZombieSpawner* copia = new ZombieSpawner(0, 0, 0, Matrix44());
+		ZombieSpawner* copia = new ZombieSpawner(0, 0, 0, m);
 		copia->copy(entity);
 		copia->m.setTranslation(pos.x, pos.y, pos.z);
 		copia->m.rotate(entity->yaw * DEG2RAD, Vector3(0, 1, 0));
@@ -361,6 +362,8 @@ void World::disparar() {
 void World::selectEntityEditor(Vector3 dir){
 	Camera* camera = Camera::current;
 	Vector3 origin = camera->eye;
+	
+	Entity* rayEntity = new Entity(100000000000, 1000000000, 1000000000000, Matrix44());
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
 		Vector3 col;
@@ -370,21 +373,44 @@ void World::selectEntityEditor(Vector3 dir){
 			Entity* current = staticEntities[i];
 			if (current == NULL) break;
 			if (!current->mesh->testRayCollision(current->m, origin, dir, col, normal, 10000)) continue;
-			if (selectedEntity != NULL) selectedEntity->bounding = false;
-			current->bounding = true;
-			selectedEntity = current;
-			break;
+			Vector3 pos = current->m.getTranslation();
+			float catetoX = camera->eye.x - rayEntity->pos.x;
+			float catetoZ = camera->eye.z - rayEntity->pos.z;
+			float catetoY = camera->eye.y - rayEntity->pos.y;
+			float rayCamera = sqrt(pow(catetoX, 2) + pow(catetoZ, 2));
+
+			catetoX = camera->eye.x - pos.x;
+			catetoZ = camera->eye.z - pos.z;
+			catetoY = camera->eye.y - pos.y;
+			float currentCamera = sqrt(pow(catetoX, 2) + pow(catetoZ, 2));
+			if (currentCamera < rayCamera) {
+				rayEntity = current;
+			}
+			
 		}
 		else if(typeObject == 1){
 			Entity* current = dynamicEntities[i];
 			if (current == NULL) break;
 			if (!current->mesh->testRayCollision(current->m, origin, dir, col, normal, 10000)) continue;
-			if (selectedEntity != NULL) selectedEntity->bounding = false;
-			current->bounding = true;
-			selectedEntity = current;
-			break;
+			Vector3 pos = current->m.getTranslation();
+			float catetoX = camera->eye.x - rayEntity->pos.x;
+			float catetoZ = camera->eye.z - rayEntity->pos.z;
+			float catetoY = camera->eye.y - rayEntity->pos.y;
+			float rayCamera = sqrt(pow(catetoX, 2) + pow(catetoZ, 2));
+
+			catetoX = camera->eye.x - pos.x;
+			catetoZ = camera->eye.z - pos.z;
+			catetoY = camera->eye.y - pos.y;
+			float currentCamera = sqrt(pow(catetoX, 2) + pow(catetoZ, 2));
+			if (currentCamera < rayCamera) {
+				rayEntity = current;
+			}
 		}
+		
 	}
+	if (selectedEntity != NULL) selectedEntity->bounding = false;
+	rayEntity->bounding = true;
+	selectedEntity = rayEntity;
 }
 void World::deleteEntity(Entity* entity) {
 	for (int i = 0; i < MAX_ENTITIES; i++) {

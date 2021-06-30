@@ -1442,7 +1442,7 @@ static
 data/Assets/Structure/marmol.obj
 data/Assets/Structure/marmol.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 35.5508 0 18.9342 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/marmol.obj
 data/Assets/Structure/marmol.png
 static
@@ -1478,63 +1478,63 @@ static
 data/Assets/Structure/marmol.obj
 data/Assets/Structure/marmol.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 9.54717 0 4.6713 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 10.0121 0 5.36192 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 10.5681 0 6.08929 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 10.9555 0 6.79244 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 11.6493 0 7.64842 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 12.2943 0 8.48122 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 12.7977 0 9.3743 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 13.3823 0 10.1696 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 13.8488 0 10.9951 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 14.3738 0 11.684 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 14.8862 0 12.3535 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 4.74496 0 7.73481 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 4.73746 0 8.79183 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 4.71563 0 9.69302 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 5.4731 0 10.2195 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
@@ -1570,167 +1570,167 @@ static
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 8.6747 0 4.77279 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 7.80015 0 4.75719 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra1.obj
 data/Assets/Structure/piedra1.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 15.6152 0 13.087 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 16.3935 0 13.1269 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 17.1263 0 13.0982 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 17.8754 0 13.0793 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 18.6047 0 13.1211 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 19.2913 0 13.1173 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 20.0215 0 13.1027 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 20.763 0 13.1135 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 21.5518 0 13.1675 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 22.3816 0 13.1227 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 23.2097 0 13.1654 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 24.0438 0 13.1449 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 24.9146 0 13.1674 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 25.7907 0 13.1451 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 26.6405 0 13.1496 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 27.5297 0 13.1963 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 28.3806 0 13.1757 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 29.2505 0 13.1783 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 30.1661 0 13.1853 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 31.0545 0 13.1714 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 31.9289 0 13.1753 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 32.7624 0 13.1677 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 33.6597 0 13.1562 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 34.5182 0 13.1666 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 35.3505 0 13.1588 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 36.1731 0 13.1763 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 37.0394 0 13.1852 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 37.8452 0 13.1711 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 38.7715 0 13.1837 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 39.6935 0 13.1716 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 40.6245 0 13.1771 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 41.4593 0 13.2007 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 42.3708 -2.38419e-07 13.1847 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 43.2675 2.38419e-07 13.2426 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 44.1656 0 13.1656 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 45.0095 0 13.1361 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 45.8983 0 13.0986 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 46.7638 0 13.0695 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 47.5354 0 13.1332 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/piedra2.obj
 data/Assets/Structure/piedra2.png
 static
@@ -1954,7 +1954,7 @@ static
 data/Assets/Structure/3paredes_madera2.obj
 data/Assets/Structure/3paredes_madera2.png
 static
--4.37114e-08 0 -1 0 0 1 0 0 1 0 -4.37114e-08 0 48.9109 0 16.1018 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/3paredes_madera2.obj
 data/Assets/Structure/3paredes_madera2.png
 static
@@ -2330,14 +2330,6 @@ static
 data/Assets/Structure/3paredes_oldbricks.obj
 data/Assets/Structure/3paredes_oldbricks.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
-data/Assets/Structure/3paredes_oldbricks.obj
-data/Assets/Structure/3paredes_oldbricks.png
-static
-1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
-data/Assets/Structure/3paredes_oldbricks.obj
-data/Assets/Structure/3paredes_oldbricks.png
-static
 -4.37114e-08 0 -1 0 0 1 0 0 1 0 -4.37114e-08 0 49.0044 0 -8.75994 1 
 data/Assets/Structure/3paredes_oldbricks.obj
 data/Assets/Structure/3paredes_oldbricks.png
@@ -2367,10 +2359,6 @@ data/Assets/Structure/3paredes_oldbricks.obj
 data/Assets/Structure/3paredes_oldbricks.png
 static
 -4.37114e-08 0 -1 0 0 1 0 0 1 0 -4.37114e-08 0 48.985 0 -41.5909 1 
-data/Assets/Structure/3paredes_oldbricks.obj
-data/Assets/Structure/3paredes_oldbricks.png
-static
-1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/3paredes_oldbricks.obj
 data/Assets/Structure/3paredes_oldbricks.png
 static
@@ -2562,10 +2550,6 @@ static
 data/Assets/Structure/3paredes_oldbricks.obj
 data/Assets/Structure/3paredes_oldbricks.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
-data/Assets/Structure/3paredes_oldbricks.obj
-data/Assets/Structure/3paredes_oldbricks.png
-static
 1 0 -1.74846e-07 0 0 1 0 0 1.74846e-07 0 1 0 8.39572 0 48.9477 1 
 data/Assets/Structure/3paredes_oldbricks.obj
 data/Assets/Structure/3paredes_oldbricks.png
@@ -2595,10 +2579,6 @@ data/Assets/Structure/estanteria.obj
 data/Assets/Structure/estanteria.png
 static
 1 0 0 0 0 1 0 0 0 0 1 0 17.1311 -2.38419e-07 17.661 1 
-data/Assets/Structure/estanteria.obj
-data/Assets/Structure/estanteria.png
-static
-1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/estanteria.obj
 data/Assets/Structure/estanteria.png
 static
@@ -3046,10 +3026,6 @@ static
 data/Assets/Structure/estanteria.obj
 data/Assets/Structure/estanteria.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
-data/Assets/Structure/estanteria.obj
-data/Assets/Structure/estanteria.png
-static
 -4.37114e-08 0 1 0 0 1 0 0 -1 0 -4.37114e-08 0 30.1777 0 42.7642 1 
 data/Assets/Structure/estanteria.obj
 data/Assets/Structure/estanteria.png
@@ -3062,19 +3038,19 @@ static
 data/Assets/Structure/estanteria.obj
 data/Assets/Structure/estanteria.png
 static
--4.37114e-08 0 1 0 0 1 0 0 -1 0 -4.37114e-08 0 35.563 0 19.4291 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/estanteria.obj
 data/Assets/Structure/estanteria.png
 static
--4.37114e-08 0 1 0 0 1 0 0 -1 0 -4.37114e-08 0 35.549 0 20.3275 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/estanteria.obj
 data/Assets/Structure/estanteria.png
 static
--4.37114e-08 0 1 0 0 1 0 0 -1 0 -4.37114e-08 0 35.5363 -2.38419e-07 21.2325 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/estanteria.obj
 data/Assets/Structure/estanteria.png
 static
--4.37114e-08 0 1 0 0 1 0 0 -1 0 -4.37114e-08 0 35.5098 0 22.1425 1 
+1 0 0 0 0 1 0 0 0 0 1 0 0 1e+07 0 1 
 data/Assets/Structure/estanteria.obj
 data/Assets/Structure/estanteria.png
 static
@@ -3101,6 +3077,110 @@ static
 -4.37114e-08 0 1 0 0 1 0 0 -1 0 -4.37114e-08 0 35.4927 0 27.5673 1 
 data/Assets/Structure/estanteria.obj
 data/Assets/Structure/estanteria.png
+static
+1 0 0 0 0 1 0 0 0 0 1 0 -15.4864 0 -14.2009 1 
+data/Assets/Structure/generator.obj
+data/Assets/Structure/generator.png
+static
+1 0 0 0 0 1 0 0 0 0 1 0 -18.7994 0 -14.2672 1 
+data/Assets/Structure/generator.obj
+data/Assets/Structure/generator.png
+static
+1 0 0 0 0 1 0 0 0 0 1 0 -22.0545 0 -14.4406 1 
+data/Assets/Structure/generator.obj
+data/Assets/Structure/generator.png
+static
+1 0 0 0 0 1 0 0 0 0 1 0 -30.2121 0 -13.6326 1 
+data/Assets/Structure/panel_control.obj
+data/Assets/Structure/panel_control.png
+static
+1 0 0 0 0 1 0 0 0 0 1 0 -29.2825 0 -13.5765 1 
+data/Assets/Structure/panel_control.obj
+data/Assets/Structure/panel_control.png
+static
+-4.37114e-08 0 1 0 0 1 0 0 -1 0 -4.37114e-08 0 -30.8129 0 -14.2503 1 
+data/Assets/Structure/panel_control.obj
+data/Assets/Structure/panel_control.png
+static
+-4.37114e-08 0 1 0 0 1 0 0 -1 0 -4.37114e-08 0 -30.9091 0 -15.0866 1 
+data/Assets/Structure/panel_control.obj
+data/Assets/Structure/panel_control.png
+static
+-1 0 -8.74228e-08 0 0 1 0 0 8.74228e-08 0 -1 0 -14.3313 0 30.6742 1 
+data/Assets/Structure/panel_electric.obj
+data/Assets/Structure/panel_electrico.png
+static
+-1 0 -8.74228e-08 0 0 1 0 0 8.74228e-08 0 -1 0 -15.3831 0 30.7048 1 
+data/Assets/Structure/panel_electric.obj
+data/Assets/Structure/panel_electrico.png
+static
+-1 0 -8.74228e-08 0 0 1 0 0 8.74228e-08 0 -1 0 -16.3819 0 30.6459 1 
+data/Assets/Structure/panel_electric.obj
+data/Assets/Structure/panel_electrico.png
+static
+-1 0 -8.74228e-08 0 0 1 0 0 8.74228e-08 0 -1 0 -17.5198 0 30.6283 1 
+data/Assets/Structure/panel_electric.obj
+data/Assets/Structure/panel_electrico.png
+static
+-1 0 -8.74228e-08 0 0 1 0 0 8.74228e-08 0 -1 0 -18.5441 0 30.5602 1 
+data/Assets/Structure/panel_electric.obj
+data/Assets/Structure/panel_electrico.png
+static
+-1 0 -8.74228e-08 0 0 1 0 0 8.74228e-08 0 -1 0 -19.6587 0 30.5304 1 
+data/Assets/Structure/panel_electric.obj
+data/Assets/Structure/panel_electrico.png
+static
+-1 0 -8.74228e-08 0 0 1 0 0 8.74228e-08 0 -1 0 -20.7241 0 30.4949 1 
+data/Assets/Structure/panel_electric.obj
+data/Assets/Structure/panel_electrico.png
+static
+-1 0 -8.74228e-08 0 0 1 0 0 8.74228e-08 0 -1 0 -21.7594 0 30.3921 1 
+data/Assets/Structure/panel_electric.obj
+data/Assets/Structure/panel_electrico.png
+static
+-1 0 -8.74228e-08 0 0 1 0 0 8.74228e-08 0 -1 0 -22.7767 0 30.3372 1 
+data/Assets/Structure/panel_electric.obj
+data/Assets/Structure/panel_electrico.png
+static
+1 0 0 0 0 1 0 0 0 0 1 0 -24.6987 0 30.3705 1 
+data/Assets/Structure/rack.obj
+data/Assets/Structure/rack.png
+static
+1 0 0 0 0 1 0 0 0 0 1 0 -26.5526 0 30.4791 1 
+data/Assets/Structure/rack.obj
+data/Assets/Structure/rack.png
+static
+1 0 0 0 0 1 0 0 0 0 1 0 -28.8205 0 30.1893 1 
+data/Assets/Structure/rack.obj
+data/Assets/Structure/rack.png
+static
+0.707107 0 0.707107 0 0 1 0 0 -0.707107 0 0.707107 0 -29.7544 0 25.9354 1 
+data/Assets/Structure/rack.obj
+data/Assets/Structure/rack.png
+static
+-4.37114e-08 0 1 0 0 1 0 0 -1 0 -4.37114e-08 0 -29.4747 0 28.2394 1 
+data/Assets/Structure/rack.obj
+data/Assets/Structure/rack.png
+static
+-0.707107 0 0.707107 0 0 1 0 0 -0.707107 0 -0.707107 0 -15.1991 0 -28.2436 1 
+data/Assets/Structure/rack.obj
+data/Assets/Structure/rack.png
+static
+-0.707107 0 0.707107 0 0 1 0 0 -0.707107 0 -0.707107 0 -17.0045 0 -29.2788 1 
+data/Assets/Structure/rack.obj
+data/Assets/Structure/rack.png
+static
+-0.707107 0 -0.707107 0 0 1 0 0 0.707107 0 -0.707107 0 -19.0345 0 -29.8876 1 
+data/Assets/Structure/rack.obj
+data/Assets/Structure/rack.png
+static
+-4.37114e-08 0 1 0 0 1 0 0 -1 0 -4.37114e-08 0 48.8208 0 15.1908 1 
+data/Assets/Structure/3paredes_madera2.obj
+data/Assets/Structure/3paredes_madera2.png
+static
+1 0 0 0 0 1 0 0 0 0 1 0 35.5625 0 18.9223 1 
+data/Assets/Structure/marmol.obj
+data/Assets/Structure/marmol.png
 static
 1 0 0 0 0 1 0 0 0 0 1 0 17.6909 0 -18.003 1 
 data/Assets/Decoration/basura.obj
@@ -3157,4 +3237,296 @@ dynamic
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
 data/Assets/Decoration/shovel.obj
 data/Assets/Decoration/shovel.png
+dynamic
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+data/Assets/Decoration/shovel.obj
+data/Assets/Decoration/shovel.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 25.0954 0 -30.3398 1 
+data/Assets/Decoration/basura.obj
+data/Assets/Decoration/basura.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 22.7971 0 -30.3515 1 
+data/Assets/Decoration/basura.obj
+data/Assets/Decoration/basura.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 19.3701 0 -30.5228 1 
+data/Assets/Decoration/basura.obj
+data/Assets/Decoration/basura.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 16.0918 0 -30.1268 1 
+data/Assets/Decoration/basura.obj
+data/Assets/Decoration/basura.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 24.4744 0 -30.3178 1 
+data/Assets/Decoration/bebida.obj
+data/Assets/Decoration/bebida.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 23.5872 0 -30.4549 1 
+data/Assets/Decoration/bebida.obj
+data/Assets/Decoration/bebida.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 18.5758 0 -28.3766 1 
+data/Assets/Decoration/bebida.obj
+data/Assets/Decoration/bebida.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 14.5961 0 -25.7357 1 
+data/Assets/Decoration/bebida.obj
+data/Assets/Decoration/bebida.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 12.9357 0 -20.8454 1 
+data/Assets/Decoration/bebida.obj
+data/Assets/Decoration/bebida.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 14.4987 0 -18.4924 1 
+data/Assets/Decoration/bebida.obj
+data/Assets/Decoration/bebida.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 15.2185 0 -22.3307 1 
+data/Assets/Decoration/bebida.obj
+data/Assets/Decoration/bebida.png
+dynamic
+-4.37114e-08 0 1 0 0 1 0 0 -1 0 -4.37114e-08 0 30.754 0 -26.6483 1 
+data/Assets/Decoration/carrito.obj
+data/Assets/Decoration/carrito.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 29.2844 0 -15.6313 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 28.7025 0 -15.3143 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 28.5676 0 -15.535 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 28.9258 0 -15.7918 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 28.9914 0 -15.798 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 29.1897 0 -16.5254 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 29.1487 0 -16.3985 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 28.4848 0 -16.3661 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 28.5451 0 -16.0074 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 28.9204 0 -16.4169 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 28.6746 0 -16.4229 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 28.2707 0 -16.1642 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 28.3605 0 -15.7884 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 42.5891 0 16.4088 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 43.677 0 15.7932 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 42.8537 0 14.9954 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 42.8819 0 16.0942 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 42.9217 0 16.2959 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 43.3589 0 15.186 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 43.4596 0 14.7384 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 43.3136 0 16.2918 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 43.1515 0 16.0308 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 42.9059 0 15.5982 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 42.9662 0 15.6198 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 43.375 0 15.8155 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -27.8665 0 29.1856 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -27.9094 0 29.131 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -28.1746 0 27.7431 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -28.682 0 28.7389 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -27.3431 0 28.0302 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -27.547 0 28.3845 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -27.6238 0 28.6498 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -27.5239 0 28.9178 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -28.39 0 28.2356 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -28.6134 0 28.4521 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -28.2612 0 28.4395 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -28.218 0 28.6153 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -27.301 0 28.678 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -26.9577 0 28.6276 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -27.1513 0 28.0126 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -27.9873 0 27.9275 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -27.8629 0 28.0985 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -30.385 1.19209e-07 -29.5516 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -29.9637 0 -29.7404 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -29.3945 0 -29.9275 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -30.2087 0 -30.4144 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -29.6794 -1.19209e-07 -29.0779 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -30.0261 1.19209e-07 -28.8524 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -30.2661 0 -28.5957 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -29.0172 0 -28.1249 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -29.0307 0 -28.7972 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -29.2568 0 -29.0637 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -29.6871 0 -28.338 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -29.9993 0 -28.1733 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -29.2773 0 -28.208 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -29.6297 0 -28.9355 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -29.2901 0 -30.0047 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -28.5046 0 -29.0598 1 
+data/Assets/Decoration/hojas.obj
+data/Assets/Decoration/hojas.png
+dynamic
+1 0 0 0 0 1 0 0 0 0 1 0 -26.9087 0 -31.0078 1 
+data/Assets/Decoration/lista.obj
+data/Assets/Decoration/lista.png
+dynamic
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+data/Assets/Decoration/lista.obj
+data/Assets/Decoration/lista.png
 dynamic

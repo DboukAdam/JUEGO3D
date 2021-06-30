@@ -284,7 +284,7 @@ void Game::setEditorStage(){
 	SDL_ShowCursor(!mouse_locked);
 	
 	//relax
-	ambienteRelax->channelSample = *ambienteRelax->Play("data/Audio/ambienteRelax.mp3");
+	//ambienteRelax->channelSample = *ambienteRelax->Play("data/Audio/ambienteRelax.mp3");
 	//parar musica
 	introMusic->Stop(introMusic->channelSample);
 	ambiente->Stop(ambiente->channelSample);

@@ -58,7 +58,7 @@ public:
 	void render(Shader* shader, float tiling = 1.0f);
 	void copy(Entity* entity);
 };
-#endif
+
 
 class Zombie : public Entity {
 public:
@@ -101,3 +101,4 @@ public:
 	void renderWeapon(Player* player, Shader* shader, float tiling = 1.0f);
 
 };
+#endif

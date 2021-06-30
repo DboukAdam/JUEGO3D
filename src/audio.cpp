@@ -6,6 +6,7 @@ std::map<std::string, Audio*> Audio::sLoadedAudios;
 Audio::Audio() {
 	
 	sample = 0;
+	channelSample = 0;
 }
 
 Audio::~Audio() {

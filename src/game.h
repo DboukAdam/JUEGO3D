@@ -11,6 +11,9 @@
 #include "stage.h"
 #include "gui.h"
 #include "manager.h"
+#include "audio.h"
+
+
 #define MAX_EDITOR_ENTITIES 69
 
 
@@ -43,7 +46,17 @@ public:
 	EndStage* end = new EndStage();
 	EditorStage* editor = new EditorStage();
 
-
+	//Our audios and music
+	Audio* introMusic = new Audio();
+	Audio* ambiente = new Audio();
+	Audio* disparo = new Audio();
+	Audio* ambienteRelax = new Audio();
+	Audio* click = new Audio();
+	Audio* feedbackPut = new Audio();
+	Audio* narrador = new Audio();
+ 
+ 
+ 
 	//Our stuff
 	World* editorWorld;
 	World* currentWorld;

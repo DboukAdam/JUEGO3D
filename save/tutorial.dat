@@ -198,11 +198,4 @@ static
 data/Assets/Structure/arena.obj
 data/Assets/Structure/arena.png
 static
-1 0 0 0 0 1 0 0 0 0 1 0 0.139536 0 40.118 1 
-data/Assets/Structure/spawn.obj
-data/Assets/Structure/spawn.png
-static
-1 0 0 0 0 1 0 0 0 0 1 0 -0.119458 0 -39.8258 1 
-data/Assets/Structure/spawn.obj
-data/Assets/Structure/spawn.png
-static
+

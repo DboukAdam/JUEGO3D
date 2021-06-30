@@ -1,5 +1,4 @@
 #include "world.h"
-
 #pragma once
 class Stage {
 public:

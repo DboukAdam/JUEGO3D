@@ -7,7 +7,6 @@
 #include "input.h"
 
 #include <cmath>
-#include "audio.h"
 
 //some globals
 Animation* anim = NULL;
@@ -49,11 +48,11 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 
 	//Audio
-	Audio* audio = new Audio();
-	/*if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
+	
+	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
 		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
-	}*/
-	audio->Play("data/Audio/menu.mp3");
+	}
+	introMusic->channelSample = *introMusic->Play("data/Audio/menu.mp3");
 }
 
 //what to do when the image has to be draw
@@ -103,6 +102,7 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 		Camera* camera = Camera::current;
 		if (currentStage == intro) {
 			gui->introButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+			click->Play("data/Audio/click.mp3");
 		}
 		else if (currentStage == selectWorld) {
 			gui->changePageButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
@@ -112,17 +112,20 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 				initWorld(filename);
 				setPlayStage();
 			}
+			click->Play("data/Audio/click.mp3");
 		}
 		else if (currentStage == play) {
-			if (mouse_locked) currentWorld->disparar();
-			else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+			if (mouse_locked) currentWorld->disparar(); //sonidito disparo
+			else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y)); click->Play("data/Audio/click.mp3"); //sonidito de click 
 		}
 		else if (currentStage == editor) {
 			if (mouse_locked) {
 				Vector3 dir = camera->getRayDirection(this->window_width / 2, this->window_height / 2, this->window_width, this->window_height);
 				currentWorld->selectEntityEditor(dir);
+				feedbackPut->Play("data/Audio/feedback.mp3");
 			}
 			else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+			click->Play("data/Audio/click.mp3");
 		}
 	}
 	if (event.button == SDL_BUTTON_RIGHT) //right mouse
@@ -211,15 +214,15 @@ void Game::initWorld(std::string filename){
 		world->initMap();
 		world->initZombies();
 
-		//QUITAR
-		for (int i = 0; i < 4; i++) {
-			m.setTranslation(10 * i, 0, 10 * i);
-			world->spawners[i] = (ZombieSpawner*) new Entity(10 * i, 0, 10 * i, m);
-			world->spawners[i]->loadMesh("data/Assets/Structure/spawn.obj");
-			world->spawners[i]->loadTexture("data/Assets/Structure/spawn.png");
-		}
+		////QUITAR
+		//for (int i = 0; i < 4; i++) {
+		//	m.setTranslation(10 * i, 0, 10 * i);
+		//	world->spawners[i] = (ZombieSpawner*) new Entity(10 * i, 0, 10 * i, m);
+		//	world->spawners[i]->loadMesh("data/Assets/Spawn/spawn.obj");
+		//	world->spawners[i]->loadTexture("data/Assets/Spawn/spawn.png");
+		//}
 
-		currentWorld = world;
+		//currentWorld = world;
 	}
 	
 }
@@ -230,12 +233,23 @@ void Game::setIntroStage(){
 	currentStage = intro;
 	mouse_locked = false;
 	SDL_ShowCursor(!mouse_locked);
+	//introMusic
+	introMusic->channelSample = *introMusic->Play("data/Audio/menu.mp3");
+	//parar musica
+	ambiente->Stop(ambiente->channelSample);
+	ambienteRelax->Stop(ambienteRelax->channelSample);
+	narrador->Stop(narrador->channelSample);
+
 }
 
 void Game::setSelectWorldStage() {
 	currentStage = selectWorld;
 	mouse_locked = false;
 	SDL_ShowCursor(!mouse_locked);
+
+	//parar musica
+	ambienteRelax->Stop(ambienteRelax->channelSample);
+	ambiente->Stop(ambiente->channelSample);
 }
 
 void Game::setPlayStage(){
@@ -243,6 +257,13 @@ void Game::setPlayStage(){
 	mouse_locked = true;
 	gameManager->round = 0;
 	SDL_ShowCursor(!mouse_locked);
+
+	//music
+	ambiente->channelSample = *ambiente->Play("data/Audio/ambiente.mp3");
+	//narrador->channelSample = *narrador->Play("huij");
+	//parar musica
+	introMusic->Stop(introMusic->channelSample);
+	ambienteRelax->Stop(ambienteRelax->channelSample);
 }
 
 void Game::setEditorStage(){
@@ -250,11 +271,22 @@ void Game::setEditorStage(){
 	currentWorld = editorWorld;
 	mouse_locked = true;
 	SDL_ShowCursor(!mouse_locked);
+	
+	//relax
+	ambienteRelax->channelSample = *ambienteRelax->Play("data/Audio/ambienteRelax.mp3");
+	//parar musica
+	introMusic->Stop(introMusic->channelSample);
+	ambiente->Stop(ambiente->channelSample);
 }
 
 void Game::setEndStage(){
 	currentStage = end;
 	mouse_locked = false;
 	SDL_ShowCursor(!mouse_locked);
+	
+	//parar ambiente
+	ambiente->Stop(ambiente->channelSample);
+	narrador->channelSample = *narrador->Play("data/Audio/gameover.mp3");
+	introMusic->channelSample = *introMusic->Play("data/Audio/menu.mp3");
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::

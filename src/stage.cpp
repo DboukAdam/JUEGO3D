@@ -22,6 +22,7 @@ void IntroStage::render(World* world) {
 	
 	game->gui->RenderIntroGui();
 
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
@@ -65,6 +66,9 @@ void SelectWorldStage::update(double seconds_elapsed, World* world) {
 
 void PlayStage::render(World* world) {
 	Game* game = Game::instance;
+
+	game->introMusic->Stop(game->introMusic->channelSample);
+
 	//set the clear color (the background color) and Clear the window and the depth buffer
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

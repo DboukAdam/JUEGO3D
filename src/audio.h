@@ -7,6 +7,7 @@ class Audio {
 public:
 	static std::map<std::string, Audio*> sLoadedAudios;
 	HSAMPLE sample;
+	HCHANNEL channelSample;
 
 	Audio();
 	~Audio();

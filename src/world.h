@@ -43,9 +43,7 @@ public:
 	int typeObject = 0;
 	int maxTypes = 3;
 
-
 	int round;
-	int numSpawns = 3;
 
 	World(Shader* shader);
 	void addStaticEntity(Entity* entity);

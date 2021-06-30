@@ -636,7 +636,7 @@ bool World::loadWorldInfo(std::string filename) {
 			dynamicIndex++;
 		}
 		else if (entityType == "spawner") {
-			ZombieSpawner* spawn = new ZombieSpawner(pos,m);//rellenarlo con lo que necesite
+			ZombieSpawner* spawn = new ZombieSpawner(pos.x, pos.y,pos.z,m);//rellenarlo con lo que necesite
 			spawn->loadMesh(meshName.c_str());
 			spawn->loadTexture(textureName.c_str());
 			spawners[spawnerIndex] = spawn;

@@ -115,8 +115,15 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 			click->Play("data/Audio/click.mp3");
 		}
 		else if (currentStage == play) {
-			if (mouse_locked) currentWorld->disparar(); //sonidito disparo
-			else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y)); click->Play("data/Audio/click.mp3"); //sonidito de click 
+			if (mouse_locked) {
+				currentWorld->disparar(); 
+				//sonidito disparo
+				disparo->channelSample = *disparo->Play("data/Audio/disparoAK47.mp3");
+			}
+			else {
+				gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y)); click->Play("data/Audio/click.mp3"); //sonidito de click 
+
+			}
 		}
 		else if (currentStage == editor) {
 			if (mouse_locked) {
@@ -234,6 +241,7 @@ void Game::setIntroStage(){
 	mouse_locked = false;
 	SDL_ShowCursor(!mouse_locked);
 	//introMusic
+	introMusic->Stop(introMusic->channelSample);
 	introMusic->channelSample = *introMusic->Play("data/Audio/menu.mp3");
 	//parar musica
 	ambiente->Stop(ambiente->channelSample);

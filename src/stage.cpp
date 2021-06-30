@@ -245,6 +245,20 @@ void EditorStage::render(World* world)
 		}
 	}
 
+	if (world->typeObject > 2) world->typeObject = 0;
+
+	if (world->typeObject == 0) {
+		
+		world->numEntity = world->numStructure;
+	}
+	else if (world->typeObject == 1) {
+		
+		world->numEntity = world->numDecoration;
+	}
+	else if (world->typeObject == 2) {
+		
+		world->numEntity = world->numSpawns;
+	}
 	
 
 	

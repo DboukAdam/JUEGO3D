@@ -9,6 +9,8 @@ public:
 	float startedRoundTime;
 	int spawnedZombies;
 
+	bool GodMode = false;
+
 	void update();
 	void initRound();
 };

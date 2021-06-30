@@ -4,13 +4,13 @@
 void Manager::update() {
 	Game* game = Game::instance;
 	World* world = game->currentWorld;
-	int cooldownRound = 5;
+	int cooldownRound = 10;
 	if (world->zombiesAlive() == 0 && startedRoundTime + cooldownRound < game->time) initRound();
 	int zombieLive = 10 + round * 2;
 	float zombieVel = 0.1 + random(0, 0.01 * round);
 	world->spawnZombies(zombiesPerRound - spawnedZombies, zombieLive, zombieVel, game->time);
 	world->moveZombies();
-	world->collisionPlayerZombie();
+	if(!GodMode) world->collisionPlayerZombie();
 	if (world->player->vida <= 0) game->setEndStage();
 }
 

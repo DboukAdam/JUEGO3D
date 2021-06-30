@@ -55,7 +55,6 @@ public:
 	Audio* narrador = new Audio();
 	Audio* nextRound = new Audio();
  
- 
 	//Our stuff
 	World* editorWorld;
 	World* currentWorld;

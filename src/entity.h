@@ -9,7 +9,6 @@
 #include "animation.h"
 #include <string>
 
-
 class Entity {
 public:
 	Vector3 pos; //Mirar si es util por culpa del setTranslation ese que dice el feo del Adam
@@ -31,16 +30,6 @@ public:
 		this->yaw = yaw;
 		this->pitch = pitch;
 	};
-	
-
-	void setPos(Vector3 pos) {
-		this->pos = pos;
-	};
-	void setPos(int x, int y, int z) {
-		this->pos.x = x;
-		this->pos.y = y;
-		this->pos.z = z;
-	};
 
 	Vector3 getPos() {
 		return m.getTranslation();
@@ -54,7 +43,6 @@ public:
 	};
 
 	void DeleteEntity();
-
 	void render(Shader* shader, float tiling = 1.0f);
 	void copy(Entity* entity);
 };
@@ -92,6 +80,7 @@ class Player : public Entity {
 public:
 	int vida;
 	float lastHit;
+
 	Player(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {
 		vida = 10;
 		lastHit = 0;
@@ -103,15 +92,16 @@ class Weapon : public Entity {
 public:
 	float cadencia;
 	float lastShot;
-	bool isEmpty;
 	int cargador;
-	bool recargar;
 	int damage;
+
 	Weapon(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {
+		cadencia = 0;
 		lastShot = 0;
+		cargador = 0;
+		damage = 0;
 	};
 	void init(float cad, int cargador, int d);
 	void renderWeapon(Player* player, Shader* shader, float tiling = 1.0f);
-
 };
 #endif

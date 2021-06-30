@@ -15,7 +15,6 @@
 
 class World {
 public:
-
 	Entity* staticEntities[MAX_ENTITIES];
 	Entity* dynamicEntities[MAX_ENTITIES];
 	Entity* structures[MAX_ENTITIES];
@@ -23,13 +22,10 @@ public:
 	int numEntity = 0;
 	int maxStructure = 0;
 	int numStructure = 0;
-
 	int maxDecoration = 0;
 	int numDecoration = 0;
-	
 	int maxSpawns = 0;
 	int numSpawns = 0;
-
 	Zombie* zombies[MAX_ZOMBIES];
 	ZombieSpawner* spawners[MAX_SPAWNERS];
 	ZombieSpawner* spawnsEditor[MAX_SPAWNERS];
@@ -79,13 +75,13 @@ public:
 	void RenderDynamic(Camera* camera);
 	void RenderZombies(Camera* camera, float time);
 	void RenderPlayer(Camera* camera);
+	void RenderSpawns(Camera* camera);
 	void RenderBoundingStatic(Camera* camera);
 	void RenderBoundingDynamic(Camera* camera);
 	void RenderBoundingZombies(Camera* camera);
 	//WorldInfos
 	void saveWorldInfo(std::string filename);
 	bool loadWorldInfo(std::string filename);
-
 };
 
 #endif

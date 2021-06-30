@@ -49,6 +49,7 @@ void World::addStaticEntity(Entity* entity) {
 		}
 	}
 }
+
 void World::addDynamicEntity(Entity* entity) {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		if (dynamicEntities[i] == NULL) {
@@ -67,7 +68,6 @@ void World::addSpawnSpawner(ZombieSpawner* spawner)
 		}
 	}
 }
-
 
 void World::addZombie(Zombie* zombie) {
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
@@ -144,7 +144,6 @@ void World::addObjectEditor(Entity* entity, Vector3 dir) {
 	}
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 //INIT BASIC THINGS OF THE WORLD
 void World::initCamera(Camera* camera) {
 	Camera::current = camera;
@@ -200,6 +199,13 @@ void World::initMap() {
 	int Mapwidth = 100;
 	int Mapheight = 100;
 
+	for (int j = 0; j < Mapwidth * Mapheight; j++) {
+		maps[0][j] = 1;
+		maps[1][j] = 1;
+		maps[2][j] = 1;
+		maps[3][j] = 1;
+	}
+	//Intentos para crear el map
 	//for (int i = 0; i < CUADRANTS; i++) {
 	//	uint8* currentMap = maps[i];
 	//	for (int j = 0; j < Mapwidth * Mapheight; j++) {//Recorrer mapa
@@ -226,12 +232,7 @@ void World::initMap() {
 	//	}
 	//	maps[i] = currentMap;
 	//}
-	for (int j = 0; j < Mapwidth * Mapheight; j++) {
-		maps[0][j] = 1;
-		maps[1][j] = 1;
-		maps[2][j] = 1;
-		maps[3][j] = 1;
-	}
+	//El otro intento
 	/*for (int i = 0; i < MAX_ENTITIES; i++) {
 		Entity* current = staticEntities[i];
 		if (current == NULL) break;
@@ -255,7 +256,6 @@ void World::initZombies() {
 		zombies[i] = zombie;
 	}
 }
-
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 void World::loadDecoration() {
@@ -288,10 +288,9 @@ void World::loadDecoration() {
 		//std::cerr << tipo << std::endl;;
 		addDecoration(entity);
 	}
-
 	maxDecoration = (deco.size() / 2) - 1;
-
 }
+
 void World::loadStructure() {
 	//Load filenames from save
 	std::string path = "data/Assets/Structure/";
@@ -353,6 +352,8 @@ void World::disparar() {
 		if (zombie->mesh->testRayCollision(scaled, origin, dir, colPoint, colNormal, maxDistance, false)) {
 			if (weapon->lastShot + weapon->cadencia < game->time) {
 				weapon->lastShot = game->time;
+				weapon->cargador--;
+				if (weapon->cargador < 0) weapon->cargador = 30;
 				zombie->vida -= weapons[currentWeapon]->damage;
 				if (zombie->vida <= 0) Game::instance->gameManager->zombiesAlive--;
 				std::cerr << "Buena punteria! " << zombie->vida << std::endl;;
@@ -416,12 +417,14 @@ void World::selectEntityEditor(Vector3 dir){
 	rayEntity->bounding = true;
 	selectedEntity = rayEntity;
 }
+
 void World::deleteEntity(Entity* entity) {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		if (staticEntities[i] == entity) staticEntities[i] = NULL; break;
 		if (dynamicEntities[i] == entity) dynamicEntities[i] = NULL; break;
 	}
 }
+
 void World::moveZombies() {
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = zombies[i];
@@ -484,7 +487,6 @@ int World::zombiesAlive()
 	return numZombies;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::...
-
 //RENDERS OF EVERYTHING NECESSARY
 void World::RenderStatic(Camera* camera)
 {
@@ -502,6 +504,7 @@ void World::RenderStatic(Camera* camera)
 
 	}
 }
+
 void World::RenderDynamic(Camera* camera)
 {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
@@ -538,6 +541,16 @@ void World::RenderPlayer(Camera* camera) {
 	weapons[0]->renderWeapon(player, shader); //CAMBIAR EL [0] AL ARMA QUE TENGA SELECCIONADA
 }
 
+void World::RenderSpawns(Camera* camera) {
+	for (int i = 0; i < MAX_SPAWNERS; i++) {
+		ZombieSpawner* spawner = spawners[i];
+		if (spawner == NULL) continue;
+		BoundingBox currentBox = transformBoundingBox(spawner->m, spawner->mesh->box);
+		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
+		spawner->render(shader);
+	}
+}
+
 void World::RenderBoundingStatic(Camera* camera)
 {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
@@ -572,7 +585,6 @@ void World::RenderBoundingZombies(Camera* camera)
 		zombie->mesh->renderBounding(scaled);
 	}
 }
-
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 void World::saveWorldInfo(std::string filename) {
 	ofstream outdata;
@@ -633,6 +645,7 @@ void World::saveWorldInfo(std::string filename) {
 	cerr << "World saved!" << endl;
 	outdata.close();
 }
+
 bool World::loadWorldInfo(std::string filename) {
 	ifstream indata;
 	std::string strMatrix;

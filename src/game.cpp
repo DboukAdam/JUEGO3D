@@ -48,7 +48,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 
 	//Audio
-	
 	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
 		std::cout << "AUDIO ERROR: tarjeta de sonido" << std::endl;
 	}
@@ -58,7 +57,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 //what to do when the image has to be draw
 void Game::render(void)
 {
-	
 	currentStage->render(currentWorld);
 	
 	//swap between front buffer and back buffer
@@ -80,9 +78,7 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 	}
 }
 
-void Game::onKeyUp(SDL_KeyboardEvent event)
-{
-}
+
 
 void Game::onMouseButtonDown( SDL_MouseButtonEvent event )
 {
@@ -91,8 +87,6 @@ void Game::onMouseButtonDown( SDL_MouseButtonEvent event )
 		mouse_locked = !mouse_locked;
 		SDL_ShowCursor(!mouse_locked);
 	}
-
-	
 }
 
 void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
@@ -149,13 +143,6 @@ void Game::onMouseWheel(SDL_MouseWheelEvent event)
 	mouse_speed *= event.y > 0 ? 1.1 : 0.9;
 }
 
-void Game::onGamepadButtonDown(SDL_JoyButtonEvent event)
-{
-}
-
-void Game::onGamepadButtonUp(SDL_JoyButtonEvent event)
-{
-}
 
 void Game::onResize(int width, int height)
 {
@@ -186,7 +173,6 @@ void Game::initWorld(std::string filename){
 	Texture* groundText = Texture::Get("data/Assets/Structure/aigua.png"); 
 	//Camera
 	camera = new Camera();
-	
 	if (filename == "") {
 		editorWorld = new World(shader);
 		editorWorld->loadDecoration();
@@ -210,34 +196,19 @@ void Game::initWorld(std::string filename){
 		world->initGround(groundText);
 		world->initCamera(camera);
 		world->addWeapon(AK47);
-		//world->initWeapons();
-		//world->addZombie(zombie);
 		world->initMap();
 		world->initZombies();
 		currentWorld = world;
-		//QUITAR
-		for (int i = 0; i < 4; i++) {
-			m.setTranslation(10 * i, 0, 10 * i);
-			world->spawners[i] = new ZombieSpawner(10 * i, 0, 10 * i, m);
-			world->spawners[i]->loadMesh("data/Assets/Spawn/spawn.obj");
-			world->spawners[i]->loadTexture("data/Assets/Spawn/spawn.png");
-		}
-
-		//currentWorld = world;
 	}
-	
 }
-
 
 //STAGES SETTINGS 
 void Game::setIntroStage(){
 	currentStage = intro;
 	mouse_locked = false;
 	SDL_ShowCursor(!mouse_locked);
-	//introMusic
 	introMusic->Stop(introMusic->channelSample);
 	introMusic->channelSample = *introMusic->Play("data/Audio/menu.mp3");
-	//parar musica
 	ambiente->Stop(ambiente->channelSample);
 	narrador->Stop(narrador->channelSample);
 }
@@ -246,23 +217,18 @@ void Game::setSelectWorldStage() {
 	currentStage = selectWorld;
 	mouse_locked = false;
 	SDL_ShowCursor(!mouse_locked);
-
-	//parar musica
 	ambiente->Stop(ambiente->channelSample);
 }
 
 void Game::setPlayStage(){
-	currentStage = play;
 	mouse_locked = true;
 	gameManager->round = 0;
 	gameManager->startedRoundTime = time;
+	gameManager->initRound();
 	SDL_ShowCursor(!mouse_locked);
-
-	//music
 	ambiente->channelSample = *ambiente->Play("data/Audio/ambiente.mp3");
-	//narrador->channelSample = *narrador->Play("huij");
-	//parar musica
 	introMusic->Stop(introMusic->channelSample);
+	currentStage = play;
 }
 
 void Game::setEditorStage(){
@@ -270,9 +236,7 @@ void Game::setEditorStage(){
 	currentWorld = editorWorld;
 	mouse_locked = true;
 	SDL_ShowCursor(!mouse_locked);
-	
 	ambiente->channelSample = *ambiente->Play("data/Audio/ambiente.mp3");
-	//parar musica
 	introMusic->Stop(introMusic->channelSample);
 }
 
@@ -280,10 +244,19 @@ void Game::setEndStage(){
 	currentStage = end;
 	mouse_locked = false;
 	SDL_ShowCursor(!mouse_locked);
-	
-	//parar ambiente
 	ambiente->Stop(ambiente->channelSample);
 	narrador->channelSample = *narrador->Play("data/Audio/gameover.mp3");
 	introMusic->channelSample = *introMusic->Play("data/Audio/menu.mp3");
 }
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+void Game::onGamepadButtonDown(SDL_JoyButtonEvent event)
+{
+}
+
+void Game::onGamepadButtonUp(SDL_JoyButtonEvent event)
+{
+}
+
+void Game::onKeyUp(SDL_KeyboardEvent event)
+{
+}

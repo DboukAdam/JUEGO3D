@@ -22,7 +22,6 @@ void IntroStage::render(World* world) {
 	
 	game->gui->RenderIntroGui();
 
-
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
@@ -73,7 +72,6 @@ void PlayStage::render(World* world) {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
 	//set the camera as default
 	Camera* camera = Camera::current;
 
@@ -87,18 +85,14 @@ void PlayStage::render(World* world) {
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	//enable shader
 	Shader* shader = world->shader;
-	//shader->enable();
 	world->sky->render(shader);
 	world->ground->render(shader);
 	world->RenderPlayer(camera);
 	world->RenderStatic(camera);
 	world->RenderDynamic(camera);
 	world->RenderZombies(camera, game->time);
-
-	//disable shader
-	//shader->disable();
+	world->RenderSpawns(camera);
 
 	//GUI STUFF
 	glDisable(GL_DEPTH_TEST);
@@ -125,7 +119,6 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 	Shader* shader = world->shader;
 
 	float speed = seconds_elapsed * game->mouse_speed; //the speed is defined by the seconds_elapsed so it goes constant
-	
 	
 	if (game->mouse_locked)
 	{
@@ -186,12 +179,15 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 
 		Input::centerMouse();
 	}
-	else {
-	}
-	
+
 	if (Input::wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
 		game->mouse_locked = !game->mouse_locked;
 		SDL_ShowCursor(!game->mouse_locked);
+	}
+
+	if (Input::wasKeyPressed(SDL_SCANCODE_F5)) {
+		game->gameManager->GodMode = !game->gameManager->GodMode;
+		std::cerr << "God mode set to " << game->gameManager->GodMode << std::endl;
 	}
 }
 
@@ -220,6 +216,10 @@ void EditorStage::render(World* world)
 	world->RenderStatic(camera);
 	world->RenderDynamic(camera);
 	world->RenderZombies(camera, game->time);
+	world->RenderSpawns(camera);
+
+	world->RenderBoundingStatic(camera);
+	world->RenderBoundingDynamic(camera);
 
 	if (world->selectedEntity == NULL) {
 		Vector3 origin = camera->eye;//unproject center coord of the screen
@@ -245,27 +245,15 @@ void EditorStage::render(World* world)
 		}
 	}
 
-	if (world->typeObject > 2) world->typeObject = 0;
-
 	if (world->typeObject == 0) {
-		
 		world->numEntity = world->numStructure;
 	}
 	else if (world->typeObject == 1) {
-		
 		world->numEntity = world->numDecoration;
 	}
 	else if (world->typeObject == 2) {
-		
 		world->numEntity = world->numSpawns;
 	}
-	
-
-	
-
-	//pintando bounding muy feo
-	world->RenderBoundingStatic(camera);
-	world->RenderBoundingDynamic(camera);
 
 	//Draw the floor grid
 	drawGrid();
@@ -286,13 +274,6 @@ void EditorStage::render(World* world)
 
 	//draw text para ver la mesh que voy a pintar
 	string asset;
-	
-	/*if (world->typeObject == 0) {
-		drawText(20, 20, world->structures[world->numEntity]->type, Vector3(1, 1, 1), 2);
-	}
-	else if (world->typeObject == 1) {
-		drawText(20, 20, world->decoration[world->numEntity]->type, Vector3(1, 1, 1), 2);
-	}*/
 }
 
 void EditorStage::update(double seconds_elapsed, World* world)
@@ -337,12 +318,9 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				std::cout << "Cambio de objectos a Spawners" << std::endl;
 				world->numEntity = world->numSpawns;
 			}
-
-		
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
-			
 			Vector3 dir = camera->getRayDirection(Input::mouse_position.x, Input::mouse_position.y, 800, 600);
 			if (world->typeObject == 0) {
 				world->addObjectEditor(world->structures[world->numEntity], dir);
@@ -353,7 +331,6 @@ void EditorStage::update(double seconds_elapsed, World* world)
 			else {
 				world->addObjectEditor(world->spawnsEditor[world->numSpawns], dir);
 			}
-			
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_X)) {
@@ -384,7 +361,6 @@ void EditorStage::update(double seconds_elapsed, World* world)
 					world->numSpawns += 1;
 				}
 			}
-			
 		}
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_Z)) {
@@ -407,7 +383,6 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				}
 			}
 		}
-
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_Q)) {
 			if (world->selectedEntity != NULL) {
@@ -436,11 +411,13 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				}
 			}
 		}
+
 		if (Input::wasKeyPressed(SDL_SCANCODE_UP)) {
 			if (!world->selectedEntity == NULL) {
 				world->selectedEntity->m.translate(0, 0.5, 0);
 			}
 		}
+
 		if (Input::wasKeyPressed(SDL_SCANCODE_DOWN)) {
 			if (!world->selectedEntity == NULL) {
 				world->selectedEntity->m.translate(0, -0.5, 0);
@@ -452,6 +429,7 @@ void EditorStage::update(double seconds_elapsed, World* world)
 				world->selectedEntity->m.translate(-0.5, 0, 0);
 			}
 		}
+
 		if (Input::wasKeyPressed(SDL_SCANCODE_RIGHT)) {
 			if (!world->selectedEntity == NULL) {
 				world->selectedEntity->m.translate(0.5, 0, 0);
@@ -466,13 +444,13 @@ void EditorStage::update(double seconds_elapsed, World* world)
 			}
 		}
 
-
 		if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
 			cout << "Que nombre quieres ponerle?" << endl;
 			string filename;
 			getline(cin, filename);
 			world->saveWorldInfo(filename);
 		}
+
 		if (Input::wasKeyPressed(SDL_SCANCODE_L)) {
 			cout << "Que archivo quieres cargar?" << endl;
 			string filename;

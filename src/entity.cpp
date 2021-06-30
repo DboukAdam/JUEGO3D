@@ -4,10 +4,10 @@
 Vector3 Zombie::AStarPath(Vector3 target, uint8** maps) {
 	int output[100];
 	int path_steps = -1;
-	float tileSizeX = 1.f; //MEGA SUCIO
+	float tileSizeX = 1.f;
 	float tileSizeZ = 1.f;
 	int Mapwidth = 100;
-	int Mapheight = 100; //SUPER SUCIO
+	int Mapheight = 100;
 
 	int startx = clamp(abs(pos.x) / tileSizeX, 0, Mapwidth - 1);
 	int startz = clamp(abs(pos.z) / tileSizeZ, 0, Mapheight - 1);
@@ -39,9 +39,6 @@ Vector3 Zombie::AStarPath(Vector3 target, uint8** maps) {
 	Vector3 nextPos = Vector3(posxgrid * tileSizeX, 0.0f, posygrid * tileSizeZ);
 	if (target.x < 0) nextPos.x *= -1;
 	if (target.z < 0) nextPos.z *= -1;
-
-	//std::cerr << "Target: " << targetx << " " << targetz << std::endl;
-	//std::cerr << "nextPos: " << nextPos.x << " " << nextPos.z << std::endl;
 
 	return nextPos;
 }
@@ -85,10 +82,8 @@ void Zombie::renderAnimation(float time, float tiling) {
 	shaderAnim->disable();
 }
 
-void Player::CamPlayer(Camera* camera)
-{
+void Player::CamPlayer(Camera* camera) {
 	camera->enable();
-
 	m.setTranslation(pos.x, pos.y, pos.z);
 	m.rotate(yaw * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
 	
@@ -102,20 +97,16 @@ void Player::CamPlayer(Camera* camera)
 
 	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 	camera->lookAt(eye, center, up);
-	
 }
 
-void Entity::DeleteEntity()
-{
+void Entity::DeleteEntity() {
 	this->m.setTranslation(0, 10000000, 0);
 }
 
 void Entity::render(Shader* shader, float tiling) {
 	Camera* camera = Camera::current;
 	shader->enable();
-	if (shader)
-	{
-		//upload uniforms
+	if (shader)	{
 		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
 		shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
 		shader->setUniform("u_time", time);
@@ -134,10 +125,8 @@ void Entity::copy(Entity* entity) {
 }
 
 void Weapon::init(float cad, int cargador, int d) {
-	isEmpty = false;
-	recargar = false;
 	cadencia = cad;
-	cargador = cargador;
+	this->cargador = cargador;
 	damage = d;
 }
 
@@ -155,5 +144,6 @@ void Weapon::renderWeapon(Player* player, Shader* shader, float tiling) { //AAAA
 void ZombieSpawner::spawnZombie(Zombie* zombie, float time) {
 	ultimoSpawn = time;
 	zombie->pos = pos;
-	zombie->m.setTranslation(pos.x, pos.y, pos.z);
+	zombie->pos.y = 0;
+	zombie->m.setTranslation(pos.x, 0, pos.z);
 }

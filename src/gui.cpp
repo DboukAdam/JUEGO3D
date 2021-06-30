@@ -108,8 +108,6 @@ void Gui::initEntries() {
 	entries = entriesTemp;
 }
 
-
-
 void Gui::RenderIntroGui()
 {
 	Game* game = Game::instance;
@@ -205,18 +203,19 @@ void Gui::RenderPlayGui() {
 	Game* game = Game::instance;
 	Manager* manager = game->gameManager;
 	Player* player = game->currentWorld->player;
+	Weapon* weapon = game->currentWorld->weapons[game->currentWorld->currentWeapon];
 	drawText(10, game->window_height - 40, std::to_string(manager->round), Vector3(1, 1, 1), 5);
 	drawText(10, 20, std::to_string(manager->zombiesAlive) + "/" + std::to_string(manager->zombiesPerRound), Vector3(1, 1, 1), 5);
 	drawText(game->window_width / 2, game->window_height - 40, std::to_string(player->vida), Vector3(1, 1, 1), 5);
+	drawText(game->window_width - 80, game->window_height - 40, std::to_string(weapon->cargador), Vector3(1, 1, 1), 5);
 }
 
 void Gui::RenderCrosshair(){
 	Game* game = Game::instance;
 	Camera cam2D;
 	cam2D.setOrthographic(0, game->window_width, game->window_height, 0, -1, 1);
-	//cam2D.enable();
 
-	Mesh quad; //MODIFICAR
+	Mesh quad;
 	quad.createQuad(game->window_width/2, game->window_height/2, 10, 10, false);
 
 	shader->enable();

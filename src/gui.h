@@ -19,6 +19,7 @@ enum atlasGuide {
 	brownButton,
 	trunLeftRed
 };
+
 class Button {
 public:
 	Vector2 pos;

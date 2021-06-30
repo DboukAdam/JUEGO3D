@@ -20,7 +20,8 @@ void IntroStage::render(World* world) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	game->gui->RenderIntroGui();
+	if (game->tutorial) game->gui->RenderTutorial();
+	else game->gui->RenderIntroGui();
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -30,9 +31,7 @@ void IntroStage::render(World* world) {
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 }
 
-void IntroStage::update(double seconds_elapsed, World* world) {
-	Game* game = Game::instance;
-	
+void IntroStage::update(double seconds_elapsed, World* world) {	
 }
 
 void SelectWorldStage::render(World* world) {
@@ -99,17 +98,21 @@ void PlayStage::render(World* world) {
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	if (game->mouse_locked) {
-		game->gui->RenderCrosshair();
-		game->gui->RenderPlayGui();
-		game->gameManager->update();
-	}
+	
+	if (game->tutorial) game->gui->RenderTutorial();
 	else {
-		game->gui->RenderPauseMenu();
+		if (game->mouse_locked) {
+			game->gui->RenderCrosshair();
+			game->gui->RenderPlayGui();
+			game->gameManager->update();
+		}
+		else {
+			game->gui->RenderPauseMenu();
+		}
 	}
+
 	//render the FPS, Draw Calls, etc
-	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+	//drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 }
 
 void PlayStage::update(double seconds_elapsed, World* world) {
@@ -156,13 +159,14 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 				Vector3 coll;
 				Vector3 collNormal;
 				if (current->mesh != NULL) {
-					if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.6, coll, collNormal)) continue;
+					if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.5, coll, collNormal)) continue;
 					Vector3 push_away = normalize(coll - playerTargetCenter) * seconds_elapsed;
-					targetPos = player->pos - (push_away - (reflect(playerSpeed, collNormal) * 0.1));
+					//targetPos = player->pos - (push_away - (reflect(playerSpeed, collNormal) * 0.05));
+					targetPos = player->pos  - push_away;
 					targetPos.y = player->pos.y;
 				}
 			}
-			if (world->dynamicEntities[i]  != NULL) { //No hace nada
+			if (world->dynamicEntities[i]  != NULL) { //No hace nada porque son muy pequeños
 				Entity* current = world->dynamicEntities[i];
 
 				Vector3 coll;
@@ -194,6 +198,7 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 void EditorStage::render(World* world)
 {
 	Game* game = Game::instance;
+	
 	//set the clear color (the background color) and Clear the window and the depth buffer
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -263,17 +268,19 @@ void EditorStage::render(World* world)
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	if (game->mouse_locked) {
-		game->gui->RenderCrosshair();
-	}
+	if (game->tutorial) game->gui->RenderTutorial();
 	else {
-		game->gui->RenderPauseMenu();
+		if (game->mouse_locked) {
+			game->gui->RenderCrosshair();
+		}
+		else {
+			game->gui->RenderPauseMenu();
+		}
 	}
 	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+	
 
-	//draw text para ver la mesh que voy a pintar
-	string asset;
 }
 
 void EditorStage::update(double seconds_elapsed, World* world)

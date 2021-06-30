@@ -13,9 +13,7 @@
 #include "manager.h"
 #include "audio.h"
 
-
 #define MAX_EDITOR_ENTITIES 69
-
 
 class Game
 {
@@ -62,6 +60,7 @@ public:
 	Gui* gui;
 	float mouse_speed = 10.0f;
 	Manager* gameManager;
+	bool tutorial = false;
 
 	Game( int window_width, int window_height, SDL_Window* window );
 

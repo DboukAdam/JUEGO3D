@@ -49,6 +49,7 @@ public:
 	Button* turnPageLeftButton;
 	Button* turnBackLeftRedButton;
 	Button* endButtons[numEndButtons];
+	Button* tutorial;
 
 	int worldPage;
 	std::vector<std::string> entries;
@@ -69,6 +70,7 @@ public:
 	void RenderCrosshair();
 	void RenderPauseMenu();
 	void RenderEndGui();
+	void RenderTutorial();
 	//ButtonPressed
 	void introButtonPressed(Vector2 pos);
 	int worldButtonPressed(Vector2 pos);

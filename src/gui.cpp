@@ -10,7 +10,7 @@ Gui::Gui(Shader* shader, Texture* atlas) {
 	this->worldPage = 0;
 	//init background
 	background = new Button(Vector2(400, 300), Vector4(0, 0, 1, 1), 800, 600, false);
-
+	tutorial = new Button(Vector2(400, 300), Vector4(0, 0, 1, 1), 800, 600, false);
 	initAtlas();
 	initIntroButtons();
 	initPauseButtons();
@@ -142,7 +142,7 @@ void Gui::RenderIntroGui()
 	float textSize = 7 * scale;
 	float yOffset = 14.0f;
 	float xOffset = 20;
-	std::string text[] = { "play", "editor", "settings", "exit" };
+	std::string text[] = { "play", "editor", "tutorial", "exit" };
 	for (int i = 0; i < numIntroButtons; i++) {
 		float yPos = introButtons[i]->pos.y;
 		drawText(xOffset, yPos - yOffset - textSize/2, text[i], Vector3(1, 1, 1), scale);
@@ -264,7 +264,7 @@ void Gui::RenderPauseMenu() {
 	float textSize = 7 * scale;
 	float yOffset = 14.0f;
 	float xOffset = 20;
-	std::string text[] = { "resume", "settings", "main menu" };
+	std::string text[] = { "resume", "tutorial", "main menu" };
 	for (int i = 0; i < numPauseButtons; i++) {
 		float yPos = pauseButtons[i]->pos.y;
 		drawText(xOffset, yPos - yOffset - textSize / 2, text[i], Vector3(1, 1, 1), scale);
@@ -313,6 +313,27 @@ void Gui::RenderEndGui() {
 	}
 }
 
+void Gui::RenderTutorial() {
+	Game* game = Game::instance;
+	Camera cam2D;
+	cam2D.setOrthographic(0, game->window_width, game->window_height, 0, -1, 1);
+
+	shader->enable();
+	if (shader)
+	{
+		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+		shader->setUniform("u_viewprojection", cam2D.viewprojection_matrix);
+		shader->setUniform("u_texture", Texture::Get("data/Gui/tutorial.png"), 0);
+		shader->setUniform("u_model", Matrix44());
+		shader->setUniform("u_texture_tiling", 1.0f);
+
+		shader->setUniform("u_tex_range", tutorial->range);
+		tutorial->mesh.render(GL_LINE_STRIP);
+		tutorial->mesh.render(GL_TRIANGLES);
+	}
+	shader->disable();
+}
+
 void Gui::introButtonPressed(Vector2 pos) {
 	Game* game = Game::instance;
 	int i = 0;
@@ -330,7 +351,10 @@ void Gui::introButtonPressed(Vector2 pos) {
 		game->setSelectWorldStage();
 	}
 	if (i == 1) game->setEditorStage();
-	if (i == 2) std::cout << "Hola, soy las settings, encantado." << std::endl;
+	if (i == 2) {
+		game->tutorial = true; 
+		game->mouse_locked = false;
+	}
 	if (i == 3) game->must_exit = true;
 }
 
@@ -387,7 +411,10 @@ void Gui::pauseButtonPressed(Vector2 pos) {
 		game->mouse_locked = !game->mouse_locked;
 		SDL_ShowCursor(!game->mouse_locked);
 	}
-	if (i == 1) std::cout << "Hola, soy las settings, encantado." << std::endl;
+	if (i == 1) {
+		game->tutorial = true;
+		game->mouse_locked = false;
+	}
 	if (i == 2) game->setIntroStage();
 }
 

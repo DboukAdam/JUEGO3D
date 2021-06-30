@@ -78,8 +78,6 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 	}
 }
 
-
-
 void Game::onMouseButtonDown( SDL_MouseButtonEvent event )
 {
 	if (event.button == SDL_BUTTON_MIDDLE) //middle mouse
@@ -93,37 +91,42 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 {
 	if (event.button == SDL_BUTTON_LEFT) //left mouse
 	{
-		Camera* camera = Camera::current;
-		if (currentStage == intro) {
-			gui->introButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
-			click->Play("data/Audio/click.mp3");
+		if (tutorial) {
+			tutorial = false;
 		}
-		else if (currentStage == selectWorld) {
-			gui->changePageButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
-			int worldPos = gui->worldButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
-			if (worldPos >= 0) {
-				std::string filename = gui->entries[worldPos + (gui->worldPage * 5)];
-				initWorld(filename);
-				setPlayStage();
+		else {
+			Camera* camera = Camera::current;
+			if (currentStage == intro) {
+				gui->introButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+				click->Play("data/Audio/click.mp3");
 			}
-			click->Play("data/Audio/click.mp3");
-		}
-		else if (currentStage == play) {
-			if (!mouse_locked) {
-				gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y)); click->Play("data/Audio/click.mp3"); //sonidito de click 
+			else if (currentStage == selectWorld) {
+				gui->changePageButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+				int worldPos = gui->worldButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+				if (worldPos >= 0) {
+					std::string filename = gui->entries[worldPos + (gui->worldPage * 5)];
+					initWorld(filename);
+					setPlayStage();
+				}
+				click->Play("data/Audio/click.mp3");
 			}
-		}
-		else if (currentStage == editor) {
-			if (mouse_locked) {
-				Vector3 dir = camera->getRayDirection(this->window_width / 2, this->window_height / 2, this->window_width, this->window_height);
-				currentWorld->selectEntityEditor(dir);
-				feedbackPut->Play("data/Audio/feedback.mp3");
+			else if (currentStage == play) {
+				if (!mouse_locked) {
+					gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y)); click->Play("data/Audio/click.mp3"); //sonidito de click 
+				}
 			}
-			else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
-			click->Play("data/Audio/click.mp3");
-		}
-		else if (currentStage == end) {
-			gui->endButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+			else if (currentStage == editor) {
+				if (mouse_locked) {
+					Vector3 dir = camera->getRayDirection(this->window_width / 2, this->window_height / 2, this->window_width, this->window_height);
+					currentWorld->selectEntityEditor(dir);
+					feedbackPut->Play("data/Audio/feedback.mp3");
+				}
+				else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+				click->Play("data/Audio/click.mp3");
+			}
+			else if (currentStage == end) {
+				gui->endButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+			}
 		}
 	}
 	if (event.button == SDL_BUTTON_RIGHT) //right mouse
@@ -135,7 +138,6 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 			}
 		}
 	}
-
 }
 
 void Game::onMouseWheel(SDL_MouseWheelEvent event)
@@ -204,8 +206,8 @@ void Game::initWorld(std::string filename){
 
 //STAGES SETTINGS 
 void Game::setIntroStage(){
-	currentStage = intro;
 	mouse_locked = false;
+	currentStage = intro;
 	SDL_ShowCursor(!mouse_locked);
 	introMusic->Stop(introMusic->channelSample);
 	introMusic->channelSample = *introMusic->Play("data/Audio/menu.mp3");
@@ -214,8 +216,8 @@ void Game::setIntroStage(){
 }
 
 void Game::setSelectWorldStage() {
-	currentStage = selectWorld;
 	mouse_locked = false;
+	currentStage = selectWorld;
 	SDL_ShowCursor(!mouse_locked);
 	ambiente->Stop(ambiente->channelSample);
 }
@@ -232,17 +234,17 @@ void Game::setPlayStage(){
 }
 
 void Game::setEditorStage(){
+	mouse_locked = true;
 	currentStage = editor;
 	currentWorld = editorWorld;
-	mouse_locked = true;
 	SDL_ShowCursor(!mouse_locked);
 	ambiente->channelSample = *ambiente->Play("data/Audio/ambiente.mp3");
 	introMusic->Stop(introMusic->channelSample);
 }
 
 void Game::setEndStage(){
-	currentStage = end;
 	mouse_locked = false;
+	currentStage = end;
 	SDL_ShowCursor(!mouse_locked);
 	ambiente->Stop(ambiente->channelSample);
 	narrador->channelSample = *narrador->Play("data/Audio/gameover.mp3");

@@ -356,7 +356,6 @@ void World::disparar() {
 				if (weapon->cargador < 0) weapon->cargador = 30;
 				zombie->vida -= weapons[currentWeapon]->damage;
 				if (zombie->vida <= 0) Game::instance->gameManager->zombiesAlive--;
-				std::cerr << "Buena punteria! " << zombie->vida << std::endl;;
 				game->disparo->channelSample = *game->disparo->Play("data/Audio/disparoAK47.mp3");
 				break;
 			}

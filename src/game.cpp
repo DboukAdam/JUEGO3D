@@ -134,6 +134,9 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 			else gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
 			click->Play("data/Audio/click.mp3");
 		}
+		else if (currentStage == end) {
+			gui->endButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y));
+		}
 	}
 	if (event.button == SDL_BUTTON_RIGHT) //right mouse
 	{
@@ -172,7 +175,6 @@ void Game::onResize(int width, int height)
 void Game::initWorld(std::string filename){
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 	Matrix44 m;
-	
 	//Player
 	m.setTranslation(100, 100, 100);
 	Vector3 playerInitPos = Vector3(0, 0.5, 0);
@@ -182,7 +184,7 @@ void Game::initWorld(std::string filename){
 	Weapon* AK47 = new Weapon(0, 0.5, 0, m);
 	AK47->loadMesh("data/Assets/Weapons/AK47.obj");
 	AK47->loadTexture("data/Assets/Weapons/AK47.png");
-	//AK47->init(10.0f, 30, 1);
+	AK47->init(10.0f, 30, 5);
 	//Sky
 	Mesh* meshCielo = Mesh::Get("data/Assets/Ambiente/cielo.ASE");
 	Texture* textCielo = Texture::Get("data/Assets/Ambiente/cielo.tga");
@@ -202,8 +204,8 @@ void Game::initWorld(std::string filename){
 		editorWorld->initCamera(camera);
 		editorWorld->addWeapon(AK47);
 		editorWorld->initZombies();
-		//editorWorld->initWeapons();
-		//editorWorld->addZombie(zombie);
+		//QUITAR
+		editorWorld->zombies[0]->vida = 1;
 	}
 	else {
 		World* world = new World(shader);
@@ -220,14 +222,14 @@ void Game::initWorld(std::string filename){
 		//world->addZombie(zombie);
 		world->initMap();
 		world->initZombies();
-
-		////QUITAR
-		//for (int i = 0; i < 4; i++) {
-		//	m.setTranslation(10 * i, 0, 10 * i);
-		//	world->spawners[i] = (ZombieSpawner*) new Entity(10 * i, 0, 10 * i, m);
-		//	world->spawners[i]->loadMesh("data/Assets/Spawn/spawn.obj");
-		//	world->spawners[i]->loadTexture("data/Assets/Spawn/spawn.png");
-		//}
+		currentWorld = world;
+		//QUITAR
+		for (int i = 0; i < 4; i++) {
+			m.setTranslation(10 * i, 0, 10 * i);
+			world->spawners[i] = new ZombieSpawner(10 * i, 0, 10 * i, m);
+			world->spawners[i]->loadMesh("data/Assets/Spawn/spawn.obj");
+			world->spawners[i]->loadTexture("data/Assets/Spawn/spawn.png");
+		}
 
 		//currentWorld = world;
 	}
@@ -264,6 +266,7 @@ void Game::setPlayStage(){
 	currentStage = play;
 	mouse_locked = true;
 	gameManager->round = 0;
+	gameManager->startedRoundTime = time;
 	SDL_ShowCursor(!mouse_locked);
 
 	//music

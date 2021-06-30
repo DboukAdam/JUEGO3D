@@ -35,6 +35,7 @@ public:
 	ZombieSpawner* spawnsEditor[MAX_SPAWNERS];
 	Player* player;
 	Weapon* weapons[MAX_WEAPONS];
+	int currentWeapon = 0;
 	Shader* shader;
 	Entity* sky;
 	Entity* selectedEntity = NULL;
@@ -42,9 +43,6 @@ public:
 	Entity* ground;
 	int typeObject = 0;
 	int maxTypes = 3;
-
-	int round;
-
 	World(Shader* shader);
 	void addStaticEntity(Entity* entity);
 	void addDynamicEntity(Entity* entity);
@@ -73,8 +71,9 @@ public:
 	void selectEntityEditor(Vector3 dir);
 	void deleteEntity(Entity* entity);
 	int zombiesAlive();
-	void spawnZombies(int num, int vida, float time);
+	void spawnZombies(int num, int vida, float vel, float time);
 	void moveZombies();
+	void collisionPlayerZombie();
 	//Renders
 	void RenderStatic(Camera* camera);
 	void RenderDynamic(Camera* camera);

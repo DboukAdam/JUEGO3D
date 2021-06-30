@@ -14,15 +14,14 @@ Vector3 Zombie::AStarPath(Vector3 target, uint8** maps) {
 
 	float targetx = clamp(abs(target.x) / tileSizeX, 0, Mapwidth - 1);
 	float targetz = clamp(abs(target.z) / tileSizeZ, 0, Mapheight - 1);
-	//std::cerr << "Target: " << targetx << " " << targetz << std::endl;
 
 	if (startx == floor(targetx) && startz == floor(targetz)) return Vector3(startx, pos.y, startz);
 
 	uint8* map;
-	if (target.x >= 0 && target.z >= 0) map = maps[0];
-	else if (target.x >= 0 && target.z <= 0) map = maps[1];
-	else if (target.x <= 0 && target.z >= 0) map = maps[2];
-	else if (target.x <= 0 && target.z <= 0) map = maps[3];
+	if (pos.x >= 0 && pos.z >= 0) map = maps[0];
+	else if (pos.x >= 0 && pos.z <= 0) map = maps[1];
+	else if (pos.x <= 0 && pos.z >= 0) map = maps[2];
+	else if (pos.x <= 0 && pos.z <= 0) map = maps[3];
 
 	path_steps = AStarFindPathNoTieDiag(
 		startx, startz, //origin (tienen que ser enteros)
@@ -40,6 +39,9 @@ Vector3 Zombie::AStarPath(Vector3 target, uint8** maps) {
 	Vector3 nextPos = Vector3(posxgrid * tileSizeX, 0.0f, posygrid * tileSizeZ);
 	if (target.x < 0) nextPos.x *= -1;
 	if (target.z < 0) nextPos.z *= -1;
+
+	//std::cerr << "Target: " << targetx << " " << targetz << std::endl;
+	//std::cerr << "nextPos: " << nextPos.x << " " << nextPos.z << std::endl;
 
 	return nextPos;
 }
@@ -63,32 +65,23 @@ void Zombie::move(Vector3 target) {
 	m.rotate((yaw + 135)* DEG2RAD, Vector3(0, 1, 0));
 }
 
-void Zombie::setVel(float v){
-	this->vel = v;
-}
 
 void Zombie::renderAnimation(float time, float tiling) {
-	if (vida > 0) {
-		Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
-		shaderAnim->enable();
-		Camera* camera = Camera::current;
-		Animation* walk = Animation::Get("data/Zombies/Animation/animations_walking.skanim");
-		walk->assignTime(time);
-		if (shaderAnim) {
-			shaderAnim->setUniform("u_color", Vector4(1, 1, 1, 1));
-			shaderAnim->setUniform("u_viewprojection", camera->viewprojection_matrix);
-			shaderAnim->setUniform("u_texture", texture);
-			shaderAnim->setUniform("u_time", time);
-			shaderAnim->setUniform("u_model", m);
-			shaderAnim->setUniform("u_texture_tiling", tiling);
-			mesh->renderAnimated(GL_TRIANGLES, &walk->skeleton);
-		}
-		shaderAnim->disable();
+	Shader* shaderAnim = Shader::Get("data/shaders/skinning.vs", "data/shaders/texture.fs");
+	shaderAnim->enable();
+	Camera* camera = Camera::current;
+	Animation* walk = Animation::Get("data/Zombies/Animation/animations_walking.skanim");
+	walk->assignTime(time);
+	if (shaderAnim) {
+		shaderAnim->setUniform("u_color", Vector4(1, 1, 1, 1));
+		shaderAnim->setUniform("u_viewprojection", camera->viewprojection_matrix);
+		shaderAnim->setUniform("u_texture", texture);
+		shaderAnim->setUniform("u_time", time);
+		shaderAnim->setUniform("u_model", m);
+		shaderAnim->setUniform("u_texture_tiling", tiling);
+		mesh->renderAnimated(GL_TRIANGLES, &walk->skeleton);
 	}
-}
-
-void Player::setVel(float v) {
-	this->vel = v;
+	shaderAnim->disable();
 }
 
 void Player::CamPlayer(Camera* camera)
@@ -160,5 +153,6 @@ void Weapon::renderWeapon(Player* player, Shader* shader, float tiling) { //AAAA
 
 void ZombieSpawner::spawnZombie(Zombie* zombie, float time) {
 	ultimoSpawn = time;
+	zombie->pos = pos;
 	zombie->m.setTranslation(pos.x, pos.y, pos.z);
 }

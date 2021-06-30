@@ -3,7 +3,11 @@
 
 class Manager {
 public:
-	int round = 0;
+	int round;
+	int zombiesAlive;
+	int zombiesPerRound;
+	float startedRoundTime;
+	int spawnedZombies;
 
 	void update();
 	void initRound();

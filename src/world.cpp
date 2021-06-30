@@ -1,4 +1,5 @@
 #include "world.h"
+#include "game.h"
 
 #include <iostream>
 #include <fstream>
@@ -161,7 +162,7 @@ void World::initPlayer(Vector3 pos, Mesh* mesh, Texture* texture) {
 	Player* player = new Player(pos.x, pos.y, pos.z, m);
 	player->mesh = mesh;
 	player->texture = texture;
-	player->setVel(2.0f);
+
 	addPlayer(player);
 }
 
@@ -250,15 +251,7 @@ void World::initZombies() {
 	m.setTranslation(0, 1000, 0);
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = new Zombie(0, 0, 0, m);
-		zombie->loadMesh("data/Zombies/Animation/character.mesh");
-		zombie->loadTexture("data/Zombies/image.png");
-		zombie->vida = 0;
-		zombie->vel = 0.0f;
 		zombies[i] = zombie;
-	}
-	for (int i = 0; i < MAX_ZOMBIES; i++) {
-		zombies[i]->vida = 0;
-		zombies[i]->vel = 0;
 	}
 }
 
@@ -332,33 +325,12 @@ void World::loadStructure() {
 
 void World::loadSpawns()
 {
-	std::string path = "data/Assets/Spawn/";
-	std::string mbin = ".mbin";
-	std::vector<std::string> spawns;
-	int numElements = 0;
-	for (const auto& object : std::filesystem::directory_iterator(path)) {
-		std::string name = object.path().u8string();
-		std::string ext = name.substr((name.size() - 5), 5);
-		if (ext == mbin) continue;
-		spawns.push_back(name);
-		numElements++;
-		
+	for (int i = 0; i < MAX_SPAWNERS; i++) {
+		Matrix44 m;
+		m.setTranslation(0, 0, 0);
+		ZombieSpawner* spawner = new ZombieSpawner(0, 0, 0, m);
+		spawnsEditor[i] = spawner;
 	}
-	Matrix44 m;
-	for (int i = 0; i < numElements - 1; i += 2) {
-		ZombieSpawner* spawn = new ZombieSpawner(0,0,0, m);
-		const char* meshObject = spawns[i].c_str();
-		spawn->loadMesh(meshObject);
-
-		const char* textureObject = spawns[i + 1].c_str();
-		spawn->loadTexture(textureObject);
-
-		std::string tipo = spawns[i].substr(22, spawns[i].size() - 26);
-		spawn->type = tipo;
-		//std::cerr << tipo << std::endl;;
-		addSpawns(spawn);
-	}
-	maxSpawns = (spawns.size() / 2) - 1;
 }
 
 
@@ -374,9 +346,14 @@ void World::disparar() {
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = zombies[i];
 		if (zombie == NULL)	break;
-		if (zombie->mesh->testRayCollision(zombie->m, origin, dir, colPoint, colNormal, maxDistance, false)) {
-			//zombie->~Zombie();
-			std::cerr << "Buena punteria!" << std::endl;;
+		if (zombie->vida <= 0) continue;
+		Matrix44 scaled = zombie->m;
+		scaled.scale(0.01, 0.01, 0.01);
+		if (zombie->mesh->testRayCollision(scaled, origin, dir, colPoint, colNormal, maxDistance, false)) {
+			zombie->vida -= weapons[currentWeapon]->damage;
+			if (zombie->vida <= 0) Game::instance->gameManager->zombiesAlive--;
+			std::cerr << "Buena punteria! " << zombie->vida << std::endl;;
+			break;
 		}
 	}
 }
@@ -422,23 +399,46 @@ void World::moveZombies() {
 		Vector3 target;
 		target = zombie->AStarPath(player->pos, maps);
 		zombie->move(target);
+
 	}
 }
 
-void World::spawnZombies(int num, int vida, float time) {
+void World::collisionPlayerZombie() {
+	Vector3 playerCenter = player->pos + Vector3(0, 1, 0);
+	int hitCooldown = 1;
+	for (int i = 0; i < MAX_ZOMBIES; i++) {
+		Zombie* zombie = zombies[i];
+		if (zombie == NULL || zombie->vida <= 0) continue;
+		Vector3 coll;
+		Vector3 collNormal;
+		if (zombie->mesh != NULL) {
+			Matrix44 scaled = zombie->m;
+			scaled.scale(0.01, 0.01, 0.01);
+			if (zombie->mesh->testSphereCollision(scaled, playerCenter, 0.5, coll, collNormal)) {
+				if (player->lastHit + hitCooldown < Game::instance->time) {
+					player->lastHit = Game::instance->time;
+					player->vida -= 1;
+				}
+			}
+		}
+	}
+}
+
+void World::spawnZombies(int num, int vida, float vel, float time) {
 	for (int i = 0; i < num; i++) {
 		Zombie* zombie = zombies[i];
-		for (int j = 0; j < MAX_SPAWNERS; j++) {
-			ZombieSpawner* zombieSpawner = spawners[j];
-			//Calcular distancia?
-			if (zombieSpawner != NULL && zombieSpawner->ultimoSpawn + zombieSpawner->cooldown < time) {
-				zombieSpawner->spawnZombie(zombie, time);
-				/*zombieSpawner->ultimoSpawn = time;
-				zombie->m.setTranslation(zombieSpawner->pos.x, zombieSpawner->pos.y, zombieSpawner->pos.z);*/
-				zombie->vida = vida;
-				break;
+		if (zombie->vida <= 0) {
+			for (int j = 0; j < MAX_SPAWNERS; j++) {
+				ZombieSpawner* zombieSpawner = spawners[j];
+				//Calcular distancia?
+				if (zombieSpawner != NULL && zombieSpawner->ultimoSpawn + zombieSpawner->cooldown < time) {
+					zombieSpawner->spawnZombie(zombie, time);
+					Game::instance->gameManager->spawnedZombies++;
+					zombie->vida = vida;
+					zombie->vel = vel;
+					break;
+				}
 			}
-			
 		}
 	}
 }
@@ -490,9 +490,14 @@ void World::RenderZombies(Camera* camera, float time) {
 		if (zombie == NULL) {
 			break;
 		}
-		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
-		if (!camera->testSphereInFrustum(currentBox.center, zombie->mesh->radius)) continue;
-		zombie->renderAnimation(time);
+		if (zombie->vida > 0) {
+			Matrix44 scaled = zombie->m;
+			scaled.scale(0.01, 0.01, 0.01);
+			BoundingBox currentBox = transformBoundingBox(scaled, zombie->mesh->box);
+			//if (!camera->testSphereInFrustum(currentBox.center, zombie->mesh->radius)) continue;
+			zombie->renderAnimation(time);
+			//zombie->render(shader);
+		}
 	}
 }
 
@@ -528,9 +533,11 @@ void World::RenderBoundingZombies(Camera* camera)
 	for (int i = 0; i < MAX_ZOMBIES; i++) {
 		Zombie* zombie = zombies[i];
 		if (zombie == NULL) break;
-		BoundingBox currentBox = transformBoundingBox(zombie->m, zombie->mesh->box);
+		Matrix44 scaled = zombie->m;
+		scaled.scale(0.01, 0.01, 0.01);
+		BoundingBox currentBox = transformBoundingBox(scaled, zombie->mesh->box);
 		if (!camera->testBoxInFrustum(currentBox.center, currentBox.halfsize)) continue;
-		if (zombie->bounding) zombie->mesh->renderBounding(zombie->m);
+		zombie->mesh->renderBounding(scaled);
 	}
 }
 
@@ -624,19 +631,23 @@ bool World::loadWorldInfo(std::string filename) {
 		if (pos.y == 10000000.0) {
 			continue;
 		}
-		Entity* newEntity = new Entity(pos.x, pos.y, pos.z, m);
-		newEntity->loadMesh(meshName.c_str());
-		newEntity->loadTexture(textureName.c_str());
+
 		if (entityType == "static") {
+			Entity* newEntity = new Entity(pos.x, pos.y, pos.z, m);
+			newEntity->loadMesh(meshName.c_str());
+			newEntity->loadTexture(textureName.c_str());
 			staticEntities[staticIndex] = newEntity;
 			staticIndex++;
 		}
 		else if (entityType == "dynamic") {
+			Entity* newEntity = new Entity(pos.x, pos.y, pos.z, m);
+			newEntity->loadMesh(meshName.c_str());
+			newEntity->loadTexture(textureName.c_str());
 			dynamicEntities[dynamicIndex] = newEntity;
 			dynamicIndex++;
 		}
 		else if (entityType == "spawner") {
-			ZombieSpawner* spawn = new ZombieSpawner(pos.x, pos.y,pos.z,m);//rellenarlo con lo que necesite
+			ZombieSpawner* spawn = new ZombieSpawner(pos.x, pos.y, pos.z,m);//rellenarlo con lo que necesite
 			spawn->loadMesh(meshName.c_str());
 			spawn->loadTexture(textureName.c_str());
 			spawners[spawnerIndex] = spawn;

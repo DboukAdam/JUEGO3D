@@ -15,6 +15,7 @@ Gui::Gui(Shader* shader, Texture* atlas) {
 	initIntroButtons();
 	initPauseButtons();
 	initWorldButtons();
+	initEndButtons();
 	initTurnPageButtons();
 }
 
@@ -65,6 +66,18 @@ void Gui::initWorldButtons() {
 	float yPos = buttonOffset;
 	for (int i = 0; i < numSaves; i++) {
 		worldSavesButtons[i] = new Button(Vector2(xPos, (yPos * (i + 1)) - 30), atlasRanges[brownButton], button_width, button_height, false);
+	}
+}
+
+void Gui::initEndButtons() {
+	Game* game = Game::instance;
+	float button_width = 320;
+	float button_height = 80;
+	float xPos = game->window_width / 2;
+	float yPos = game->window_height / (numEndButtons + 1);
+	endButtons[0] = new Button(Vector2(400, 300), Vector4(0, 0, 1, 1), 800, 600, false); //Background
+	for (int i = 1; i < numEndButtons; i++) {
+		endButtons[i] = new Button(Vector2(xPos, yPos * (i + 1)), atlasRanges[fleshButton], button_width, button_height, false);
 	}
 }
 
@@ -188,6 +201,15 @@ void Gui::RenderWorldsGui() {
 	}
 }
 
+void Gui::RenderPlayGui() {
+	Game* game = Game::instance;
+	Manager* manager = game->gameManager;
+	Player* player = game->currentWorld->player;
+	drawText(10, game->window_height - 40, std::to_string(manager->round), Vector3(1, 1, 1), 5);
+	drawText(10, 20, std::to_string(manager->zombiesAlive) + "/" + std::to_string(manager->zombiesPerRound), Vector3(1, 1, 1), 5);
+	drawText(game->window_width / 2, game->window_height - 40, std::to_string(player->vida), Vector3(1, 1, 1), 5);
+}
+
 void Gui::RenderCrosshair(){
 	Game* game = Game::instance;
 	Camera cam2D;
@@ -247,6 +269,48 @@ void Gui::RenderPauseMenu() {
 	for (int i = 0; i < numPauseButtons; i++) {
 		float yPos = pauseButtons[i]->pos.y;
 		drawText(xOffset, yPos - yOffset - textSize / 2, text[i], Vector3(1, 1, 1), scale);
+	}
+}
+
+void Gui::RenderEndGui() {
+	//Load filenames from save
+	initEntries();
+	//Render buttons
+	Game* game = Game::instance;
+	Camera cam2D;
+	cam2D.setOrthographic(0, game->window_width, game->window_height, 0, -1, 1);
+
+	shader->enable();
+	if (shader)
+	{
+		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+		shader->setUniform("u_viewprojection", cam2D.viewprojection_matrix);
+		shader->setUniform("u_texture", Texture::Get("data/Gui/GameOver.png"), 0);
+		shader->setUniform("u_model", Matrix44());
+		shader->setUniform("u_texture_tiling", 1.0f);
+
+		shader->setUniform("u_tex_range", endButtons[0]->range);
+		endButtons[0]->mesh.render(GL_LINE_STRIP);
+		endButtons[0]->mesh.render(GL_TRIANGLES);
+
+		shader->setUniform("u_texture", atlas, 0);
+		for (int i = 1; i < numEndButtons; i++) {
+			Button* button = endButtons[i];
+			shader->setUniform("u_tex_range", button->range);
+			button->mesh.render(GL_LINE_STRIP);
+			button->mesh.render(GL_TRIANGLES);
+		}
+	}
+	shader->disable();
+
+	float scale = 5.0f;
+	float textSize = 7 * scale;
+	float yOffset = 14.0f;
+	float xOffset = 20;
+	std::string text[] = { "restart", "main menu" };
+	for (int i = 1; i < numEndButtons; i++) {
+		float yPos = endButtons[i]->pos.y;
+		drawText(game->window_width / 2 - 160 + xOffset, yPos - yOffset - textSize / 2, text[i - 1], Vector3(1, 1, 1), scale);
 	}
 }
 
@@ -325,5 +389,21 @@ void Gui::pauseButtonPressed(Vector2 pos) {
 		SDL_ShowCursor(!game->mouse_locked);
 	}
 	if (i == 1) std::cout << "Hola, soy las settings, encantado." << std::endl;
+	if (i == 2) game->setIntroStage();
+}
+
+void Gui::endButtonPressed(Vector2 pos) {
+	Game* game = Game::instance;
+	int i = 1;
+	for (i; i < numEndButtons; i++) {
+		Button* button = pauseButtons[i];
+		int min_x = button->pos.x - (button->width / 2);
+		int min_y = button->pos.y - (button->height / 2);
+		int max_x = button->pos.x + (button->width / 2);
+		int max_y = button->pos.y + (button->height / 2);
+		if (pos.x > min_x && pos.y > min_y && pos.x < max_x && pos.y < max_y) break;
+		if (i == numIntroButtons - 1) i++;
+	}
+	if (i == 1) game->setSelectWorldStage();
 	if (i == 2) game->setIntroStage();
 }

@@ -97,7 +97,6 @@ void PlayStage::render(World* world) {
 	world->RenderDynamic(camera);
 	world->RenderZombies(camera, game->time);
 
-	world->RenderBoundingZombies(camera);
 	//disable shader
 	shader->disable();
 
@@ -109,11 +108,12 @@ void PlayStage::render(World* world) {
 
 	if (game->mouse_locked) {
 		game->gui->RenderCrosshair();
+		game->gui->RenderPlayGui();
+		game->gameManager->update();
 	}
 	else {
 		game->gui->RenderPauseMenu();
 	}
-	game->gameManager->update();
 	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 }
@@ -158,35 +158,25 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 		Vector3 targetPos = player->pos + playerSpeed;
 		Vector3 playerTargetCenter = targetPos + Vector3(0, 1, 0);
 		for (int i = 0; i < MAX_ENTITIES; i++) {
-			
-			if (!world->staticEntities[i] == NULL) {
-
+			if (world->staticEntities[i] != NULL) {
 				Entity* current = world->staticEntities[i];
-			
 				Vector3 coll;
 				Vector3 collNormal;
 				if (current->mesh != NULL) {
-
-					if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.5, coll, collNormal)) continue;
-			
+					if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.6, coll, collNormal)) continue;
 					Vector3 push_away = normalize(coll - playerTargetCenter) * seconds_elapsed;
-					targetPos = player->pos - push_away;
+					targetPos = player->pos - (push_away - (reflect(playerSpeed, collNormal) * 0.1));
 					targetPos.y = player->pos.y;
 				}
 			}
-
-			if (!world->dynamicEntities[i] == NULL) {
-
+			if (world->dynamicEntities[i]  != NULL) { //No hace nada
 				Entity* current = world->dynamicEntities[i];
 
 				Vector3 coll;
 				Vector3 collNormal;
-
 				if (!current->mesh->testSphereCollision(current->m, playerTargetCenter, 0.5, coll, collNormal)) continue;
 				current->m.translate(0,0,-1);
-
 			}
-			
 		}
 		player->pos = targetPos;
 	}
@@ -503,3 +493,26 @@ void EditorStage::update(double seconds_elapsed, World* world)
 	}
 }
 
+void EndStage::render(World* world) {
+	Game* game = Game::instance;
+
+	//set the clear color (the background color)
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+
+	// Clear the window and the depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	game->gui->RenderEndGui();
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
+
+	//render the FPS, Draw Calls, etc
+	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+}

@@ -6,6 +6,7 @@
 #define numIntroButtons 4
 #define numPauseButtons 3
 #define numSaves 5
+#define numEndButtons 3
 
 enum atlasGuide {
 	greenButton,
@@ -46,6 +47,7 @@ public:
 	Button* turnPageRightButton;
 	Button* turnPageLeftButton;
 	Button* turnBackLeftRedButton;
+	Button* endButtons[numEndButtons];
 
 	int worldPage;
 	std::vector<std::string> entries;
@@ -56,16 +58,20 @@ public:
 	void initIntroButtons();
 	void initPauseButtons();
 	void initWorldButtons();
+	void initEndButtons();
 	void initTurnPageButtons();
 	void initEntries();
 	//Renders
 	void RenderIntroGui();
 	void RenderWorldsGui();
+	void RenderPlayGui();
 	void RenderCrosshair();
 	void RenderPauseMenu();
+	void RenderEndGui();
 	//ButtonPressed
 	void introButtonPressed(Vector2 pos);
 	int worldButtonPressed(Vector2 pos);
 	void changePageButtonPressed(Vector2 pos);
 	void pauseButtonPressed(Vector2 pos);
+	void endButtonPressed(Vector2 pos);
 };

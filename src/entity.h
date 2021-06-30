@@ -65,27 +65,38 @@ public:
 	float vel = 0;
 	int vida = 0;
 
-	Zombie(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {};
+	Zombie(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {
+		loadMesh("data/Zombies/Animation/character.mesh");
+		loadTexture("data/Zombies/image.png");
+		vel = 0;
+		vida = 0;
+	};
 	Vector3 AStarPath(Vector3 target, uint8** maps);
 	void move(Vector3 target);
-	void setVel(float v);
 	void renderAnimation(float time, float tiling = 1.0f);
 };
 
 class ZombieSpawner : public Entity {
 public:
-	float ultimoSpawn = 0;
-	int cooldown = 5;
+	float ultimoSpawn;
+	int cooldown;
 
-	ZombieSpawner(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {};
+	ZombieSpawner(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {
+		loadMesh("data/Assets/Spawn/spawn.obj");
+		loadTexture("data/Assets/Spawn/spawn.png");
+		ultimoSpawn = 0;
+		cooldown = 5;
+	};
 	void spawnZombie(Zombie* zombie, float time);
 };
 class Player : public Entity {
 public:
-	float vel;
 	int vida;
-	Player(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {};
-	void setVel(float v);
+	float lastHit;
+	Player(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {
+		vida = 1;
+		lastHit = 0;
+	};
 	void CamPlayer(Camera* camera);
 };
 

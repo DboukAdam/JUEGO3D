@@ -15,9 +15,11 @@ void Manager::update() {
 }
 
 void Manager::initRound() {
-	startedRoundTime = Game::instance->time;
+	Game* game = Game::instance;
+	game->nextRound->channelSample = *game->nextRound->Play("data/Audio/nextround.mp3");
+	startedRoundTime = game->time;
 	round++;
-	zombiesPerRound =  1; // 10 + round * 2
+	zombiesPerRound = 10 + round * 2;
 	if (zombiesPerRound >= 100) zombiesPerRound = 100;
 	zombiesAlive = zombiesPerRound;
 	spawnedZombies = 0;

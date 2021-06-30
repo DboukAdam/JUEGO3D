@@ -115,14 +115,8 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 			click->Play("data/Audio/click.mp3");
 		}
 		else if (currentStage == play) {
-			if (mouse_locked) {
-				currentWorld->disparar(); 
-				//sonidito disparo
-				disparo->channelSample = *disparo->Play("data/Audio/disparoAK47.mp3");
-			}
-			else {
+			if (!mouse_locked) {
 				gui->pauseButtonPressed(Vector2(Input::mouse_position.x, Input::mouse_position.y)); click->Play("data/Audio/click.mp3"); //sonidito de click 
-
 			}
 		}
 		else if (currentStage == editor) {
@@ -184,7 +178,7 @@ void Game::initWorld(std::string filename){
 	Weapon* AK47 = new Weapon(0, 0.5, 0, m);
 	AK47->loadMesh("data/Assets/Weapons/AK47.obj");
 	AK47->loadTexture("data/Assets/Weapons/AK47.png");
-	AK47->init(10.0f, 30, 5);
+	AK47->init(0.2f, 30, 5);
 	//Sky
 	Mesh* meshCielo = Mesh::Get("data/Assets/Ambiente/cielo.ASE");
 	Texture* textCielo = Texture::Get("data/Assets/Ambiente/cielo.tga");
@@ -204,8 +198,6 @@ void Game::initWorld(std::string filename){
 		editorWorld->initCamera(camera);
 		editorWorld->addWeapon(AK47);
 		editorWorld->initZombies();
-		//QUITAR
-		editorWorld->zombies[0]->vida = 1;
 	}
 	else {
 		World* world = new World(shader);
@@ -247,9 +239,7 @@ void Game::setIntroStage(){
 	introMusic->channelSample = *introMusic->Play("data/Audio/menu.mp3");
 	//parar musica
 	ambiente->Stop(ambiente->channelSample);
-	ambienteRelax->Stop(ambienteRelax->channelSample);
 	narrador->Stop(narrador->channelSample);
-
 }
 
 void Game::setSelectWorldStage() {
@@ -258,7 +248,6 @@ void Game::setSelectWorldStage() {
 	SDL_ShowCursor(!mouse_locked);
 
 	//parar musica
-	ambienteRelax->Stop(ambienteRelax->channelSample);
 	ambiente->Stop(ambiente->channelSample);
 }
 
@@ -274,7 +263,6 @@ void Game::setPlayStage(){
 	//narrador->channelSample = *narrador->Play("huij");
 	//parar musica
 	introMusic->Stop(introMusic->channelSample);
-	ambienteRelax->Stop(ambienteRelax->channelSample);
 }
 
 void Game::setEditorStage(){
@@ -283,11 +271,9 @@ void Game::setEditorStage(){
 	mouse_locked = true;
 	SDL_ShowCursor(!mouse_locked);
 	
-	//relax
-	//ambienteRelax->channelSample = *ambienteRelax->Play("data/Audio/ambienteRelax.mp3");
+	ambiente->channelSample = *ambiente->Play("data/Audio/ambiente.mp3");
 	//parar musica
 	introMusic->Stop(introMusic->channelSample);
-	ambiente->Stop(ambiente->channelSample);
 }
 
 void Game::setEndStage(){

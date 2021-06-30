@@ -49,6 +49,7 @@ Vector3 Zombie::AStarPath(Vector3 target, uint8** maps) {
 void Zombie::move(Vector3 target) {
 	pos.x += (target.x - (trunc(pos.x * 10) / 10)) * vel;
 	pos.z += (target.z - (trunc(pos.z * 10) / 10)) * vel;
+	m.setIdentity();
 	m.setTranslation(pos.x, pos.y, pos.z);
 
 	float catetoX = pos.x - target.x;

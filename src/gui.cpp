@@ -92,8 +92,8 @@ void Gui::initTurnPageButtons() {
 	float yPosLeft = game->window_height - buttonOffset - button_height / 2;;
 	turnPageRightButton = new Button(Vector2(xPosRight, yPosRight), atlasRanges[turnPageRight], button_width, button_height, false);
 	turnPageLeftButton = new Button(Vector2(xPosLeft, yPosLeft), atlasRanges[turnPageLeft], button_width, button_height, false);
-	float xPosBack = game->window_width / 2 - buttonOffset - button_width / 2;
-	float yPosBack = game->window_height - buttonOffset - button_width / 2;
+	float xPosBack = game->window_width / 2 - button_width / 2;
+	float yPosBack = game->window_height - buttonOffset - button_height / 2;
 	turnBackLeftRedButton = new Button(Vector2(xPosBack, yPosBack), atlasRanges[trunLeftRed], button_width, button_height, false);
 }
 
@@ -338,7 +338,7 @@ void Gui::introButtonPressed(Vector2 pos) {
 int Gui::worldButtonPressed(Vector2 pos) {
 	Game* game = Game::instance;
 	int i = 0;
-	for (i; i < entries.size(); i++) {
+	for (i; i < numSaves; i++) {
 		Button* button = worldSavesButtons[i];
 		int min_x = button->pos.x - (button->width / 2);
 		int min_y = button->pos.y - (button->height / 2);
@@ -396,7 +396,7 @@ void Gui::endButtonPressed(Vector2 pos) {
 	Game* game = Game::instance;
 	int i = 1;
 	for (i; i < numEndButtons; i++) {
-		Button* button = pauseButtons[i];
+		Button* button = endButtons[i];
 		int min_x = button->pos.x - (button->width / 2);
 		int min_y = button->pos.y - (button->height / 2);
 		int max_x = button->pos.x + (button->width / 2);

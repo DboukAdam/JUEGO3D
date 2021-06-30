@@ -59,7 +59,6 @@ public:
 	void copy(Entity* entity);
 };
 
-
 class Zombie : public Entity {
 public:
 	float vel = 0;
@@ -94,7 +93,7 @@ public:
 	int vida;
 	float lastHit;
 	Player(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {
-		vida = 1;
+		vida = 10;
 		lastHit = 0;
 	};
 	void CamPlayer(Camera* camera);
@@ -103,11 +102,14 @@ public:
 class Weapon : public Entity {
 public:
 	float cadencia;
+	float lastShot;
 	bool isEmpty;
 	int cargador;
 	bool recargar;
 	int damage;
-	Weapon(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {};
+	Weapon(float x, float y, float z, Matrix44 m, float yaw = 0, Mesh* mesh = NULL, Texture* texture = NULL, float pitch = 0) : Entity(x, y, z, m, yaw = 0, mesh = NULL, texture = NULL, pitch = 0) {
+		lastShot = 0;
+	};
 	void init(float cad, int cargador, int d);
 	void renderWeapon(Player* player, Shader* shader, float tiling = 1.0f);
 

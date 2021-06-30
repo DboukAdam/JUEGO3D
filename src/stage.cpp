@@ -89,7 +89,7 @@ void PlayStage::render(World* world) {
 
 	//enable shader
 	Shader* shader = world->shader;
-	shader->enable();
+	//shader->enable();
 	world->sky->render(shader);
 	world->ground->render(shader);
 	world->RenderPlayer(camera);
@@ -98,7 +98,7 @@ void PlayStage::render(World* world) {
 	world->RenderZombies(camera, game->time);
 
 	//disable shader
-	shader->disable();
+	//shader->disable();
 
 	//GUI STUFF
 	glDisable(GL_DEPTH_TEST);
@@ -179,6 +179,12 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 			}
 		}
 		player->pos = targetPos;
+		
+		if (Input::isMousePressed(SDL_BUTTON_LEFT)) {
+			world->disparar();
+		}
+
+		Input::centerMouse();
 	}
 	else {
 	}
@@ -187,10 +193,6 @@ void PlayStage::update(double seconds_elapsed, World* world) {
 		game->mouse_locked = !game->mouse_locked;
 		SDL_ShowCursor(!game->mouse_locked);
 	}
-
-	//to navigate with the mouse fixed in the middle
-	if (game->mouse_locked)
-		Input::centerMouse();
 }
 
 void EditorStage::render(World* world)
@@ -211,7 +213,6 @@ void EditorStage::render(World* world)
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	
 	Shader* shader = world->shader;
 	
 	world->sky->render(shader);
@@ -251,7 +252,6 @@ void EditorStage::render(World* world)
 	//pintando bounding muy feo
 	world->RenderBoundingStatic(camera);
 	world->RenderBoundingDynamic(camera);
-	world->RenderBoundingZombies(camera);
 
 	//Draw the floor grid
 	drawGrid();
@@ -452,12 +452,6 @@ void EditorStage::update(double seconds_elapsed, World* world)
 			}
 		}
 
-		if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) {
-			game->setPlayStage();
-		}
-
-		if (game->mouse_locked)
-			Input::centerMouse();
 
 		if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
 			cout << "Que nombre quieres ponerle?" << endl;
@@ -471,6 +465,7 @@ void EditorStage::update(double seconds_elapsed, World* world)
 			getline(cin, filename);
 			world->loadWorldInfo(filename);
 		}
+		Input::centerMouse();
 	}
 	else { //menu de pause
 

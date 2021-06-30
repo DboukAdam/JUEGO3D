@@ -50,11 +50,10 @@ public:
 	Audio* introMusic = new Audio();
 	Audio* ambiente = new Audio();
 	Audio* disparo = new Audio();
-	Audio* ambienteRelax = new Audio();
 	Audio* click = new Audio();
 	Audio* feedbackPut = new Audio();
 	Audio* narrador = new Audio();
- 
+	Audio* nextRound = new Audio();
  
  
 	//Our stuff

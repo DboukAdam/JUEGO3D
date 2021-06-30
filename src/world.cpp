@@ -334,11 +334,11 @@ void World::loadSpawns()
 	}
 }
 
-
-//
 //BASIC FUNCTIONALITIES OF EACH WORLD, FOR PLAYSTAGE AND ALSO EDITOR STAGE
 void World::disparar() {
+	Game* game = Game::instance;
 	Camera* camera = Camera::current;
+	Weapon* weapon = weapons[currentWeapon];
 	Vector3 colPoint;
 	Vector3 colNormal;
 	Vector3 origin = camera->eye;
@@ -351,10 +351,14 @@ void World::disparar() {
 		Matrix44 scaled = zombie->m;
 		scaled.scale(0.01, 0.01, 0.01);
 		if (zombie->mesh->testRayCollision(scaled, origin, dir, colPoint, colNormal, maxDistance, false)) {
-			zombie->vida -= weapons[currentWeapon]->damage;
-			if (zombie->vida <= 0) Game::instance->gameManager->zombiesAlive--;
-			std::cerr << "Buena punteria! " << zombie->vida << std::endl;;
-			break;
+			if (weapon->lastShot + weapon->cadencia < game->time) {
+				weapon->lastShot = game->time;
+				zombie->vida -= weapons[currentWeapon]->damage;
+				if (zombie->vida <= 0) Game::instance->gameManager->zombiesAlive--;
+				std::cerr << "Buena punteria! " << zombie->vida << std::endl;;
+				game->disparo->channelSample = *game->disparo->Play("data/Audio/disparoAK47.mp3");
+				break;
+			}
 		}
 	}
 }
@@ -438,9 +442,11 @@ void World::collisionPlayerZombie() {
 		Vector3 coll;
 		Vector3 collNormal;
 		if (zombie->mesh != NULL) {
-			Matrix44 scaled = zombie->m;
-			scaled.scale(0.01, 0.01, 0.01);
-			if (zombie->mesh->testSphereCollision(scaled, playerCenter, 0.5, coll, collNormal)) {
+			//Matrix44 scaled = zombie->m;
+			//scaled.scale(0.01, 0.01, 0.01);
+			if (zombie->mesh->testSphereCollision(zombie->m, playerCenter, 0.5, coll, collNormal)) {
+				/*std::cerr << zombie->m.getTranslation().x << " Z: " << zombie->m.getTranslation().z << std::endl;
+				std::cerr << player->m.getTranslation().x << " Z: " << player->m.getTranslation().z << std::endl;*/
 				if (player->lastHit + hitCooldown < Game::instance->time) {
 					player->lastHit = Game::instance->time;
 					player->vida -= 1;
@@ -639,7 +645,7 @@ bool World::loadWorldInfo(std::string filename) {
 		cerr << "Error tu prima" << endl;
 		return false;
 	}
-	cerr << "Loading world" << endl;
+	cerr << "Loading world " << filename << endl;
 	
 	int staticIndex = 0;
 	int dynamicIndex = 0;
